@@ -20,6 +20,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         let navigationController = splitViewController.viewControllers[splitViewController.viewControllers.count-1] as! UINavigationController
         navigationController.topViewController!.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
         splitViewController.delegate = self
+
+        let model = UserDefaultsOrdersModelContext(persistenceName: "test")
+        do {
+            let notes : [Note] = try model.fetch(request: NotesModelFetchRequest.emptyPredicate)
+            let lists : [List] = try model.fetch(request: NotesModelFetchRequest.emptyPredicate)
+            assert(notes.count>0)
+            assert(lists.count>0)
+        } catch (_) {
+            fatalError()
+        }
+
+
         return true
     }
 
