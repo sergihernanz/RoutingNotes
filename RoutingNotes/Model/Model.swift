@@ -61,14 +61,14 @@ final class AnyModelContext<I,R>: ModelContext {
 }
 
 struct NotesModelFetchRequest {
-    let predicate:NSPredicate?
+    var filter: ((Any) -> Bool)?
     let sortDescriptors:[NSSortDescriptor]
     let range:ClosedRange<Int>
 
     static var emptyPredicate : NotesModelFetchRequest {
-        return NotesModelFetchRequest(predicate:nil,
-                                      sortDescriptors:[],
-                                      range:0...0)
+        return NotesModelFetchRequest(filter: nil,
+                                      sortDescriptors: [],
+                                      range: 0...0)
     }
 }
 typealias OrdersModelContext = AnyModelContext<NotesModelId,NotesModelFetchRequest>
@@ -100,6 +100,7 @@ protocol Note : NotesModelBase {
     var title : String {get set}
     var modifiedDate : Date {get set}
     var content : String {get set}
+    var listId : ListId {get set}
     func fetchList(ctxt:AnyModelContext<NotesModelId,NotesModelFetchRequest>) throws -> List
 }
 
@@ -110,8 +111,7 @@ struct ListUserDefaults : List, Codable {
     var name: String
 
     func fetchNotes(ctxt: AnyModelContext<NotesModelId, NotesModelFetchRequest>) throws -> [Note] {
-        let predicate = NSPredicate(format: "listId = %@", listId)
-        let req = NotesModelFetchRequest(predicate: predicate,
+        let req = NotesModelFetchRequest(filter: { return ($0 as! Note).listId == self.listId },
                                          sortDescriptors: [],
                                          range: 0...0)
         return try ctxt.fetch(request: req)
@@ -123,7 +123,6 @@ struct NoteUserDefaults : Note, Codable {
     var title: String
     var modifiedDate: Date
     var content: String
-
     var listId : ListId
     func fetchList(ctxt: AnyModelContext<NotesModelId, NotesModelFetchRequest>) throws -> List {
         return try ctxt.fetch(id:.list(listId))!
@@ -145,43 +144,45 @@ class UserDefaultsOrdersModelContext : ModelContext {
     }
 
     func fetch<T>(id: NotesModelId) throws -> T? {
-        let key = persistenceKey(type:String(describing: T.self))
         switch id {
         case .list(let listId):
-            guard let listData = UserDefaults.standard.data(forKey:key ) else {
-                return nil
-            }
-            let decoder = JSONDecoder()
-            let lists = try decoder.decode([ListUserDefaults].self, from: listData)
-            return lists.filter({ (list) -> Bool in list.listId == listId }).first as? T
+            let req = NotesModelFetchRequest(filter: { return ($0 as! List).listId == listId },
+                                             sortDescriptors: [],
+                                             range: 0...0)
+            let lists = try fetch(request: req) as [ListUserDefaults]
+            return lists.first as? T
         case .note(let noteId):
-            guard let noteData = UserDefaults.standard.data(forKey:key ) else {
-                return nil
-            }
-            let decoder = JSONDecoder()
-            let notes = try decoder.decode([NoteUserDefaults].self, from: noteData)
-            return notes.filter({ (note) -> Bool in note.noteId == noteId }).first as? T
+            let req = NotesModelFetchRequest(filter: { return ($0 as! Note).noteId == noteId },
+                                             sortDescriptors: [],
+                                             range: 0...0)
+            let notes = try fetch(request: req) as [NoteUserDefaults]
+            return notes.first as? T
         }
     }
 
     func fetch<T>(request: NotesModelFetchRequest) throws -> [T] {
-        fatalError()
+        switch String(describing: T.self) {
+        case String(describing:Note.self):
+            let udNotes = try fetch(request: request) as [NoteUserDefaults]
+            return udNotes as! [T]
+        case String(describing:List.self):
+            let udLists = try fetch(request: request) as [ListUserDefaults]
+            return udLists as! [T]
+        default:
+            fatalError()
+        }
     }
 
-    func fetch(request: NotesModelFetchRequest) throws -> [Note] {
-        let udNotes = try fetch(request: request) as [NoteUserDefaults]
-        return udNotes as [Note]
-    }
-    func fetch(request: NotesModelFetchRequest) throws -> [List] {
-        let udLists = try fetch(request: request) as [ListUserDefaults]
-        return udLists as [List]
-    }
     func fetch<T>(request: NotesModelFetchRequest) throws -> [T] where T: Codable & NotesModelBase {
         let key = persistenceKey(type:String(describing: T.self))
         guard let data = UserDefaults.standard.value(forKey:key) as? Data else {
             return [];
         }
-        return try JSONDecoder().decode(Array<T>.self, from: data)
+        let ret = try JSONDecoder().decode(Array<T>.self, from: data)
+        guard let filter = request.filter else {
+            return ret
+        }
+        return ret.filter(filter)
     }
 
 
