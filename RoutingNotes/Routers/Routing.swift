@@ -8,20 +8,25 @@
 
 import Foundation
 
-enum Navigation {
+enum Navigation : Equatable {
     case folders
     case folders👉list(listId:ListId)
     case folders👉🏻list👉note(listId:ListId, noteId:NoteId)
 }
 
 
+import UIKit
+
 protocol Navigator {
+
+    // Root viewcontroller to be presented on a VC hierarchy
+    var rootViewController: UIViewController { get }
 
     // Information
     var currentNavigation : Navigation { get }
 
     // Deep link
-    func navigate(to:Navigation, completion: () -> Void)
+    func navigate(to: Navigation, completion: @escaping () -> Void)
 
     // TODO: Normal navigation
 

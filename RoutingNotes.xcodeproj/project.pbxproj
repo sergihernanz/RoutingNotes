@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2D06C2E021BCF9F4004962A2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D06C2DF21BCF9F4004962A2 /* Model.swift */; };
-		2D06C2E121BCF9F4004962A2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D06C2DF21BCF9F4004962A2 /* Model.swift */; };
+		2D0F310521D59E3900F3126B /* UIWindowRootViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */; };
 		2D546DF621AE77EA00CFB5BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D546DF521AE77EA00CFB5BA /* AppDelegate.swift */; };
 		2D546DFF21AE77EB00CFB5BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D546DFE21AE77EB00CFB5BA /* Assets.xcassets */; };
 		2D546E0221AE77EB00CFB5BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D546E0021AE77EB00CFB5BA /* LaunchScreen.storyboard */; };
@@ -17,6 +17,7 @@
 		2D5A8DBD21B1CD5100DAFC8D /* FoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DBC21B1CD5100DAFC8D /* FoldersVC.swift */; };
 		2D5A8DBF21B1CD6E00DAFC8D /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DBE21B1CD6E00DAFC8D /* ListVC.swift */; };
 		2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */; };
+		2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7993CF21D7BC3700279B87 /* MockUDOrdersModelContext.swift */; };
 		2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */; };
 		2DCE24AD21B198ED00150FB0 /* NavigatorImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */; };
 /* End PBXBuildFile section */
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		2D06C2DF21BCF9F4004962A2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowRootViewControllerTester.swift; sourceTree = "<group>"; };
 		2D546DF221AE77EA00CFB5BA /* RoutingNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoutingNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D546DF521AE77EA00CFB5BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D546DFE21AE77EB00CFB5BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -46,6 +48,7 @@
 		2D5A8DBE21B1CD6E00DAFC8D /* ListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
 		2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteVC.swift; sourceTree = "<group>"; };
 		2D5A8DC321B2738600DAFC8D /* __unused__Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __unused__Repository.swift; sourceTree = "<group>"; };
+		2D7993CF21D7BC3700279B87 /* MockUDOrdersModelContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUDOrdersModelContext.swift; sourceTree = "<group>"; };
 		2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+DeselectRow.swift"; sourceTree = "<group>"; };
 		2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorImpl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,8 +106,10 @@
 		2D546E0B21AE77EB00CFB5BA /* RoutingNotesTests */ = {
 			isa = PBXGroup;
 			children = (
+				2D7993CF21D7BC3700279B87 /* MockUDOrdersModelContext.swift */,
 				2D546E0C21AE77EB00CFB5BA /* RoutingNotesTests.swift */,
 				2D546E0E21AE77EB00CFB5BA /* Info.plist */,
+				2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */,
 			);
 			path = RoutingNotesTests;
 			sourceTree = "<group>";
@@ -246,6 +251,7 @@
 				2D5A8DBD21B1CD5100DAFC8D /* FoldersVC.swift in Sources */,
 				2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */,
 				2D546DF621AE77EA00CFB5BA /* AppDelegate.swift in Sources */,
+				2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -254,7 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D546E0D21AE77EB00CFB5BA /* RoutingNotesTests.swift in Sources */,
-				2D06C2E121BCF9F4004962A2 /* Model.swift in Sources */,
+				2D0F310521D59E3900F3126B /* UIWindowRootViewControllerTester.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

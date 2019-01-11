@@ -12,33 +12,20 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
     fileprivate func populateMockModel() -> OrdersModelContext {
-        let model = UserDefaultsOrdersModelContext(persistenceName: "test")
-        do {
-            let notes : [Note] = try model.fetch(request: NotesModelFetchRequest.emptyPredicate)
-            let lists : [List] = try model.fetch(request: NotesModelFetchRequest.emptyPredicate)
-            assert(notes.count>0)
-            assert(lists.count>0)
-        } catch (_) {
-            fatalError()
-        }
-        do {
-            let anyContext = OrdersModelContext(model)
-            let notes : [Note] = try anyContext.fetch(request: NotesModelFetchRequest.emptyPredicate)
-            let lists : [List] = try anyContext.fetch(request: NotesModelFetchRequest.emptyPredicate)
-            assert(notes.count>0)
-            assert(lists.count>0)
-        } catch (_) {
-            fatalError()
-        }
+        let model = MockUDOrdersModelContext(persistenceName: "test")
         return OrdersModelContext(model)
     }
 
+    var window: UIWindow?
+    private var navigator: NavigatorImpl!
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        let window = UIWindow(frame: UIScreen.main.bounds)
         let model = populateMockModel()
-        _ = NavigatorImpl(window: window, model:model)
+        let navigator = NavigatorImpl(model:model)
+        let window = UIWindow(frame: UIScreen.main.bounds)
+        window.rootViewController = navigator.rootViewController
         window.makeKeyAndVisible()
+        self.window = window
 
         return true
     }

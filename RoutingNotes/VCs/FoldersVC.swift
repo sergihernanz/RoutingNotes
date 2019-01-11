@@ -89,5 +89,6 @@ extension FoldersVC : UITableViewDelegate {
         let list = folders[indexPath.row]
         let newNavigation = Navigation.folders👉list(listId: list.listId)
         navigator.navigate(to: newNavigation) {}
+        //self.navigationController?.pushViewController(UIViewController(), animated: true)
     }
 }
