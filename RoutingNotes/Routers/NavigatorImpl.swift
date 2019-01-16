@@ -22,7 +22,7 @@ class NavigatorImpl : Navigator {
     }
 
     fileprivate lazy var navigationController : UINavigationController = {
-        let navC = UINavigationController(rootViewController: FoldersVC(navigator: self, model:model))
+        let navC = UINavigationController(rootViewController: FoldersVC(navigator: self, model:model, navigationInput:nil))
         navC.navigationBar.tintColor = UIColor.black
         return navC
     }()
@@ -49,14 +49,14 @@ class NavigatorImpl : Navigator {
     fileprivate func presentList(listId:ListId, animated:Bool) {
         if navigationController.children.count>1,
            let currentListVC = navigationController.children[1] as? ListVC,
-           currentListVC.routeInput == listId {
+           currentListVC.navigationInput == listId {
             // Already there, nothing to do
             // [✅,✅,?]
             navigationController.popToViewController(currentListVC, animated: animated)
         } else {
             // List is not in place
             // [✅,❌,?...]
-            let listVC = ListVC(navigator: self, model:model, listId: listId)
+            let listVC = ListVC(navigator: self, model:model, navigationInput: listId)
             if navigationController.children.count>1 {
                 // Already there... but different input, rebuild
                 // [✅,❌]
@@ -73,19 +73,19 @@ class NavigatorImpl : Navigator {
     fileprivate func presentDetail(listId:ListId,noteId:NoteId, animated:Bool) {
         if navigationController.children.count>2,
            let currentListVC = navigationController.children[1] as? ListVC,
-           currentListVC.routeInput == listId,
+           currentListVC.navigationInput == listId,
            let currentNoteVC = navigationController.children[2] as? NoteVC,
-           currentNoteVC.routeInput == noteId {
+           currentNoteVC.navigationInput == noteId {
             // Already there, nothing to do
             // [✅,✅,✅,?...]
             navigationController.popToViewController(currentNoteVC, animated: animated)
         } else {
             // Note is not in place
             // [✅] [✅,?] [✅,?,❌] [✅,?,❌...]
-            let noteVC = NoteVC(navigator: self, model:model, noteId: noteId)
+            let noteVC = NoteVC(navigator: self, model:model, navigationInput: noteId)
             if navigationController.children.count>1,
                let currentListVC = navigationController.children[1] as? ListVC,
-               currentListVC.routeInput == listId {
+               currentListVC.navigationInput == listId {
                 // Already there, nothing to do
                 // [✅] [✅,✅] [✅,✅,❌] [✅,✅,❌...]
                 let foldersVC = navigationController.children.first!
@@ -94,7 +94,7 @@ class NavigatorImpl : Navigator {
             } else {
                 // List is not in place
                 // [✅] [✅,❌] [✅,❌...]
-                let listVC = ListVC(navigator: self, model:model, listId: listId)
+                let listVC = ListVC(navigator: self, model:model, navigationInput: listId)
                 let foldersVC = navigationController.children.first!
                 navigationController.setViewControllers([foldersVC,listVC,noteVC], animated: animated)
             }

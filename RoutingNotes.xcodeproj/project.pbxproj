@@ -17,6 +17,7 @@
 		2D5A8DBD21B1CD5100DAFC8D /* FoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DBC21B1CD5100DAFC8D /* FoldersVC.swift */; };
 		2D5A8DBF21B1CD6E00DAFC8D /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DBE21B1CD6E00DAFC8D /* ListVC.swift */; };
 		2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */; };
+		2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E08721EF680C008104C4 /* Navigatable.swift */; };
 		2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */; };
 		2DCE24AD21B198ED00150FB0 /* NavigatorImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,7 @@
 		2D5A8DBE21B1CD6E00DAFC8D /* ListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
 		2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteVC.swift; sourceTree = "<group>"; };
 		2D5A8DC321B2738600DAFC8D /* __unused__Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __unused__Repository.swift; sourceTree = "<group>"; };
+		2DB6E08721EF680C008104C4 /* Navigatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigatable.swift; sourceTree = "<group>"; };
 		2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+DeselectRow.swift"; sourceTree = "<group>"; };
 		2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorImpl.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,6 +127,7 @@
 				2D5A8DBC21B1CD5100DAFC8D /* FoldersVC.swift */,
 				2D5A8DBE21B1CD6E00DAFC8D /* ListVC.swift */,
 				2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */,
+				2DB6E08721EF680C008104C4 /* Navigatable.swift */,
 			);
 			path = VCs;
 			sourceTree = "<group>";
@@ -246,6 +249,7 @@
 				2D5A8DBD21B1CD5100DAFC8D /* FoldersVC.swift in Sources */,
 				2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */,
 				2D546DF621AE77EA00CFB5BA /* AppDelegate.swift in Sources */,
+				2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

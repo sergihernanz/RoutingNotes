@@ -9,24 +9,33 @@
 import Foundation
 import UIKit
 
-class ListVC : UIViewController {
+class ListVC : UIViewController, Navigatable {
+
+    typealias InputType = ListId
+    typealias OutputType = NoteId
 
     @available(*,unavailable)
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) { fatalError() }
     @available(*,unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    private(set) var routeInput : ListId
+    private(set) var navigationInput : ListId
+    var navigationOutput: NoteId? {
+        guard let selectedIP = tableView.indexPathForSelectedRow else {
+            return nil
+        }
+        return notes[selectedIP.row].noteId
+    }
 
-    fileprivate var navigator:Navigator
-    fileprivate var model:OrdersModelContext
-    init(navigator:Navigator, model:OrdersModelContext, listId:ListId) {
+    private(set) var navigator:Navigator
+    private(set) var model:OrdersModelContext
+    required init(navigator:Navigator, model:OrdersModelContext, navigationInput:ListId) {
         self.navigator = navigator
         self.model = model
-        self.routeInput = listId
+        self.navigationInput = navigationInput
 
         do {
-            let list = try model.fetch(id: .list(routeInput)) as List?
+            let list = try model.fetch(id: .list(navigationInput)) as List?
             if let l = list {
                 try notes = l.fetchNotes(ctxt: model)
             } else {
@@ -56,7 +65,7 @@ class ListVC : UIViewController {
         deselectRow(tableView: tableView, animated: animated)
 
         do {
-            let list = try model.fetch(id: .list(routeInput)) as List?
+            let list = try model.fetch(id: .list(navigationInput)) as List?
             if let listName = list?.name {
                 navigationItem.title = listName
             }
@@ -99,7 +108,7 @@ extension ListVC : UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let note = notes[indexPath.row]
-        let newNavigation = Navigation.folders👉🏻list👉note(listId: routeInput, noteId: note.noteId)
+        let newNavigation = Navigation.folders👉🏻list👉note(listId: navigationInput, noteId: note.noteId)
         navigator.navigate(to: newNavigation) {}
     }
 }
