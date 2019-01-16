@@ -9,16 +9,27 @@
 import Foundation
 import UIKit
 
-class FoldersVC : UIViewController {
+class FoldersVC : UIViewController, Navigatable {
+
+    typealias InputType = Any?
+    typealias OutputType = ListId
 
     @available(*,unavailable)
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) { fatalError() }
     @available(*,unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    fileprivate var navigator:Navigator
-    fileprivate var model:OrdersModelContext
-    init(navigator:Navigator, model:OrdersModelContext) {
+    var navigationInput: Any?
+    var navigationOutput: ListId? {
+        guard let selectedIP = tableView.indexPathForSelectedRow else {
+            return nil
+        }
+        return folders[selectedIP.row].listId
+    }
+
+    private(set) var navigator:Navigator
+    private(set) var model:OrdersModelContext
+    required init(navigator: Navigator, model: OrdersModelContext, navigationInput: Any?) {
         self.navigator = navigator
         self.model = model
 

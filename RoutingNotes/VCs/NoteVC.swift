@@ -9,21 +9,26 @@
 import Foundation
 import UIKit
 
-class NoteVC : UIViewController {
+class NoteVC : UIViewController, Navigatable {
+
+    typealias InputType = NoteId
+    typealias OutputType = Any
 
     @available(*,unavailable)
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) { fatalError() }
     @available(*,unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    private(set) var routeInput : NoteId
+    private(set) var navigationInput: NoteId
+    var navigationOutput: Any? { return nil }
 
-    fileprivate var navigator:Navigator
-    fileprivate var model:OrdersModelContext
-    init(navigator:Navigator, model:OrdersModelContext, noteId:NoteId) {
+
+    var navigator:Navigator
+    var model:OrdersModelContext
+    required init(navigator:Navigator, model:OrdersModelContext, navigationInput:NoteId) {
         self.navigator = navigator
         self.model = model
-        self.routeInput = noteId
+        self.navigationInput = navigationInput
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -72,7 +77,7 @@ class NoteVC : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         do {
-            try note = model.fetch(id: NotesModelId.note(routeInput))!
+            try note = model.fetch(id: NotesModelId.note(navigationInput))!
         } catch {
             fatalError()
         }

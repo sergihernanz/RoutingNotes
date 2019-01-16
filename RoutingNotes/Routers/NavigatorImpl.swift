@@ -28,7 +28,7 @@ class NavigatorImpl : NSObject, Navigator {
     }
 
     fileprivate lazy var navigationController : UINavigationController = {
-        let navC = UINavigationController(rootViewController: FoldersVC(navigator: self, model:model))
+        let navC = UINavigationController(rootViewController: FoldersVC(navigator: self, model:model, navigationInput:nil))
         navC.navigationBar.tintColor = UIColor.black
         navC.delegate = self
         return navC
@@ -84,7 +84,7 @@ class NavigatorImpl : NSObject, Navigator {
         currentState = .navigating(from: currentNavigation, to: .folders👉list(listId: listId))
         if navigationController.children.count>1,
            let currentListVC = navigationController.children[1] as? ListVC,
-           currentListVC.routeInput == listId {
+           currentListVC.navigationInput == listId {
             // Already there, nothing to do
             // [✅,✅,?]
             currentNavigateCompletionBlock = completion
@@ -92,7 +92,7 @@ class NavigatorImpl : NSObject, Navigator {
         } else {
             // List is not in place
             // [✅,❌,?...]
-            let listVC = ListVC(navigator: self, model:model, listId: listId)
+            let listVC = ListVC(navigator: self, model:model, navigationInput: listId)
             if navigationController.children.count>1 {
                 // Already there... but different input, rebuild
                 // [✅,❌]
@@ -111,9 +111,9 @@ class NavigatorImpl : NSObject, Navigator {
         currentState = .navigating(from: currentNavigation, to: .folders👉🏻list👉note(listId: listId, noteId: noteId))
         if navigationController.children.count>2,
            let currentListVC = navigationController.children[1] as? ListVC,
-           currentListVC.routeInput == listId,
+           currentListVC.navigationInput == listId,
            let currentNoteVC = navigationController.children[2] as? NoteVC,
-           currentNoteVC.routeInput == noteId {
+           currentNoteVC.navigationInput == noteId {
             // Already there, nothing to do
             // [✅,✅,✅,?...]
             currentNavigateCompletionBlock = completion
@@ -121,10 +121,10 @@ class NavigatorImpl : NSObject, Navigator {
         } else {
             // Note is not in place
             // [✅] [✅,?] [✅,?,❌] [✅,?,❌...]
-            let noteVC = NoteVC(navigator: self, model:model, noteId: noteId)
+            let noteVC = NoteVC(navigator: self, model:model, navigationInput: noteId)
             if navigationController.children.count>1,
                let currentListVC = navigationController.children[1] as? ListVC,
-               currentListVC.routeInput == listId {
+               currentListVC.navigationInput == listId {
                 // Already there, nothing to do
                 // [✅] [✅,✅] [✅,✅,❌] [✅,✅,❌...]
                 currentNavigateCompletionBlock = completion
@@ -135,7 +135,7 @@ class NavigatorImpl : NSObject, Navigator {
                 // List is not in place
                 // [✅] [✅,❌] [✅,❌...]
                 currentNavigateCompletionBlock = completion
-                let listVC = ListVC(navigator: self, model:model, listId: listId)
+                let listVC = ListVC(navigator: self, model:model, navigationInput: listId)
                 let foldersVC = navigationController.children.first!
                 navigationController.setViewControllers([foldersVC,listVC,noteVC], animated: animated)
             }
@@ -156,7 +156,7 @@ extension NavigatorImpl : UINavigationControllerDelegate {
                 assertionFailure()
                 return .folders
             }
-            return .folders👉list(listId: listVC.routeInput)
+            return .folders👉list(listId: listVC.navigationInput)
         } else {
             assert(navC.viewControllers.count==3)
             guard let listVC = navC.viewControllers[1] as? ListVC,
@@ -164,7 +164,7 @@ extension NavigatorImpl : UINavigationControllerDelegate {
                 assertionFailure()
                 return .folders
             }
-            return .folders👉🏻list👉note(listId: listVC.routeInput, noteId: noteVC.routeInput)
+            return .folders👉🏻list👉note(listId: listVC.navigationInput, noteId: noteVC.navigationInput)
         }
     }
     func navigationController(_ navigationController: UINavigationController,
