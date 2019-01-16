@@ -98,7 +98,7 @@ class RoutingNotesTests: XCTestCase {
             XCTAssertNotNil(rootVCTester.rootWindow)
             
             let exp = expectation(description: "deepLinkToList")
-            navigator.navigate(to: .folders👉list(listId: "1"), completion: { (cancelled: Bool) in
+            navigator.navigate(to: .folders👉list(listId: "1"), animated: true,  completion: { (cancelled: Bool) in
                 exp.fulfill()
             })
             RunLoop.current.run(until: Date())
@@ -137,12 +137,12 @@ class RoutingNotesTests: XCTestCase {
             XCTAssertNotNil(rootVCTester.rootWindow)
 
             let listExp = expectation(description: "deepLinkToList")
-            navigator.navigate(to: .folders👉list(listId: "1"), completion: { (cancelled: Bool) in
+            navigator.navigate(to: .folders👉list(listId: "1"), animated: true, completion: { (cancelled: Bool) in
                 XCTAssertTrue(cancelled)
                 listExp.fulfill()
             })
             let noteExp = expectation(description: "deepLinkToNote")
-            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), completion: { (cancelled: Bool) in
+            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), animated: true, completion: { (cancelled: Bool) in
                 XCTAssertFalse(cancelled)
                 noteExp.fulfill()
             })
@@ -181,12 +181,12 @@ class RoutingNotesTests: XCTestCase {
             XCTAssertNotNil(rootVCTester.rootWindow)
 
             let noteExp1 = expectation(description: "deepLinkToNote1")
-            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), completion: { (cancelled: Bool) in
+            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), animated: true, completion: { (cancelled: Bool) in
                 XCTAssertFalse(cancelled)
                 noteExp1.fulfill()
             })
             let noteExp2 = expectation(description: "deepLinkToNote2")
-            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), completion: { (cancelled: Bool) in
+            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), animated: true, completion: { (cancelled: Bool) in
                 XCTAssertFalse(cancelled)
                 noteExp2.fulfill()
             })

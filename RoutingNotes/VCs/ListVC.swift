@@ -109,6 +109,6 @@ extension ListVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let note = notes[indexPath.row]
         let newNavigation = Navigation.folders👉🏻list👉note(listId: navigationInput, noteId: note.noteId)
-        navigator.navigate(to: newNavigation) { (cancelled: Bool) in }
+        navigator.navigate(to: newNavigation, animated: true) { (cancelled: Bool) in }
     }
 }

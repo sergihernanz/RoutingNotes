@@ -26,7 +26,7 @@ protocol Navigator {
     var currentNavigation : Navigation { get }
 
     // Deep link
-    func navigate(to: Navigation, completion: @escaping (_ cancelled: Bool) -> Void)
+    func navigate(to: Navigation, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void)
 
     // TODO: Normal navigation
 

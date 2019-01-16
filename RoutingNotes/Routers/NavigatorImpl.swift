@@ -80,7 +80,7 @@ class NavigatorImpl : NSObject, Navigator {
             }
         }
     }
-    var currentState: NavigatorState {
+    fileprivate var currentState: NavigatorState {
         willSet {
             switch currentState {
             case .navigating(from: _, to: let toNavigation, toCompletion: let completion):
@@ -93,21 +93,20 @@ class NavigatorImpl : NSObject, Navigator {
             }
         }
         didSet {
-            print("\(currentState)")
+            print("[NOTESNAVIGATOR] \(currentState)")
         }
     }
 
-    func navigate(to: Navigation, completion: @escaping (_ cancelled: Bool) -> Void) {
+    func navigate(to: Navigation, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
         switch currentState {
         case .idle:
-            let animate = true
             switch to {
             case .folders:
-                presentFolders(animated: animate, completion: completion)
+                presentFolders(animated: animated, completion: completion)
             case .folders👉list(let listId):
-                presentList(listId: listId, animated: animate, completion: completion)
+                presentList(listId: listId, animated: animated, completion: completion)
             case .folders👉🏻list👉note(let listId, let noteId):
-                presentDetail(listId: listId, noteId: noteId, animated: animate, completion: completion)
+                presentDetail(listId: listId, noteId: noteId, animated: animated, completion: completion)
             }
         case .navigating(from: let navigatingFrom, to: let navigatingTo, toCompletion: let toCompletion):
             if to != navigatingTo {
@@ -240,7 +239,8 @@ extension NavigatorImpl : UINavigationControllerDelegate {
         case .navigatingToNonFinalNavigation(from: _, to: let intermediateDestination,
                                              finalNavigation: let finalNavigation, finalCompletion: let finalCompletion):
             currentState = .idle(intermediateDestination)
-            navigate(to: finalNavigation, completion: finalCompletion)
+            // TODO: save animaged Bool for finalAnimation
+            navigate(to: finalNavigation, animated: true, completion: finalCompletion)
         case .idle(_):
             currentState = .idle(newNavigation)
         }
