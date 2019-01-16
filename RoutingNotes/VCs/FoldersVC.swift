@@ -99,7 +99,7 @@ extension FoldersVC : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let list = folders[indexPath.row]
         let newNavigation = Navigation.folders👉list(listId: list.listId)
-        navigator.navigate(to: newNavigation) {}
+        navigator.navigate(to: newNavigation) { (cancelled: Bool) in }
         //self.navigationController?.pushViewController(UIViewController(), animated: true)
     }
 }

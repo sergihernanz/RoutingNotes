@@ -98,7 +98,7 @@ class RoutingNotesTests: XCTestCase {
             XCTAssertNotNil(rootVCTester.rootWindow)
             
             let exp = expectation(description: "deepLinkToList")
-            navigator.navigate(to: .folders👉list(listId: "1"), completion: {
+            navigator.navigate(to: .folders👉list(listId: "1"), completion: { (cancelled: Bool) in
                 exp.fulfill()
             })
             RunLoop.current.run(until: Date())
@@ -112,6 +112,94 @@ class RoutingNotesTests: XCTestCase {
             let sshot = XCTAttachment(image:img)
             self.add(sshot)
             XCTAssertTrue(rootVCTester.rootWindow.allLabels(text: "List 1").count == 1)
+            XCTAssertTrue(rootVCTester.rootWindow.allLabels(text: "Note A").count == 1)
+        })
+    }
+
+    func testCallNavigateWithoutWaitingForCompletion() {
+        var navigator: NavigatorImpl!
+        XCTContext.runActivity(named: """
+            GIVEN we have a valid router configured for the default route
+                  AND configured with a mock model
+        """, block:{ _ in
+            let model = populateMockModel()
+            navigator = NavigatorImpl(model: model)
+            XCTAssertNotNil(navigator)
+        })
+        var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
+        XCTContext.runActivity(named: """
+            WHEN we deep Link to a list id AND to a noteId before first navigate ends AND present it on a valid window
+        """, block:{ _ in
+            let mainVC = navigator.rootViewController
+            rootVCTester = UIWindowRootViewControllerTester(viewController: mainVC)
+            RunLoop.current.run(until: Date())
+            XCTAssertNotNil(rootVCTester)
+            XCTAssertNotNil(rootVCTester.rootWindow)
+
+            let listExp = expectation(description: "deepLinkToList")
+            navigator.navigate(to: .folders👉list(listId: "1"), completion: { (cancelled: Bool) in
+                XCTAssertTrue(cancelled)
+                listExp.fulfill()
+            })
+            let noteExp = expectation(description: "deepLinkToNote")
+            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), completion: { (cancelled: Bool) in
+                XCTAssertFalse(cancelled)
+                noteExp.fulfill()
+            })
+            RunLoop.current.run(until: Date())
+            wait(for: [listExp, noteExp], timeout: 2)
+            XCTAssertEqual(navigator.currentNavigation, .folders👉🏻list👉note(listId: "1", noteId: "A"))
+        })
+        XCTContext.runActivity(named: """
+            THEN it displays the note detail
+        """, block:{ _ in
+            let img = rootVCTester.rootWindow.orders_takeSnapshot()
+            let sshot = XCTAttachment(image:img)
+            self.add(sshot)
+            XCTAssertTrue(rootVCTester.rootWindow.allLabels(text: "Note A").count == 1)
+        })
+    }
+
+    func testCallSameNavigateWithoutWaitingForCompletion() {
+        var navigator: NavigatorImpl!
+        XCTContext.runActivity(named: """
+            GIVEN we have a valid router configured for the default route
+                  AND configured with a mock model
+        """, block:{ _ in
+            let model = populateMockModel()
+            navigator = NavigatorImpl(model: model)
+            XCTAssertNotNil(navigator)
+        })
+        var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
+        XCTContext.runActivity(named: """
+            WHEN we deep Link to a list id AND to a noteId before first navigate ends AND present it on a valid window
+        """, block:{ _ in
+            let mainVC = navigator.rootViewController
+            rootVCTester = UIWindowRootViewControllerTester(viewController: mainVC)
+            RunLoop.current.run(until: Date())
+            XCTAssertNotNil(rootVCTester)
+            XCTAssertNotNil(rootVCTester.rootWindow)
+
+            let noteExp1 = expectation(description: "deepLinkToNote1")
+            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), completion: { (cancelled: Bool) in
+                XCTAssertFalse(cancelled)
+                noteExp1.fulfill()
+            })
+            let noteExp2 = expectation(description: "deepLinkToNote2")
+            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), completion: { (cancelled: Bool) in
+                XCTAssertFalse(cancelled)
+                noteExp2.fulfill()
+            })
+            RunLoop.current.run(until: Date())
+            wait(for: [noteExp1, noteExp2], timeout: 2)
+            XCTAssertEqual(navigator.currentNavigation, .folders👉🏻list👉note(listId: "1", noteId: "A"))
+        })
+        XCTContext.runActivity(named: """
+            THEN it displays the note detail
+        """, block:{ _ in
+            let img = rootVCTester.rootWindow.orders_takeSnapshot()
+            let sshot = XCTAttachment(image:img)
+            self.add(sshot)
             XCTAssertTrue(rootVCTester.rootWindow.allLabels(text: "Note A").count == 1)
         })
     }
