@@ -9,33 +9,25 @@
 import Foundation
 import UIKit
 
-class ListVC : UIViewController, Navigatable {
+class ListVC : UIViewController {
 
-    typealias InputType = ListId
-    typealias OutputType = NoteId
 
     @available(*,unavailable)
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) { fatalError() }
     @available(*,unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    private(set) var navigationInput : ListId
-    var navigationOutput: NoteId? {
-        guard let selectedIP = tableView.indexPathForSelectedRow else {
-            return nil
-        }
-        return notes[selectedIP.row].noteId
-    }
+    private(set) var listInput : ListId
 
     private(set) var navigator:Navigator
     private(set) var model:OrdersModelContext
     required init(navigator:Navigator, model:OrdersModelContext, navigationInput:ListId) {
         self.navigator = navigator
         self.model = model
-        self.navigationInput = navigationInput
+        self.listInput = navigationInput
 
         do {
-            let list = try model.fetch(id: .list(navigationInput)) as List?
+            let list = try model.fetch(id: .list(listInput)) as List?
             if let l = list {
                 try notes = l.fetchNotes(ctxt: model)
             } else {
@@ -65,7 +57,7 @@ class ListVC : UIViewController, Navigatable {
         deselectRow(tableView: tableView, animated: animated)
 
         do {
-            let list = try model.fetch(id: .list(navigationInput)) as List?
+            let list = try model.fetch(id: .list(listInput)) as List?
             if let listName = list?.name {
                 navigationItem.title = listName
             }
@@ -104,11 +96,5 @@ extension ListVC : UITableViewDelegate {
         }
         titleLabel.text = note.title
         subtitleLabel.text = String(describing: note.modifiedDate)
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let note = notes[indexPath.row]
-        let newNavigation = Navigation.folders👉🏻list👉note(listId: navigationInput, noteId: note.noteId)
-        navigator.navigate(to: newNavigation, animated: true) { (cancelled: Bool) in }
     }
 }

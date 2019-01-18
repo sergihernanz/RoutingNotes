@@ -28,7 +28,7 @@ class NavigatorImpl : NSObject, Navigator {
     }
 
     fileprivate lazy var navigationController : UINavigationController = {
-        let navC = UINavigationController(rootViewController: FoldersVC(navigator: self, model:model, navigationInput:nil))
+        let navC = UINavigationController(rootViewController: FoldersVC(navigator: self, model:model, navigationInput:()))
         navC.navigationBar.tintColor = UIColor.black
         navC.delegate = self
         return navC

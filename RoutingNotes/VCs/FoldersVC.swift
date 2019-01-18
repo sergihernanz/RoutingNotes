@@ -9,27 +9,16 @@
 import Foundation
 import UIKit
 
-class FoldersVC : UIViewController, Navigatable {
-
-    typealias InputType = Any?
-    typealias OutputType = ListId
+class FoldersVC : UIViewController {
 
     @available(*,unavailable)
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) { fatalError() }
     @available(*,unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    var navigationInput: Any?
-    var navigationOutput: ListId? {
-        guard let selectedIP = tableView.indexPathForSelectedRow else {
-            return nil
-        }
-        return folders[selectedIP.row].listId
-    }
-
     private(set) var navigator:Navigator
     private(set) var model:OrdersModelContext
-    required init(navigator: Navigator, model: OrdersModelContext, navigationInput: Any?) {
+    required init(navigator: Navigator, model: OrdersModelContext, navigationInput: Void) {
         self.navigator = navigator
         self.model = model
 
@@ -48,7 +37,7 @@ class FoldersVC : UIViewController, Navigatable {
         view = table
     }
 
-    var folders : [List] {
+    private(set) var folders : [List] {
         didSet {
             tableView.reloadData()
         }
@@ -96,10 +85,4 @@ extension FoldersVC : UITableViewDelegate {
         }
     }
 
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let list = folders[indexPath.row]
-        let newNavigation = Navigation.folders👉list(listId: list.listId)
-        navigator.navigate(to: newNavigation, animated: true) { (cancelled: Bool) in }
-        //self.navigationController?.pushViewController(UIViewController(), animated: true)
-    }
 }

@@ -14,6 +14,17 @@ enum Navigation : Equatable {
     case folders👉🏻list👉note(listId:ListId, noteId:NoteId)
 }
 
+enum NavigationError : Error {
+    case invalidDestinationForCurrentNavigation(currentNavigation:Navigation, destinationDescription:String)
+
+    var localizedDescription: String {
+        switch self {
+        case .invalidDestinationForCurrentNavigation(let currentNavigation, let destinationDescription):
+            return "Current navigation (\(currentNavigation) does not support navigating to \(destinationDescription)"
+        }
+    }
+}
+
 
 import UIKit
 
