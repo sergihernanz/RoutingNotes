@@ -38,49 +38,10 @@ class NavigatorImpl : NSObject, Navigator {
     }
 
     var currentNavigation: Navigation {
-        switch currentState {
-        case .idle(let navigation):
-            return navigation
-        case .navigating(from: _, to: let futureNavigation, toCompletion: _):
-            return futureNavigation
-        case .navigatingToNonFinalNavigation(from: _, to: _, finalNavigation: let finalNavigation, finalCompletion: _):
-            return finalNavigation
-        }
+        return currentState.currentNavigation
     }
-    enum NavigatorState : Equatable {
-
-        case idle(Navigation)
-        case navigating(from:Navigation, to:Navigation, toCompletion:((_ cancelled: Bool) -> Void))
-        case navigatingToNonFinalNavigation(from:Navigation, to:Navigation,
-                                            finalNavigation: Navigation, finalCompletion: ((_ cancelled: Bool) -> Void))
-
-        static func == (lhs: NavigatorImpl.NavigatorState, rhs: NavigatorImpl.NavigatorState) -> Bool {
-            switch lhs {
-            case .idle(let lhsn):
-                switch rhs {
-                case .idle(let rhsn):
-                    return lhsn == rhsn
-                default:
-                    return false
-                }
-            case .navigating(from: let lhfrom, to: let lhto, toCompletion: _):
-                switch rhs {
-                case .navigating(from: let rhfrom, to: let rhto, toCompletion: _):
-                    return lhfrom == rhfrom && rhto == lhto;
-                default:
-                    return false
-                }
-            case .navigatingToNonFinalNavigation(from: let lhfrom, to: let lhto, finalNavigation: let lhfinal, finalCompletion: _):
-                switch rhs {
-                case .navigatingToNonFinalNavigation(from: let rhfrom, to: let rhto, finalNavigation: let rhfinal, finalCompletion: _):
-                    return lhfrom == rhfrom && rhto == lhto && rhfinal == lhfinal;
-                default:
-                    return false
-                }
-            }
-        }
-    }
-    fileprivate var currentState: NavigatorState {
+    
+    fileprivate var currentState: NavigatorState<Navigation> {
         willSet {
             switch currentState {
             case .navigating(from: _, to: let toNavigation, toCompletion: let completion):
@@ -139,66 +100,79 @@ class NavigatorImpl : NSObject, Navigator {
     }
 
     fileprivate func presentList(listId:ListId, animated:Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
+        let newNavigation: Navigation = .folders👉list(listId: listId)
         currentState = .navigating(from: currentNavigation,
-                                   to: .folders👉list(listId: listId),
+                                   to: newNavigation,
                                    toCompletion: completion)
-        if navigationController.children.count>1,
-           let currentListVC = navigationController.children[1] as? ListVC,
-           currentListVC.navigationInput == listId {
-            // Already there, nothing to do
-            // [✅,✅,?]
-            navigationController.popToViewController(currentListVC, animated: animated)
-        } else {
-            // List is not in place
-            // [✅,❌,?...]
-            let listVC = ListVC(navigator: self, model:model, navigationInput: listId)
-            if navigationController.children.count>1 {
-                // Already there... but different input, rebuild
-                // [✅,❌]
-                let foldersVC = navigationController.children.first!
-                navigationController.setViewControllers([foldersVC,listVC], animated: animated)
-            } else {
-                // [✅]
-                navigationController.pushViewController(listVC, animated: animated)
-            }
-        }
+        let pos0Navigation = newNavigation.pop()
+        let VCs = [navigationController.getLastInstancedOrNewViewController(forNavigation: pos0Navigation) ??
+                    buildLastRoutableViewController(forNavigation: pos0Navigation),
+                   navigationController.getLastInstancedOrNewViewController(forNavigation: newNavigation) ??
+                    buildLastRoutableViewController(forNavigation: newNavigation)]
+        navigationController.setPopOrPushViewControllers(VCs, animated: animated)
     }
 
     fileprivate func presentDetail(listId:ListId,noteId:NoteId, animated:Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
+        let newNavigation: Navigation = .folders👉🏻list👉note(listId: listId, noteId: noteId)
         currentState = .navigating(from: currentNavigation,
-                                   to: .folders👉🏻list👉note(listId: listId, noteId: noteId),
+                                   to: newNavigation,
                                    toCompletion: completion)
-        if navigationController.children.count>2,
-           let currentListVC = navigationController.children[1] as? ListVC,
-           currentListVC.navigationInput == listId,
-           let currentNoteVC = navigationController.children[2] as? NoteVC,
-           currentNoteVC.navigationInput == noteId {
-            // Already there, nothing to do
-            // [✅,✅,✅,?...]
-            navigationController.popToViewController(currentNoteVC, animated: animated)
-        } else {
-            // Note is not in place
-            // [✅] [✅,?] [✅,?,❌] [✅,?,❌...]
-            let noteVC = NoteVC(navigator: self, model:model, navigationInput: noteId)
-            if navigationController.children.count>1,
-               let currentListVC = navigationController.children[1] as? ListVC,
-               currentListVC.navigationInput == listId {
-                // Already there, nothing to do
-                // [✅] [✅,✅] [✅,✅,❌] [✅,✅,❌...]
-                let foldersVC = navigationController.children.first!
-                let listVC = navigationController.children[1]
-                navigationController.setViewControllers([foldersVC,listVC,noteVC], animated: animated)
-            } else {
-                // List is not in place
-                // [✅] [✅,❌] [✅,❌...]
-                let listVC = ListVC(navigator: self, model:model, navigationInput: listId)
-                let foldersVC = navigationController.children.first!
-                navigationController.setViewControllers([foldersVC,listVC,noteVC], animated: animated)
-            }
+        let pos1Navigation = newNavigation.pop()
+        let pos0Navigation = pos1Navigation.pop()
+        let VCs = [navigationController.getLastInstancedOrNewViewController(forNavigation: pos0Navigation) ??
+                    buildLastRoutableViewController(forNavigation: pos0Navigation),
+                   navigationController.getLastInstancedOrNewViewController(forNavigation: pos1Navigation) ??
+                    buildLastRoutableViewController(forNavigation: pos1Navigation),
+                   navigationController.getLastInstancedOrNewViewController(forNavigation: newNavigation) ??
+                    buildLastRoutableViewController(forNavigation: newNavigation)]
+        navigationController.setPopOrPushViewControllers(VCs, animated: animated)
+    }
+}
+
+extension NavigatorImpl {
+
+    func buildLastRoutableViewController(forNavigation:Navigation) -> UIViewController {
+        switch forNavigation {
+        case .folders:
+            return FoldersVC(navigator: self, model:model, navigationInput:())
+        case .folders👉list(let listId):
+            return ListVC(navigator: self, model:model, navigationInput: listId)
+        case .folders👉🏻list👉note(_, let noteId):
+            return NoteVC(navigator: self, model:model, navigationInput: noteId)
         }
     }
+}
 
-
+extension UINavigationController {
+    func setPopOrPushViewControllers(_ newViewControllers: [UIViewController], animated: Bool) {
+        var viewControllersWithoutLast = viewControllers
+        _ = viewControllersWithoutLast.popLast()
+        if newViewControllers.elementsEqual(viewControllersWithoutLast) {
+            popViewController(animated: animated)
+        } else {
+            self.setViewControllers(newViewControllers, animated: animated)
+        }
+    }
+    func getLastInstancedOrNewViewController(forNavigation:Navigation) -> UIViewController? {
+        switch forNavigation {
+        case .folders:
+            return self.viewControllers.first
+        case .folders👉list(let listId):
+            guard self.viewControllers.count > 1,
+                  let secondVC = self.viewControllers[1] as? ListVC,
+                  secondVC.navigationInput == listId else {
+                    return nil
+            }
+            return secondVC
+        case .folders👉🏻list👉note(_, let noteId):
+            guard self.viewControllers.count > 2,
+                  let thirdVC = self.viewControllers[2] as? NoteVC,
+                  thirdVC.navigationInput == noteId else {
+                    return nil
+            }
+            return thirdVC
+        }
+    }
 }
 
 extension NavigatorImpl : UINavigationControllerDelegate {

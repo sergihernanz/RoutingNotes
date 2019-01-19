@@ -21,6 +21,10 @@
 		2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E08721EF680C008104C4 /* Navigatable.swift */; };
 		2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */; };
 		2DCE24AD21B198ED00150FB0 /* NavigatorImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */; };
+		2DD274D021F26D7E003FB74A /* FoldersVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274CF21F26D7E003FB74A /* FoldersVC+Routing.swift */; };
+		2DD274D321F273B3003FB74A /* ListVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D221F273B3003FB74A /* ListVC+Routing.swift */; };
+		2DD274D621F27577003FB74A /* NoteVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D521F27577003FB74A /* NoteVC+Routing.swift */; };
+		2DD274D921F27A69003FB74A /* NavigatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D821F27A69003FB74A /* NavigatorState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,10 @@
 		2DB6E08721EF680C008104C4 /* Navigatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigatable.swift; sourceTree = "<group>"; };
 		2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+DeselectRow.swift"; sourceTree = "<group>"; };
 		2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorImpl.swift; sourceTree = "<group>"; };
+		2DD274CF21F26D7E003FB74A /* FoldersVC+Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FoldersVC+Routing.swift"; sourceTree = "<group>"; };
+		2DD274D221F273B3003FB74A /* ListVC+Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListVC+Routing.swift"; sourceTree = "<group>"; };
+		2DD274D521F27577003FB74A /* NoteVC+Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteVC+Routing.swift"; sourceTree = "<group>"; };
+		2DD274D821F27A69003FB74A /* NavigatorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +127,8 @@
 		2D546E1921AE789E00CFB5BA /* Routers */ = {
 			isa = PBXGroup;
 			children = (
+				2DD274CE21F26D7E003FB74A /* VCsRouting */,
+				2DD274D821F27A69003FB74A /* NavigatorState.swift */,
 				2D546E1A21AE789E00CFB5BA /* Routing.swift */,
 				2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */,
 			);
@@ -144,6 +154,16 @@
 				2D06C2DF21BCF9F4004962A2 /* Model.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		2DD274CE21F26D7E003FB74A /* VCsRouting */ = {
+			isa = PBXGroup;
+			children = (
+				2DD274CF21F26D7E003FB74A /* FoldersVC+Routing.swift */,
+				2DD274D221F273B3003FB74A /* ListVC+Routing.swift */,
+				2DD274D521F27577003FB74A /* NoteVC+Routing.swift */,
+			);
+			path = VCsRouting;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,11 +269,15 @@
 				2D5A8DBF21B1CD6E00DAFC8D /* ListVC.swift in Sources */,
 				2D546E1B21AE789E00CFB5BA /* Routing.swift in Sources */,
 				2DCE24AD21B198ED00150FB0 /* NavigatorImpl.swift in Sources */,
+				2DD274D621F27577003FB74A /* NoteVC+Routing.swift in Sources */,
+				2DD274D321F273B3003FB74A /* ListVC+Routing.swift in Sources */,
+				2DD274D021F26D7E003FB74A /* FoldersVC+Routing.swift in Sources */,
 				2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */,
 				2D06C2E021BCF9F4004962A2 /* Model.swift in Sources */,
 				2D5A8DBD21B1CD5100DAFC8D /* FoldersVC.swift in Sources */,
 				2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */,
 				2D546DF621AE77EA00CFB5BA /* AppDelegate.swift in Sources */,
+				2DD274D921F27A69003FB74A /* NavigatorState.swift in Sources */,
 				2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */,
 				2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */,
 			);
