@@ -16,13 +16,102 @@ extension UIViewController {
     }
 }
 
+class NotesNavigationEndpointsBuilder: NavigationEndpointsBuilder {
+
+    typealias NavigationType = NotesNavigation
+    typealias NavigatorType = NavigatorImpl
+    typealias ModelType = NotesModelContext
+
+    private(set) var model: NotesModelContext
+    required init(model: NotesModelContext) {
+        self.model = model
+    }
+
+    func getInstancedOrBuildViewController(forNavigationEndpoint:NotesNavigation,
+                                           navigator: NavigatorImpl) -> UIViewController {
+        return getEndpointCorrectInstancedViewController(forNavigationEndpoint: forNavigationEndpoint,
+                                                         navigator: navigator) ??
+                buildEndpointRoutableViewController(forNavigationEndpoint: forNavigationEndpoint,
+                                                    navigator: navigator)
+    }
+    private func buildEndpointRoutableViewController(forNavigationEndpoint:NotesNavigation,
+                                                     navigator: NavigatorImpl) -> UIViewController {
+        switch forNavigationEndpoint {
+        case .folders:
+            return FoldersVC(navigator: navigator, model:model, navigationInput:())
+        case .folders👉list(let listId):
+            return ListVC(navigator: navigator, model:model, navigationInput: listId)
+        case .folders👉🏻list👉note(_, let noteId):
+            return NoteVC(navigator: navigator, model:model, navigationInput: noteId)
+        }
+    }
+
+    func getEndpointCorrectInstancedViewController(forNavigationEndpoint:NotesNavigation,
+                                                   navigator: NavigatorImpl) -> UIViewController? {
+        switch forNavigationEndpoint {
+        case .folders:
+            return navigator.navigationController.viewControllers.first
+        case .folders👉list(let listId):
+            guard navigator.navigationController.viewControllers.count > 1,
+                let secondVC = navigator.navigationController.viewControllers[1] as? ListVC,
+                secondVC.navigationInput == listId,
+                // TODO:
+                //secondVC.navigator === navigator,
+                secondVC.model === model else {
+                    return nil
+            }
+            return secondVC
+        case .folders👉🏻list👉note(_, let noteId):
+            guard navigator.navigationController.viewControllers.count > 2,
+                let thirdVC = navigator.navigationController.viewControllers[2] as? NoteVC,
+                thirdVC.navigationInput == noteId,
+                // TODO:
+                //thirdVC.navigator === navigator,
+                thirdVC.model === model else {
+                    return nil
+            }
+            return thirdVC
+        }
+    }
+
+    func getCurrentNavigation(fromNavigator: NavigatorImpl) -> NotesNavigation {
+        var evaluatingNavigation: NotesNavigation
+        switch fromNavigator.currentState {
+        case .idle(let currentNavigation):
+            evaluatingNavigation = currentNavigation
+        case .navigating(_, let to, _):
+            evaluatingNavigation = to
+        case .navigatingToNonFinalNavigation(_, let to, _, _):
+            evaluatingNavigation = to
+        }
+
+        let evaluatingStack = evaluatingNavigation.navigationStack()
+        assert(evaluatingStack.count >= fromNavigator.navigationController.viewControllers.count)
+        let validVCsOnNavC = evaluatingStack.compactMap { (navigation) -> UIViewController? in
+            getEndpointCorrectInstancedViewController(forNavigationEndpoint: navigation,
+                                                      navigator: fromNavigator)
+            }.count
+        let numOfVCsAccordingToEvailuatingNavigation = evaluatingStack.count
+        let invalidVCsNumberInEvaluatingNavigation = numOfVCsAccordingToEvailuatingNavigation - validVCsOnNavC
+        assert( invalidVCsNumberInEvaluatingNavigation >= 0 )
+        if invalidVCsNumberInEvaluatingNavigation > 0 {
+            for _ in [1...invalidVCsNumberInEvaluatingNavigation] {
+                evaluatingNavigation = evaluatingNavigation.pop()!
+            }
+        }
+        return evaluatingNavigation
+    }
+}
+
 
 class NavigatorImpl : NSObject, Navigator {
 
-    fileprivate var model : OrdersModelContext
+    fileprivate var model : NotesModelContext
+    fileprivate var endpointsBuilder : NotesNavigationEndpointsBuilder
 
-    init(model:OrdersModelContext) {
+    init(model:NotesModelContext, endpointsBuilder: NotesNavigationEndpointsBuilder) {
         self.model = model
+        self.endpointsBuilder = endpointsBuilder
         currentState = .idle(.folders)
         super.init()
     }
@@ -37,11 +126,11 @@ class NavigatorImpl : NSObject, Navigator {
         return navigationController
     }
 
-    var currentNavigation: Navigation {
+    var currentNavigation: NotesNavigation {
         return currentState.currentNavigation
     }
     
-    fileprivate var currentState: NavigatorState<Navigation> {
+    fileprivate var currentState: NavigatorState<NotesNavigation> {
         willSet {
             switch currentState {
             case .navigating(from: _, to: let toNavigation, toCompletion: let completion):
@@ -59,7 +148,7 @@ class NavigatorImpl : NSObject, Navigator {
         }
     }
 
-    func navigate(to: Navigation, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
+    func navigate(to: NotesNavigation, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
         switch currentState {
         case .idle:
             switch to {
@@ -101,99 +190,35 @@ class NavigatorImpl : NSObject, Navigator {
     }
 
     fileprivate func presentList(listId:ListId, animated:Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
-        let newNavigation: Navigation = .folders👉list(listId: listId)
+        let newNavigation: NotesNavigation = .folders👉list(listId: listId)
         currentState = .navigating(from: currentNavigation,
                                    to: newNavigation,
                                    toCompletion: completion)
         let navigationStack = newNavigation.navigationStack()
         let VCs = navigationStack.map { (navigation) -> UIViewController in
-            getLastInstancedOrNewViewController(forNavigation: navigation)
+            endpointsBuilder.getInstancedOrBuildViewController(forNavigationEndpoint: navigation,
+                                                               navigator: self)
         }
         navigationController.setPopOrPushViewControllers(VCs, animated: animated)
     }
 
     fileprivate func presentDetail(listId:ListId,noteId:NoteId, animated:Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
-        let newNavigation: Navigation = .folders👉🏻list👉note(listId: listId, noteId: noteId)
+        let newNavigation: NotesNavigation = .folders👉🏻list👉note(listId: listId, noteId: noteId)
         currentState = .navigating(from: currentNavigation,
                                    to: newNavigation,
                                    toCompletion: completion)
         let navigationStack = newNavigation.navigationStack()
         let VCs = navigationStack.map { (navigation) -> UIViewController in
-            getLastInstancedOrNewViewController(forNavigation: navigation)
+            endpointsBuilder.getInstancedOrBuildViewController(forNavigationEndpoint: navigation,
+                                                               navigator: self)
         }
         navigationController.setPopOrPushViewControllers(VCs, animated: animated)
     }
 }
 
-extension NavigatorImpl {
-
-    func getLastInstancedOrNewViewController(forNavigation:Navigation) -> UIViewController {
-        return navigationController.getLastCorrectInstancedViewController(forNavigation:forNavigation) ??
-               buildLastRoutableViewController(forNavigation:forNavigation)
-    }
-    func buildLastRoutableViewController(forNavigation:Navigation) -> UIViewController {
-        switch forNavigation {
-        case .folders:
-            return FoldersVC(navigator: self, model:model, navigationInput:())
-        case .folders👉list(let listId):
-            return ListVC(navigator: self, model:model, navigationInput: listId)
-        case .folders👉🏻list👉note(_, let noteId):
-            return NoteVC(navigator: self, model:model, navigationInput: noteId)
-        }
-    }
-}
-
-extension UINavigationController {
-    func getLastCorrectInstancedViewController(forNavigation:Navigation) -> UIViewController? {
-        switch forNavigation {
-        case .folders:
-            return self.viewControllers.first
-        case .folders👉list(let listId):
-            guard self.viewControllers.count > 1,
-                  let secondVC = self.viewControllers[1] as? ListVC,
-                  secondVC.navigationInput == listId else {
-                    return nil
-            }
-            return secondVC
-        case .folders👉🏻list👉note(_, let noteId):
-            guard self.viewControllers.count > 2,
-                  let thirdVC = self.viewControllers[2] as? NoteVC,
-                  thirdVC.navigationInput == noteId else {
-                    return nil
-            }
-            return thirdVC
-        }
-    }
-}
 
 extension NavigatorImpl : UINavigationControllerDelegate {
 
-    private func calculateCurrentNavigation(fromNavigationController navC: UINavigationController) -> Navigation {
-        var evaluatingNavigation: Navigation
-        switch self.currentState {
-        case .idle(let currentNavigation):
-            evaluatingNavigation = currentNavigation
-        case .navigating(_, let to, _):
-            evaluatingNavigation = to
-        case .navigatingToNonFinalNavigation(_, let to, _, _):
-            evaluatingNavigation = to
-        }
-
-        let evaluatingStack = evaluatingNavigation.navigationStack()
-        assert(evaluatingStack.count >= navC.viewControllers.count)
-        let validVCsOnNavC = evaluatingStack.compactMap { (navigation) -> UIViewController? in
-            navC.getLastCorrectInstancedViewController(forNavigation: navigation)
-        }.count
-        let numOfVCsAccordingToEvailuatingNavigation = evaluatingStack.count
-        let invalidVCsNumberInEvaluatingNavigation = numOfVCsAccordingToEvailuatingNavigation - validVCsOnNavC
-        assert( invalidVCsNumberInEvaluatingNavigation >= 0 )
-        if invalidVCsNumberInEvaluatingNavigation > 0 {
-            for _ in [1...invalidVCsNumberInEvaluatingNavigation] {
-                evaluatingNavigation = evaluatingNavigation.pop()!
-            }
-        }
-        return evaluatingNavigation
-    }
     func navigationController(_ navigationController: UINavigationController,
                               willShow viewController: UIViewController,
                               animated: Bool) {
@@ -203,7 +228,7 @@ extension NavigatorImpl : UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController,
                               didShow viewController: UIViewController,
                               animated: Bool) {
-        let newNavigation = calculateCurrentNavigation(fromNavigationController: navigationController)
+        let newNavigation = endpointsBuilder.getCurrentNavigation(fromNavigator: self)
         switch currentState {
         case .navigating(from: _, to: _, toCompletion: _):
             currentState = .idle(newNavigation)

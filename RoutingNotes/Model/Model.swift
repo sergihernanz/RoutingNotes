@@ -71,7 +71,7 @@ struct NotesModelFetchRequest {
                                       range: 0...0)
     }
 }
-typealias OrdersModelContext = AnyModelContext<NotesModelId,NotesModelFetchRequest>
+typealias NotesModelContext = AnyModelContext<NotesModelId,NotesModelFetchRequest>
 
 
 // Notes model

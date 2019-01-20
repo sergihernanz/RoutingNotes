@@ -35,8 +35,8 @@ extension ListVC : Navigatable {
     }
 }
 
-fileprivate extension Navigation {
-    func navigationToDetail(noteId: ListId) throws -> Navigation {
+fileprivate extension NotesNavigation {
+    func navigationToDetail(noteId: ListId) throws -> NotesNavigation {
         switch self {
         case .folders👉list(listId: let listId):
             return .folders👉🏻list👉note(listId: listId, noteId: noteId)

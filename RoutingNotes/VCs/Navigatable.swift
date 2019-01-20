@@ -16,7 +16,7 @@ protocol Navigatable {
     var navigationInput: InputType { get }
     var navigationOutput: OutputType? { get }
     var navigator: Navigator { get }
-    var model: OrdersModelContext { get }
+    var model: NotesModelContext { get }
 
-    init(navigator:Navigator, model:OrdersModelContext, navigationInput: InputType);
+    init(navigator:Navigator, model:NotesModelContext, navigationInput: InputType);
 }

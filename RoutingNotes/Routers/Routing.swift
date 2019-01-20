@@ -8,12 +8,13 @@
 
 import Foundation
 
-enum Navigation : Equatable {
+enum NotesNavigation : Navigation {
+
     case folders
     case folders👉list(listId:ListId)
     case folders👉🏻list👉note(listId:ListId, noteId:NoteId)
 
-    func pop() -> Navigation? {
+    func pop() -> NotesNavigation? {
         switch self {
         case .folders👉🏻list👉note(listId: let listId, noteId:_):
             return .folders👉list(listId: listId)
@@ -23,19 +24,10 @@ enum Navigation : Equatable {
             return nil
         }
     }
-
-    func navigationStack() -> [Navigation] {
-        guard let backNavigation = self.pop() else {
-            return [self]
-        }
-        var stack = backNavigation.navigationStack()
-        stack.append(self)
-        return stack
-    }
 }
 
 enum NavigationError : Error {
-    case invalidDestinationForCurrentNavigation(currentNavigation:Navigation, destinationDescription:String)
+    case invalidDestinationForCurrentNavigation(currentNavigation:NotesNavigation, destinationDescription:String)
 
     var localizedDescription: String {
         switch self {
@@ -54,10 +46,10 @@ protocol Navigator {
     var rootViewController: UIViewController { get }
 
     // Information
-    var currentNavigation : Navigation { get }
+    var currentNavigation : NotesNavigation { get }
 
     // Deep link
-    func navigate(to: Navigation, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void)
+    func navigate(to: NotesNavigation, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void)
 
     // TODO: Normal navigation
 

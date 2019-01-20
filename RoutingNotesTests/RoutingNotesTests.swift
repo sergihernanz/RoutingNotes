@@ -11,7 +11,7 @@ import XCTest
 
 class RoutingNotesTests: XCTestCase {
 
-    var model : OrdersModelContext!
+    var model : NotesModelContext!
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         model = populateMockModel()
@@ -21,7 +21,7 @@ class RoutingNotesTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    fileprivate func populateMockModel() -> OrdersModelContext {
+    fileprivate func populateMockModel() -> NotesModelContext {
         let model = MockUDOrdersModelContext(persistenceName: "test")
         do {
             let notes : [Note] = try model.fetch(request: NotesModelFetchRequest.emptyPredicate)
@@ -32,7 +32,7 @@ class RoutingNotesTests: XCTestCase {
             fatalError()
         }
         do {
-            let anyContext = OrdersModelContext(model)
+            let anyContext = NotesModelContext(model)
             let notes : [Note] = try anyContext.fetch(request: NotesModelFetchRequest.emptyPredicate)
             let lists : [List] = try anyContext.fetch(request: NotesModelFetchRequest.emptyPredicate)
             assert(notes.count>0)
@@ -40,7 +40,7 @@ class RoutingNotesTests: XCTestCase {
         } catch (_) {
             fatalError()
         }
-        return OrdersModelContext(model)
+        return NotesModelContext(model)
     }
 
     func testMainFoldersScreenRoute() {
@@ -50,7 +50,8 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
-            navigator = NavigatorImpl(model: model)
+            let endpointsBuilder = NotesNavigationEndpointsBuilder(model: model)
+            navigator = NavigatorImpl(model: model, endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -84,7 +85,8 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
-            navigator = NavigatorImpl(model: model)
+            let endpointsBuilder = NotesNavigationEndpointsBuilder(model: model)
+            navigator = NavigatorImpl(model: model, endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -123,7 +125,8 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
-            navigator = NavigatorImpl(model: model)
+            let endpointsBuilder = NotesNavigationEndpointsBuilder(model: model)
+            navigator = NavigatorImpl(model: model, endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -167,7 +170,8 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
-            navigator = NavigatorImpl(model: model)
+            let endpointsBuilder = NotesNavigationEndpointsBuilder(model: model)
+            navigator = NavigatorImpl(model: model, endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -211,7 +215,8 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
-            navigator = NavigatorImpl(model: model)
+            let endpointsBuilder = NotesNavigationEndpointsBuilder(model: model)
+            navigator = NavigatorImpl(model: model, endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!

@@ -20,8 +20,8 @@ class ListVC : UIViewController {
     private(set) var listInput : ListId
 
     private(set) var navigator:Navigator
-    private(set) var model:OrdersModelContext
-    required init(navigator:Navigator, model:OrdersModelContext, navigationInput:ListId) {
+    private(set) var model:NotesModelContext
+    required init(navigator:Navigator, model:NotesModelContext, navigationInput:ListId) {
         self.navigator = navigator
         self.model = model
         self.listInput = navigationInput

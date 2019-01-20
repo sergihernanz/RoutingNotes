@@ -19,6 +19,7 @@
 		2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */; };
 		2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7993CF21D7BC3700279B87 /* MockUDOrdersModelContext.swift */; };
 		2D8C8E7C21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */; };
+		2D8C8E7E21F485F50045FC13 /* NavigationEndpointsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */; };
 		2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E08721EF680C008104C4 /* Navigatable.swift */; };
 		2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */; };
 		2DCE24AD21B198ED00150FB0 /* NavigatorImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */; };
@@ -56,6 +57,7 @@
 		2D5A8DC321B2738600DAFC8D /* __unused__Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __unused__Repository.swift; sourceTree = "<group>"; };
 		2D7993CF21D7BC3700279B87 /* MockUDOrdersModelContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUDOrdersModelContext.swift; sourceTree = "<group>"; };
 		2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+pushPopOrSetViewControllers.swift"; sourceTree = "<group>"; };
+		2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationEndpointsBuilder.swift; sourceTree = "<group>"; };
 		2DB6E08721EF680C008104C4 /* Navigatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigatable.swift; sourceTree = "<group>"; };
 		2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+DeselectRow.swift"; sourceTree = "<group>"; };
 		2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorImpl.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 			children = (
 				2DD274CE21F26D7E003FB74A /* VCsRouting */,
 				2DD274D821F27A69003FB74A /* NavigatorState.swift */,
+				2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */,
 				2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */,
 				2D546E1A21AE789E00CFB5BA /* Routing.swift */,
 				2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */,
@@ -281,6 +284,7 @@
 				2D5A8DBD21B1CD5100DAFC8D /* FoldersVC.swift in Sources */,
 				2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */,
 				2D546DF621AE77EA00CFB5BA /* AppDelegate.swift in Sources */,
+				2D8C8E7E21F485F50045FC13 /* NavigationEndpointsBuilder.swift in Sources */,
 				2DD274D921F27A69003FB74A /* NavigatorState.swift in Sources */,
 				2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */,
 				2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */,

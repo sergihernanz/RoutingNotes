@@ -11,9 +11,9 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDelegate {
 
-    fileprivate func populateMockModel() -> OrdersModelContext {
+    fileprivate func populateMockModel() -> NotesModelContext {
         let model = MockUDOrdersModelContext(persistenceName: "test")
-        return OrdersModelContext(model)
+        return NotesModelContext(model)
     }
 
     var window: UIWindow?
@@ -21,7 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let model = populateMockModel()
-        let navigator = NavigatorImpl(model:model)
+        let endpointsBuilder = NotesNavigationEndpointsBuilder(model: model)
+        let navigator = NavigatorImpl(model:model, endpointsBuilder: endpointsBuilder)
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = navigator.rootViewController
         window.makeKeyAndVisible()
