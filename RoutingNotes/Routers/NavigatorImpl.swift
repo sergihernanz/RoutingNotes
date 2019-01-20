@@ -79,9 +79,9 @@ class NotesNavigationEndpointsBuilder: NavigationEndpointsBuilder {
         switch fromNavigator.currentState {
         case .idle(let currentNavigation):
             evaluatingNavigation = currentNavigation
-        case .navigating(_, let to, _):
+        case .navigating(_, let to, _, _):
             evaluatingNavigation = to
-        case .navigatingToNonFinalNavigation(_, let to, _, _):
+        case .navigatingToNonFinalNavigation(_, let to, _, _, _):
             evaluatingNavigation = to
         }
 
@@ -131,88 +131,85 @@ class NavigatorImpl : NSObject, Navigator {
     }
     
     fileprivate var currentState: NavigatorState<NotesNavigation> {
-        willSet {
-            switch currentState {
-            case .navigating(from: _, to: let toNavigation, toCompletion: let completion):
-                if currentState != newValue {
-                    // TODO too early notification, if notified/us calls to navigator.currentState... will it be correct ?
-                    completion(newValue != .idle(toNavigation))
-                }
-                break
-            default:
-                break
-            }
-        }
         didSet {
+            if oldValue == currentState {
+                return
+            }
+            // Call completion closures correctly: from navigating to idle
+            switch oldValue {
+            case .navigating(from: _, let toNavigation, _, let completion):
+                switch currentState {
+                case .idle(let newNavigation):
+                    assert(toNavigation == newNavigation)
+                    if oldValue != currentState {
+                        completion(currentState != .idle(toNavigation))
+                    }
+                default: break
+                }
+            default: break
+            }
+
+            // Configure vCs accordingly to new state
+            switch currentState {
+            case .navigating(_, let to, let animated, _):
+               let navigationStack = to.navigationStack()
+               let VCs = navigationStack.map { (navigation) -> UIViewController in
+                endpointsBuilder.getInstancedOrBuildViewController(forNavigationEndpoint: navigation,
+                                                                   navigator: self)
+               }
+               navigationController.setPopOrPushViewControllers(VCs, animated: animated)
+            default: break
+            }
+
             print("[NOTESNAVIGATOR] \(currentState)")
         }
     }
 
     func navigate(to: NotesNavigation, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
         switch currentState {
-        case .idle:
-            switch to {
-            case .folders:
-                presentFolders(animated: animated, completion: completion)
-            case .folders👉list(let listId):
-                presentList(listId: listId, animated: animated, completion: completion)
-            case .folders👉🏻list👉note(let listId, let noteId):
-                presentDetail(listId: listId, noteId: noteId, animated: animated, completion: completion)
-            }
-        case .navigating(from: let navigatingFrom, to: let navigatingTo, toCompletion: let toCompletion):
-            if to != navigatingTo {
-                currentState = .navigatingToNonFinalNavigation(from: navigatingFrom, to: navigatingTo,
-                                                               finalNavigation: to, finalCompletion: completion)
-            } else {
-                currentState = .navigating(from: navigatingFrom, to: navigatingTo, toCompletion: { (cancelled) in
-                    toCompletion(cancelled)
-                    completion(cancelled)
+        case .idle(let navigation):
+            currentState = .navigating(from: navigation,
+                                       to: to,
+                                       animated: animated,
+                                       toCompletion: completion)
+        case .navigating(let navigatingFrom, let navigatingTo, let animated, let toCompletion):
+            if to == navigatingTo {
+                // Already navigating there... just recreate completion closure to call current and new completion closure
+                currentState = .navigating(from: navigatingFrom,
+                                           to: navigatingTo,
+                                           animated: animated,
+                                           toCompletion: { (cancelled) in
+                                            toCompletion(cancelled)
+                                            completion(cancelled)
                 })
-            }
-        case .navigatingToNonFinalNavigation(from: let navigatingFrom, to: let navigatingTo,
-                                             finalNavigation: let finalNavigation, finalCompletion: let finalCompletion):
-            if to != finalNavigation {
-                currentState = .navigatingToNonFinalNavigation(from: navigatingFrom, to: navigatingTo,
-                                                               finalNavigation: to, finalCompletion: finalCompletion)
             } else {
-                currentState = .navigatingToNonFinalNavigation(from: navigatingFrom, to: navigatingTo,
-                                                               finalNavigation: finalNavigation, finalCompletion: { (cancelled) in
-                    finalCompletion(cancelled)
-                    completion(cancelled)
+                toCompletion(true)
+                currentState = .navigatingToNonFinalNavigation(from: navigatingFrom,
+                                                               to: navigatingTo,
+                                                               finalNavigation: to,
+                                                               animated: animated,
+                                                               finalCompletion: completion)
+            }
+        case .navigatingToNonFinalNavigation(let from, let currentTo, let finalNavigation, _, let finalCompletion):
+            if to == finalNavigation {
+                // Already final-navigating there... just recreate completion closure to call current and new completion closure
+                currentState = .navigatingToNonFinalNavigation(from: from,
+                                                               to: currentTo,
+                                                               finalNavigation: finalNavigation,
+                                                               animated: animated,
+                                                               finalCompletion: { (cancelled) in
+                                                                finalCompletion(cancelled)
+                                                                completion(cancelled)
                 })
+            } else {
+                finalCompletion(true)
+                currentState = .navigatingToNonFinalNavigation(from: from,
+                                                               to: currentTo,
+                                                               finalNavigation: to,
+                                                               animated: animated,
+                                                               finalCompletion: completion)
             }
         }
-    }
-
-    fileprivate func presentFolders(animated:Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
-        currentState = .navigating(from: currentNavigation, to: .folders, toCompletion: completion)
-        navigationController.popToRootViewController(animated: animated)
-    }
-
-    fileprivate func presentList(listId:ListId, animated:Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
-        let newNavigation: NotesNavigation = .folders👉list(listId: listId)
-        currentState = .navigating(from: currentNavigation,
-                                   to: newNavigation,
-                                   toCompletion: completion)
-        let navigationStack = newNavigation.navigationStack()
-        let VCs = navigationStack.map { (navigation) -> UIViewController in
-            endpointsBuilder.getInstancedOrBuildViewController(forNavigationEndpoint: navigation,
-                                                               navigator: self)
-        }
-        navigationController.setPopOrPushViewControllers(VCs, animated: animated)
-    }
-
-    fileprivate func presentDetail(listId:ListId,noteId:NoteId, animated:Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
-        let newNavigation: NotesNavigation = .folders👉🏻list👉note(listId: listId, noteId: noteId)
-        currentState = .navigating(from: currentNavigation,
-                                   to: newNavigation,
-                                   toCompletion: completion)
-        let navigationStack = newNavigation.navigationStack()
-        let VCs = navigationStack.map { (navigation) -> UIViewController in
-            endpointsBuilder.getInstancedOrBuildViewController(forNavigationEndpoint: navigation,
-                                                               navigator: self)
-        }
-        navigationController.setPopOrPushViewControllers(VCs, animated: animated)
     }
 }
 
@@ -230,15 +227,16 @@ extension NavigatorImpl : UINavigationControllerDelegate {
                               animated: Bool) {
         let newNavigation = endpointsBuilder.getCurrentNavigation(fromNavigator: self)
         switch currentState {
-        case .navigating(from: _, to: _, toCompletion: _):
+        case .idle:
+            // Swipe back gesture recognizer
             currentState = .idle(newNavigation)
-        case .navigatingToNonFinalNavigation(from: _, to: let intermediateDestination,
-                                             finalNavigation: let finalNavigation, finalCompletion: let finalCompletion):
-            currentState = .idle(intermediateDestination)
-            // TODO: save animaged Bool for finalAnimation
-            navigate(to: finalNavigation, animated: true, completion: finalCompletion)
-        case .idle(_):
+        case .navigating(_, let to, _, _):
+            // Router started animation just finished...
+            assert(to == newNavigation)
             currentState = .idle(newNavigation)
+        case .navigatingToNonFinalNavigation(_, let to, let finalNavigation, let animated, finalCompletion: let finalCompletion):
+            // Navigate to final destination
+            currentState = .navigating(from: to, to: finalNavigation, animated: animated, toCompletion: finalCompletion)
         }
     }
 }

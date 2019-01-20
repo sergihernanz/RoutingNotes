@@ -26,9 +26,11 @@ extension Navigation {
 enum NavigatorState<NavigationType : Equatable> : Equatable {
 
     case idle(NavigationType)
-    case navigating(from:NavigationType, to:NavigationType, toCompletion:((_ cancelled: Bool) -> Void))
+    case navigating(from:NavigationType, to:NavigationType,
+                    animated: Bool, toCompletion:((_ cancelled: Bool) -> Void))
     case navigatingToNonFinalNavigation(from:NavigationType, to:NavigationType,
-        finalNavigation: NavigationType, finalCompletion: ((_ cancelled: Bool) -> Void))
+                                        finalNavigation: NavigationType, animated: Bool,
+                                        finalCompletion: ((_ cancelled: Bool) -> Void))
 
     static func == (lhs: NavigatorState, rhs: NavigatorState) -> Bool {
         switch lhs {
@@ -39,16 +41,16 @@ enum NavigatorState<NavigationType : Equatable> : Equatable {
             default:
                 return false
             }
-        case .navigating(from: let lhfrom, to: let lhto, toCompletion: _):
+        case .navigating(let lhfrom, let lhto, _, _):
             switch rhs {
-            case .navigating(from: let rhfrom, to: let rhto, toCompletion: _):
+            case .navigating(let rhfrom, let rhto, _, _):
                 return lhfrom == rhfrom && rhto == lhto;
             default:
                 return false
             }
-        case .navigatingToNonFinalNavigation(from: let lhfrom, to: let lhto, finalNavigation: let lhfinal, finalCompletion: _):
+        case .navigatingToNonFinalNavigation(let lhfrom, let lhto, let lhfinal, _, _):
             switch rhs {
-            case .navigatingToNonFinalNavigation(from: let rhfrom, to: let rhto, finalNavigation: let rhfinal, finalCompletion: _):
+            case .navigatingToNonFinalNavigation(let rhfrom, let rhto, let rhfinal, _, _):
                 return lhfrom == rhfrom && rhto == lhto && rhfinal == lhfinal;
             default:
                 return false
@@ -60,9 +62,9 @@ enum NavigatorState<NavigationType : Equatable> : Equatable {
         switch self {
         case .idle(let navigation):
             return navigation
-        case .navigating(from: _, to: let futureNavigation, toCompletion: _):
+        case .navigating(_, let futureNavigation, _, _):
             return futureNavigation
-        case .navigatingToNonFinalNavigation(from: _, to: _, finalNavigation: let finalNavigation, finalCompletion: _):
+        case .navigatingToNonFinalNavigation(_, _, let finalNavigation, _, _):
             return finalNavigation
         }
     }
