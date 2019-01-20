@@ -19,6 +19,6 @@ protocol NavigationEndpointsBuilder {
     func getInstancedOrBuildViewController(forNavigationEndpoint:NavigationType,
                                            navigator: NavigatorType) -> UIViewController
     func getEndpointCorrectInstancedViewController(forNavigationEndpoint:NotesNavigation,
-                                                   navigator: NavigatorImpl) -> UIViewController?
+                                                   navigator: NavigatorType) -> UIViewController?
     func getCurrentNavigation(fromNavigator: NavigatorType) -> NavigationType
 }

@@ -47,7 +47,7 @@ fileprivate extension NotesNavigation {
     }
 }
 
-fileprivate extension Navigator {
+fileprivate extension Navigator where NavigationType == NotesNavigation {
     func navigateToDetail(noteId: NoteId, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void) throws {
         let newNavigation = try currentNavigation.navigationToDetail(noteId: noteId)
         navigate(to: newNavigation, animated: animated, completion: completion)

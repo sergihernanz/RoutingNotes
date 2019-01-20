@@ -12,11 +12,13 @@ protocol Navigatable {
 
     associatedtype InputType
     associatedtype OutputType
+    associatedtype NavigatorType
+    associatedtype ModelType
 
     var navigationInput: InputType { get }
     var navigationOutput: OutputType? { get }
-    var navigator: Navigator { get }
-    var model: NotesModelContext { get }
+    var navigator: NavigatorType { get }
+    var model: ModelType { get }
 
-    init(navigator:Navigator, model:NotesModelContext, navigationInput: InputType);
+    init(navigator:NavigatorType, model:ModelType, navigationInput: InputType);
 }

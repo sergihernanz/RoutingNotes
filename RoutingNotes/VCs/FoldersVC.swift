@@ -16,9 +16,9 @@ class FoldersVC : UIViewController {
     @available(*,unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    private(set) var navigator:Navigator
-    private(set) var model:NotesModelContext
-    required init(navigator: Navigator, model: NotesModelContext, navigationInput: Void) {
+    private(set) var navigator: NavigatorImpl
+    private(set) var model: NotesModelContext
+    required init(navigator: NavigatorImpl, model: NotesModelContext, navigationInput: Void) {
         self.navigator = navigator
         self.model = model
 
