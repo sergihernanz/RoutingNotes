@@ -46,6 +46,7 @@ class NavigatorImpl : NSObject, Navigator {
             switch currentState {
             case .navigating(from: _, to: let toNavigation, toCompletion: let completion):
                 if currentState != newValue {
+                    // TODO too early notification, if notified/us calls to navigator.currentState... will it be correct ?
                     completion(newValue != .idle(toNavigation))
                 }
                 break
@@ -104,11 +105,10 @@ class NavigatorImpl : NSObject, Navigator {
         currentState = .navigating(from: currentNavigation,
                                    to: newNavigation,
                                    toCompletion: completion)
-        let pos0Navigation = newNavigation.pop()
-        let VCs = [navigationController.getLastInstancedOrNewViewController(forNavigation: pos0Navigation) ??
-                    buildLastRoutableViewController(forNavigation: pos0Navigation),
-                   navigationController.getLastInstancedOrNewViewController(forNavigation: newNavigation) ??
-                    buildLastRoutableViewController(forNavigation: newNavigation)]
+        let navigationStack = newNavigation.navigationStack()
+        let VCs = navigationStack.map { (navigation) -> UIViewController in
+            getLastInstancedOrNewViewController(forNavigation: navigation)
+        }
         navigationController.setPopOrPushViewControllers(VCs, animated: animated)
     }
 
@@ -117,20 +117,20 @@ class NavigatorImpl : NSObject, Navigator {
         currentState = .navigating(from: currentNavigation,
                                    to: newNavigation,
                                    toCompletion: completion)
-        let pos1Navigation = newNavigation.pop()
-        let pos0Navigation = pos1Navigation.pop()
-        let VCs = [navigationController.getLastInstancedOrNewViewController(forNavigation: pos0Navigation) ??
-                    buildLastRoutableViewController(forNavigation: pos0Navigation),
-                   navigationController.getLastInstancedOrNewViewController(forNavigation: pos1Navigation) ??
-                    buildLastRoutableViewController(forNavigation: pos1Navigation),
-                   navigationController.getLastInstancedOrNewViewController(forNavigation: newNavigation) ??
-                    buildLastRoutableViewController(forNavigation: newNavigation)]
+        let navigationStack = newNavigation.navigationStack()
+        let VCs = navigationStack.map { (navigation) -> UIViewController in
+            getLastInstancedOrNewViewController(forNavigation: navigation)
+        }
         navigationController.setPopOrPushViewControllers(VCs, animated: animated)
     }
 }
 
 extension NavigatorImpl {
 
+    func getLastInstancedOrNewViewController(forNavigation:Navigation) -> UIViewController {
+        return navigationController.getLastCorrectInstancedViewController(forNavigation:forNavigation) ??
+               buildLastRoutableViewController(forNavigation:forNavigation)
+    }
     func buildLastRoutableViewController(forNavigation:Navigation) -> UIViewController {
         switch forNavigation {
         case .folders:
@@ -144,16 +144,7 @@ extension NavigatorImpl {
 }
 
 extension UINavigationController {
-    func setPopOrPushViewControllers(_ newViewControllers: [UIViewController], animated: Bool) {
-        var viewControllersWithoutLast = viewControllers
-        _ = viewControllersWithoutLast.popLast()
-        if newViewControllers.elementsEqual(viewControllersWithoutLast) {
-            popViewController(animated: animated)
-        } else {
-            self.setViewControllers(newViewControllers, animated: animated)
-        }
-    }
-    func getLastInstancedOrNewViewController(forNavigation:Navigation) -> UIViewController? {
+    func getLastCorrectInstancedViewController(forNavigation:Navigation) -> UIViewController? {
         switch forNavigation {
         case .folders:
             return self.viewControllers.first
@@ -178,24 +169,30 @@ extension UINavigationController {
 extension NavigatorImpl : UINavigationControllerDelegate {
 
     private func calculateCurrentNavigation(fromNavigationController navC: UINavigationController) -> Navigation {
-        if navC.viewControllers.count <= 1 {
-            assert(navC.viewControllers[0] is FoldersVC)
-            return .folders
-        } else if navC.viewControllers.count == 2 {
-            guard let listVC = navC.viewControllers[1] as? ListVC else {
-                assertionFailure()
-                return .folders
-            }
-            return .folders👉list(listId: listVC.navigationInput)
-        } else {
-            assert(navC.viewControllers.count==3)
-            guard let listVC = navC.viewControllers[1] as? ListVC,
-                  let noteVC = navC.viewControllers[2] as? NoteVC else {
-                assertionFailure()
-                return .folders
-            }
-            return .folders👉🏻list👉note(listId: listVC.navigationInput, noteId: noteVC.navigationInput)
+        var evaluatingNavigation: Navigation
+        switch self.currentState {
+        case .idle(let currentNavigation):
+            evaluatingNavigation = currentNavigation
+        case .navigating(_, let to, _):
+            evaluatingNavigation = to
+        case .navigatingToNonFinalNavigation(_, let to, _, _):
+            evaluatingNavigation = to
         }
+
+        let evaluatingStack = evaluatingNavigation.navigationStack()
+        assert(evaluatingStack.count >= navC.viewControllers.count)
+        let validVCsOnNavC = evaluatingStack.compactMap { (navigation) -> UIViewController? in
+            navC.getLastCorrectInstancedViewController(forNavigation: navigation)
+        }.count
+        let numOfVCsAccordingToEvailuatingNavigation = evaluatingStack.count
+        let invalidVCsNumberInEvaluatingNavigation = numOfVCsAccordingToEvailuatingNavigation - validVCsOnNavC
+        assert( invalidVCsNumberInEvaluatingNavigation >= 0 )
+        if invalidVCsNumberInEvaluatingNavigation > 0 {
+            for _ in [1...invalidVCsNumberInEvaluatingNavigation] {
+                evaluatingNavigation = evaluatingNavigation.pop()!
+            }
+        }
+        return evaluatingNavigation
     }
     func navigationController(_ navigationController: UINavigationController,
                               willShow viewController: UIViewController,

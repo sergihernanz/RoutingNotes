@@ -13,15 +13,24 @@ enum Navigation : Equatable {
     case folders👉list(listId:ListId)
     case folders👉🏻list👉note(listId:ListId, noteId:NoteId)
 
-    func pop() -> Navigation {
+    func pop() -> Navigation? {
         switch self {
         case .folders👉🏻list👉note(listId: let listId, noteId:_):
             return .folders👉list(listId: listId)
         case .folders👉list(listId: _):
             return .folders
         case .folders:
-            return .folders
+            return nil
         }
+    }
+
+    func navigationStack() -> [Navigation] {
+        guard let backNavigation = self.pop() else {
+            return [self]
+        }
+        var stack = backNavigation.navigationStack()
+        stack.append(self)
+        return stack
     }
 }
 
