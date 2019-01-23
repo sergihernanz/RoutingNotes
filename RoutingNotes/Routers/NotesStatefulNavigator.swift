@@ -16,55 +16,34 @@ extension UIViewController {
     }
 }
 
-class NotesNavigationEndpointsBuilder: NavigationEndpointsBuilder {
-
-    func buildEndpointRoutableViewController(forNavigationEndpoint:NotesNavigation,
-                                             navigator: NavigatorImpl,
-                                             model: NotesModelContext) -> UIViewController {
-        switch forNavigationEndpoint {
-        case .folders:
-            return FoldersVC(navigator: navigator, model:model, navigationInput:())
-        case .folders👉list(let listId):
-            return ListVC(navigator: navigator, model:model, navigationInput: listId)
-        case .folders👉🏻list👉note(_, let noteId):
-            return NoteVC(navigator: navigator, model:model, navigationInput: noteId)
-        }
-    }
-
-    func correctlyConfigured(viewController: UIViewController, forNavigation: NotesNavigation) -> Bool {
-        switch forNavigation {
-        case .folders:
-            return viewController is FoldersVC
-        case .folders👉list(let listId):
-            if let listVC = viewController as? ListVC,
-                listVC.navigationInput == listId {
-                return true
-            }
-        case .folders👉🏻list👉note(_, let noteId):
-            if let noteVC = viewController as? NoteVC, noteVC.navigationInput == noteId {
-                return true
-            }
-        }
-        return false
-    }
-
-}
-
 extension Collection {
     subscript (safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil
     }
 }
 
-class NavigatorImpl : NSObject, StatefulNavigator {
+enum NavigationError : Error {
+    case invalidDestinationForCurrentNavigation(currentNavigation:NotesNavigation, destinationDescription:String)
+
+    var localizedDescription: String {
+        switch self {
+        case .invalidDestinationForCurrentNavigation(let currentNavigation, let destinationDescription):
+            return "Current navigation (\(currentNavigation) does not support navigating to \(destinationDescription)"
+        }
+    }
+}
+
+
+
+class NotesStatefulNavigator : NSObject, StatefulNavigator {
 
     typealias NavigationType = NotesNavigation
 
     fileprivate var model : NotesModelContext
-    fileprivate var endpointsBuilder : NotesNavigationEndpointsBuilder
+    fileprivate var endpointsBuilder : NavigationEndpointsBuilder
 
     init(model:NotesModelContext,
-         endpointsBuilder: NotesNavigationEndpointsBuilder) {
+         endpointsBuilder: NavigationEndpointsBuilder) {
         self.model = model
         self.endpointsBuilder = endpointsBuilder
         navigatorState = .idle(.folders)
@@ -172,7 +151,7 @@ class NavigatorImpl : NSObject, StatefulNavigator {
 }
 
 
-extension NavigatorImpl : UINavigationControllerDelegate {
+extension NotesStatefulNavigator : UINavigationControllerDelegate {
 
     func navigationController(_ navigationController: UINavigationController,
                               willShow viewController: UIViewController,

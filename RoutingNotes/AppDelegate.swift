@@ -17,13 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     }
 
     var window: UIWindow?
-    private var navigator: NavigatorImpl!
+    private var navigator: NotesStatefulNavigator!
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let model = populateMockModel()
         let endpointsBuilder = NotesNavigationEndpointsBuilder()
         //let endpointsBuilder = TestsEndpointsBuilder()
-        let navigator = NavigatorImpl(model:model,
+        let navigator = NotesStatefulNavigator(model:model,
                                       endpointsBuilder: endpointsBuilder)
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = navigator.rootViewController

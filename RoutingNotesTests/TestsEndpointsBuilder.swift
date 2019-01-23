@@ -16,7 +16,7 @@ class TestsEndpointsBuilder: NavigationEndpointsBuilder {
     //typealias ModelType = NotesModelContext
 
     func buildEndpointRoutableViewController(forNavigationEndpoint:NotesNavigation,
-                                             navigator: NavigatorImpl,
+                                             navigator: NotesStatefulNavigator,
                                              model: NotesModelContext) -> UIViewController {
         switch forNavigationEndpoint {
         case .folders:

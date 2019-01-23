@@ -13,14 +13,14 @@ class NavigationTestVC: UIViewController, Navigatable {
 
     typealias InputType = Any
     typealias OutputType = Any
-    typealias NavigatorType = NavigatorImpl
+    typealias NavigatorType = NotesStatefulNavigator
     typealias ModelType = NotesModelContext
 
-    private(set) var navigator: NavigatorImpl
+    private(set) var navigator: NotesStatefulNavigator
     private(set) var model: NotesModelContext
     private(set) var navigationInput: Any
     private(set) var navigationOutput: Any?
-    required init(navigator: NavigatorImpl, model:NotesModelContext, navigationInput:Any) {
+    required init(navigator: NotesStatefulNavigator, model:NotesModelContext, navigationInput:Any) {
         self.navigator = navigator
         self.model = model
         self.navigationInput = navigationInput

@@ -19,9 +19,9 @@ class ListVC : UIViewController {
 
     private(set) var listInput : ListId
 
-    private(set) var navigator: NavigatorImpl
+    private(set) var navigator: NotesStatefulNavigator
     private(set) var model: NotesModelContext
-    required init(navigator: NavigatorImpl, model:NotesModelContext, navigationInput:ListId) {
+    required init(navigator: NotesStatefulNavigator, model:NotesModelContext, navigationInput:ListId) {
         self.navigator = navigator
         self.model = model
         self.listInput = navigationInput

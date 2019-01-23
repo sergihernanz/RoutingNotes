@@ -44,14 +44,14 @@ class RoutingNotesTests: XCTestCase {
     }
 
     func testMainFoldersScreenRoute() {
-        var navigator: NavigatorImpl!
+        var navigator: NotesStatefulNavigator!
         XCTContext.runActivity(named: """
             GIVEN we have a valid router configured for the default route
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
             let endpointsBuilder = NotesNavigationEndpointsBuilder()
-            navigator = NavigatorImpl(model: model, endpointsBuilder: AnyNavigationEndpointsBuilder(endpointsBuilder))
+            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -79,14 +79,14 @@ class RoutingNotesTests: XCTestCase {
     }
 
     func testDeepLinkToList() {
-        var navigator: NavigatorImpl!
+        var navigator: NotesStatefulNavigator!
         XCTContext.runActivity(named: """
             GIVEN we have a valid router configured for the default route
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
             let endpointsBuilder = NotesNavigationEndpointsBuilder()
-            navigator = NavigatorImpl(model: model, endpointsBuilder: AnyNavigationEndpointsBuilder(endpointsBuilder))
+            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -119,14 +119,14 @@ class RoutingNotesTests: XCTestCase {
     }
 
     func testCallNavigateWithoutWaitingForCompletion() {
-        var navigator: NavigatorImpl!
+        var navigator: NotesStatefulNavigator!
         XCTContext.runActivity(named: """
             GIVEN we have a valid router configured for the default route
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
             let endpointsBuilder = NotesNavigationEndpointsBuilder()
-            navigator = NavigatorImpl(model: model, endpointsBuilder: AnyNavigationEndpointsBuilder(endpointsBuilder))
+            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -164,14 +164,14 @@ class RoutingNotesTests: XCTestCase {
     }
 
     func testCallSameNavigateWithoutWaitingForCompletion() {
-        var navigator: NavigatorImpl!
+        var navigator: NotesStatefulNavigator!
         XCTContext.runActivity(named: """
             GIVEN we have a valid router configured for the default route
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
             let endpointsBuilder = NotesNavigationEndpointsBuilder()
-            navigator = NavigatorImpl(model: model, endpointsBuilder: AnyNavigationEndpointsBuilder(endpointsBuilder))
+            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -209,15 +209,15 @@ class RoutingNotesTests: XCTestCase {
     }
 
     func testNavigateBackFromDetailToList() {
-        var navigator: NavigatorImpl!
+        var navigator: NotesStatefulNavigator!
         XCTContext.runActivity(named: """
             GIVEN we have a valid router configured for the default route
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
             let endpointsBuilder = TestsEndpointsBuilder()
-            navigator = NavigatorImpl(model: model,
-                                      endpointsBuilder: AnyNavigationEndpointsBuilder(endpointsBuilder))
+            navigator = NotesStatefulNavigator(model: model,
+                                      endpointsBuilder: endpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!

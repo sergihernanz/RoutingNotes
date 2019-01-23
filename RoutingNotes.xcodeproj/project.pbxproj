@@ -13,7 +13,7 @@
 		2D546DFF21AE77EB00CFB5BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D546DFE21AE77EB00CFB5BA /* Assets.xcassets */; };
 		2D546E0221AE77EB00CFB5BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D546E0021AE77EB00CFB5BA /* LaunchScreen.storyboard */; };
 		2D546E0D21AE77EB00CFB5BA /* RoutingNotesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D546E0C21AE77EB00CFB5BA /* RoutingNotesTests.swift */; };
-		2D546E1B21AE789E00CFB5BA /* Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D546E1A21AE789E00CFB5BA /* Routing.swift */; };
+		2D546E1B21AE789E00CFB5BA /* NotesNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D546E1A21AE789E00CFB5BA /* NotesNavigation.swift */; };
 		2D5A8DBD21B1CD5100DAFC8D /* FoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DBC21B1CD5100DAFC8D /* FoldersVC.swift */; };
 		2D5A8DBF21B1CD6E00DAFC8D /* ListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DBE21B1CD6E00DAFC8D /* ListVC.swift */; };
 		2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */; };
@@ -24,7 +24,9 @@
 		2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */; };
 		2DCDC52321F9101C0094761A /* TestsEndpointsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD7509C21F5BAC1007BD6A1 /* TestsEndpointsBuilder.swift */; };
 		2DCDC52621F9158E0094761A /* NavigationTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7F21F59F4E0045FC13 /* NavigationTestVC.swift */; };
-		2DCE24AD21B198ED00150FB0 /* NavigatorImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */; };
+		2DCDC52821F91DA20094761A /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDC52721F91DA20094761A /* Navigator.swift */; };
+		2DCDC52A21F91E330094761A /* NotesNavigationEndpointsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDC52921F91E330094761A /* NotesNavigationEndpointsBuilder.swift */; };
+		2DCE24AD21B198ED00150FB0 /* NotesStatefulNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCE24AC21B198ED00150FB0 /* NotesStatefulNavigator.swift */; };
 		2DD274D021F26D7E003FB74A /* FoldersVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274CF21F26D7E003FB74A /* FoldersVC+Routing.swift */; };
 		2DD274D321F273B3003FB74A /* ListVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D221F273B3003FB74A /* ListVC+Routing.swift */; };
 		2DD274D621F27577003FB74A /* NoteVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D521F27577003FB74A /* NoteVC+Routing.swift */; };
@@ -52,7 +54,7 @@
 		2D546E0821AE77EB00CFB5BA /* RoutingNotesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RoutingNotesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D546E0C21AE77EB00CFB5BA /* RoutingNotesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingNotesTests.swift; sourceTree = "<group>"; };
 		2D546E0E21AE77EB00CFB5BA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2D546E1A21AE789E00CFB5BA /* Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Routing.swift; sourceTree = "<group>"; };
+		2D546E1A21AE789E00CFB5BA /* NotesNavigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotesNavigation.swift; sourceTree = "<group>"; };
 		2D5A8DBC21B1CD5100DAFC8D /* FoldersVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoldersVC.swift; sourceTree = "<group>"; };
 		2D5A8DBE21B1CD6E00DAFC8D /* ListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
 		2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteVC.swift; sourceTree = "<group>"; };
@@ -63,7 +65,9 @@
 		2D8C8E7F21F59F4E0045FC13 /* NavigationTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTestVC.swift; sourceTree = "<group>"; };
 		2DB6E08721EF680C008104C4 /* Navigatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigatable.swift; sourceTree = "<group>"; };
 		2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+DeselectRow.swift"; sourceTree = "<group>"; };
-		2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorImpl.swift; sourceTree = "<group>"; };
+		2DCDC52721F91DA20094761A /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
+		2DCDC52921F91E330094761A /* NotesNavigationEndpointsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesNavigationEndpointsBuilder.swift; sourceTree = "<group>"; };
+		2DCE24AC21B198ED00150FB0 /* NotesStatefulNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesStatefulNavigator.swift; sourceTree = "<group>"; };
 		2DD274CF21F26D7E003FB74A /* FoldersVC+Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FoldersVC+Routing.swift"; sourceTree = "<group>"; };
 		2DD274D221F273B3003FB74A /* ListVC+Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListVC+Routing.swift"; sourceTree = "<group>"; };
 		2DD274D521F27577003FB74A /* NoteVC+Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteVC+Routing.swift"; sourceTree = "<group>"; };
@@ -139,10 +143,12 @@
 			children = (
 				2DD274CE21F26D7E003FB74A /* VCsRouting */,
 				2DD274D821F27A69003FB74A /* NavigatorState.swift */,
+				2DCDC52721F91DA20094761A /* Navigator.swift */,
 				2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */,
 				2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */,
-				2D546E1A21AE789E00CFB5BA /* Routing.swift */,
-				2DCE24AC21B198ED00150FB0 /* NavigatorImpl.swift */,
+				2D546E1A21AE789E00CFB5BA /* NotesNavigation.swift */,
+				2DCDC52921F91E330094761A /* NotesNavigationEndpointsBuilder.swift */,
+				2DCE24AC21B198ED00150FB0 /* NotesStatefulNavigator.swift */,
 			);
 			path = Routers;
 			sourceTree = "<group>";
@@ -279,9 +285,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				2D5A8DBF21B1CD6E00DAFC8D /* ListVC.swift in Sources */,
-				2D546E1B21AE789E00CFB5BA /* Routing.swift in Sources */,
+				2D546E1B21AE789E00CFB5BA /* NotesNavigation.swift in Sources */,
+				2DCDC52821F91DA20094761A /* Navigator.swift in Sources */,
 				2D8C8E7C21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift in Sources */,
-				2DCE24AD21B198ED00150FB0 /* NavigatorImpl.swift in Sources */,
+				2DCDC52A21F91E330094761A /* NotesNavigationEndpointsBuilder.swift in Sources */,
+				2DCE24AD21B198ED00150FB0 /* NotesStatefulNavigator.swift in Sources */,
 				2DD274D621F27577003FB74A /* NoteVC+Routing.swift in Sources */,
 				2DCDC52321F9101C0094761A /* TestsEndpointsBuilder.swift in Sources */,
 				2DD274D321F273B3003FB74A /* ListVC+Routing.swift in Sources */,

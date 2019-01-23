@@ -18,9 +18,9 @@ class NoteVC : UIViewController {
 
     private(set) var noteInput: NoteId
 
-    var navigator: NavigatorImpl
+    var navigator: NotesStatefulNavigator
     var model: NotesModelContext
-    required init(navigator: NavigatorImpl, model:NotesModelContext, navigationInput:NoteId) {
+    required init(navigator: NotesStatefulNavigator, model:NotesModelContext, navigationInput:NoteId) {
         self.navigator = navigator
         self.model = model
         self.noteInput = navigationInput

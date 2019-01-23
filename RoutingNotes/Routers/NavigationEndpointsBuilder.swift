@@ -12,7 +12,7 @@ protocol NavigationEndpointsBuilder {
 
     func correctlyConfigured(viewController: UIViewController, forNavigation: NotesNavigation) -> Bool
     func buildEndpointRoutableViewController(forNavigationEndpoint: NotesNavigation,
-                                             navigator: NavigatorImpl,
+                                             navigator: NotesStatefulNavigator,
                                              model: NotesModelContext) -> UIViewController
 }
 
