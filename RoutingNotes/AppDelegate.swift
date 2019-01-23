@@ -21,8 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         let model = populateMockModel()
-        let endpointsBuilder = NotesNavigationEndpointsBuilder(model: model)
-        let navigator = NavigatorImpl(model:model, endpointsBuilder: endpointsBuilder)
+        let endpointsBuilder = NotesNavigationEndpointsBuilder()
+        //let endpointsBuilder = TestsEndpointsBuilder()
+        let navigator = NavigatorImpl(model:model,
+                                      endpointsBuilder: endpointsBuilder)
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = navigator.rootViewController
         window.makeKeyAndVisible()

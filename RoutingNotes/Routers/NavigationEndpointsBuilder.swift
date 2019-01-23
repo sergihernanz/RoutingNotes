@@ -9,16 +9,74 @@
 import UIKit
 
 protocol NavigationEndpointsBuilder {
+
+    func correctlyConfigured(viewController: UIViewController, forNavigation: NotesNavigation) -> Bool
+    func buildEndpointRoutableViewController(forNavigationEndpoint: NotesNavigation,
+                                             navigator: NavigatorImpl,
+                                             model: NotesModelContext) -> UIViewController
+}
+
+/*
+protocol NavigationEndpointsBuilder {
     associatedtype NavigationType : Navigation
     associatedtype NavigatorType : Navigator
     associatedtype ModelType
 
-    var model: ModelType { get }
-    init(model: ModelType)
-
-    func getInstancedOrBuildViewController(forNavigationEndpoint:NavigationType,
-                                           navigator: NavigatorType) -> UIViewController
-    func getEndpointCorrectInstancedViewController(forNavigationEndpoint:NotesNavigation,
-                                                   navigator: NavigatorType) -> UIViewController?
-    func getCurrentNavigation(fromNavigator: NavigatorType) -> NavigationType
+    func correctlyConfigured(viewController: UIViewController, forNavigation: NavigationType) -> Bool
+    func buildEndpointRoutableViewController(forNavigationEndpoint:NavigationType,
+                                             navigator: NavigatorType,
+                                             model: ModelType) -> UIViewController
 }
+
+fileprivate class _AnyNavigationEndpointsBuilderBase<NavigationType: Navigation,NavigatorType: Navigator,ModelType>: NavigationEndpointsBuilder {
+
+    init() {
+        guard type(of: self) != _AnyNavigationEndpointsBuilderBase.self else {
+            fatalError("_AnyNavigationEndpointsBuilderBase<NavigationType,NavigatorType,ModelType> instances can not be created, create a subclass instance instead")
+        }
+    }
+    func buildEndpointRoutableViewController(forNavigationEndpoint: NavigationType,
+                                             navigator: NavigatorType,
+                                             model: ModelType) -> UIViewController {
+        fatalError("Method must be overriden")
+    }
+    func correctlyConfigured(viewController: UIViewController, forNavigation: NavigationType) -> Bool {
+        fatalError("Method must be overriden")
+    }
+}
+fileprivate final class _AnyNavigationEndpointsBuilderBox<Concrete: NavigationEndpointsBuilder>: _AnyNavigationEndpointsBuilderBase<Concrete.NavigationType,Concrete.NavigatorType,Concrete.ModelType> {
+    // variable used since we're calling mutating functions
+    var concrete: Concrete
+    init(_ concrete: Concrete) {
+        self.concrete = concrete
+    }
+    override func buildEndpointRoutableViewController(forNavigationEndpoint: Concrete.NavigationType,
+                                                      navigator: Concrete.NavigatorType,
+                                                      model: Concrete.ModelType) -> UIViewController {
+        return concrete.buildEndpointRoutableViewController(forNavigationEndpoint: forNavigationEndpoint,
+                                                            navigator: navigator,
+                                                            model: model)
+    }
+    override func correctlyConfigured(viewController: UIViewController, forNavigation: Concrete.NavigationType) -> Bool {
+        return concrete.correctlyConfigured(viewController: viewController, forNavigation: forNavigation)
+    }
+}
+
+final class AnyNavigationEndpointsBuilder<NavigationType: Navigation,NavigatorType: Navigator,ModelType>: NavigationEndpointsBuilder {
+
+    private let box: _AnyNavigationEndpointsBuilderBase<NavigationType,NavigatorType,ModelType>
+    init<Concrete: NavigationEndpointsBuilder>(_ concrete: Concrete) where Concrete.NavigationType == NavigationType, Concrete.NavigatorType == NavigatorType, Concrete.ModelType == ModelType {
+        box = _AnyNavigationEndpointsBuilderBox(concrete)
+    }
+    func buildEndpointRoutableViewController(forNavigationEndpoint: NavigationType,
+                                             navigator: NavigatorType,
+                                             model: ModelType) -> UIViewController {
+        return box.buildEndpointRoutableViewController(forNavigationEndpoint: forNavigationEndpoint,
+                                                       navigator: navigator,
+                                                       model: model)
+    }
+    func correctlyConfigured(viewController: UIViewController, forNavigation: NavigationType) -> Bool {
+        return box.correctlyConfigured(viewController: viewController, forNavigation: forNavigation)
+    }
+}
+*/

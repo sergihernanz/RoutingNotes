@@ -18,24 +18,9 @@ extension UIViewController {
 
 class NotesNavigationEndpointsBuilder: NavigationEndpointsBuilder {
 
-    typealias NavigationType = NotesNavigation
-    typealias NavigatorType = NavigatorImpl
-    typealias ModelType = NotesModelContext
-
-    private(set) var model: NotesModelContext
-    required init(model: NotesModelContext) {
-        self.model = model
-    }
-
-    func getInstancedOrBuildViewController(forNavigationEndpoint:NotesNavigation,
-                                           navigator: NavigatorImpl) -> UIViewController {
-        return getEndpointCorrectInstancedViewController(forNavigationEndpoint: forNavigationEndpoint,
-                                                         navigator: navigator) ??
-                buildEndpointRoutableViewController(forNavigationEndpoint: forNavigationEndpoint,
-                                                    navigator: navigator)
-    }
-    private func buildEndpointRoutableViewController(forNavigationEndpoint:NotesNavigation,
-                                                     navigator: NavigatorImpl) -> UIViewController {
+    func buildEndpointRoutableViewController(forNavigationEndpoint:NotesNavigation,
+                                             navigator: NavigatorImpl,
+                                             model: NotesModelContext) -> UIViewController {
         switch forNavigationEndpoint {
         case .folders:
             return FoldersVC(navigator: navigator, model:model, navigationInput:())
@@ -46,37 +31,120 @@ class NotesNavigationEndpointsBuilder: NavigationEndpointsBuilder {
         }
     }
 
-    func getEndpointCorrectInstancedViewController(forNavigationEndpoint:NotesNavigation,
-                                                   navigator: NavigatorImpl) -> UIViewController? {
+    func correctlyConfigured(viewController: UIViewController, forNavigation: NotesNavigation) -> Bool {
+        switch forNavigation {
+        case .folders:
+            return viewController is FoldersVC
+        case .folders👉list(let listId):
+            if let listVC = viewController as? ListVC,
+                listVC.navigationInput == listId {
+                return true
+            }
+        case .folders👉🏻list👉note(_, let noteId):
+            if let noteVC = viewController as? NoteVC, noteVC.navigationInput == noteId {
+                return true
+            }
+        }
+        return false
+    }
+
+}
+
+extension Collection {
+    subscript (safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+}
+
+class NavigatorImpl : NSObject, StatefulNavigator {
+
+    typealias NavigationType = NotesNavigation
+
+    fileprivate var model : NotesModelContext
+    fileprivate var endpointsBuilder : NotesNavigationEndpointsBuilder
+
+    init(model:NotesModelContext,
+         endpointsBuilder: NotesNavigationEndpointsBuilder) {
+        self.model = model
+        self.endpointsBuilder = endpointsBuilder
+        navigatorState = .idle(.folders)
+        super.init()
+    }
+
+    fileprivate lazy var navigationController : UINavigationController = {
+        let rootVC = endpointsBuilder.buildEndpointRoutableViewController(forNavigationEndpoint: .folders,
+                                                                          navigator: self,
+                                                                          model: model)
+        let navC = UINavigationController(rootViewController: rootVC)
+        navC.navigationBar.tintColor = UIColor.black
+        navC.delegate = self
+        return navC
+    }()
+    var rootViewController: UIViewController {
+        return navigationController
+    }
+
+    internal var navigatorState: NavigatorState<NotesNavigation> {
+        didSet {
+            if oldValue == navigatorState {
+                return
+            }
+            // Call completion closures correctly: from navigating to idle
+            switch oldValue {
+            case .navigating(from: _, let toNavigation, _, let completion):
+                switch navigatorState {
+                case .idle(let newNavigation):
+                    assert(toNavigation == newNavigation)
+                    if oldValue != navigatorState {
+                        completion(navigatorState != .idle(toNavigation))
+                    }
+                default: break
+                }
+            default: break
+            }
+
+            // Configure vCs accordingly to new state
+            switch navigatorState {
+            case .navigating(_, let to, let animated, _):
+               let navigationStack = to.navigationStack()
+               let VCs = navigationStack.map { (navigation) -> UIViewController in
+                getCorrectlyInstancedViewController(forNavigationEndpoint: navigation) ??
+                    endpointsBuilder.buildEndpointRoutableViewController(forNavigationEndpoint: navigation,
+                                                                         navigator: self,
+                                                                         model: model)
+               }
+               navigationController.setPopOrPushViewControllers(VCs, animated: animated)
+            default: break
+            }
+
+            print("[NOTESNAVIGATOR] \(navigatorState)")
+        }
+    }
+
+    func getCorrectlyInstancedViewController(forNavigationEndpoint:NotesNavigation) -> UIViewController? {
         switch forNavigationEndpoint {
         case .folders:
-            return navigator.navigationController.viewControllers.first
-        case .folders👉list(let listId):
-            guard navigator.navigationController.viewControllers.count > 1,
-                let secondVC = navigator.navigationController.viewControllers[1] as? ListVC,
-                secondVC.navigationInput == listId,
-                // TODO:
-                //secondVC.navigator === navigator,
-                secondVC.model === model else {
-                    return nil
+            return navigationController.viewControllers.first
+        case .folders👉list:
+            guard let secondVC = navigationController.viewControllers[safe: 1],
+                endpointsBuilder.correctlyConfigured(viewController: secondVC,
+                                                     forNavigation: forNavigationEndpoint) else {
+                                                        return nil
             }
             return secondVC
-        case .folders👉🏻list👉note(_, let noteId):
-            guard navigator.navigationController.viewControllers.count > 2,
-                let thirdVC = navigator.navigationController.viewControllers[2] as? NoteVC,
-                thirdVC.navigationInput == noteId,
-                // TODO:
-                //thirdVC.navigator === navigator,
-                thirdVC.model === model else {
-                    return nil
+        case .folders👉🏻list👉note:
+            guard let thirdVC = navigationController.viewControllers[safe: 2],
+                endpointsBuilder.correctlyConfigured(viewController: thirdVC,
+                                                     forNavigation: forNavigationEndpoint) else {
+                                                        return nil
             }
             return thirdVC
         }
     }
 
-    func getCurrentNavigation(fromNavigator: NavigatorImpl) -> NotesNavigation {
+    func getCurrentNavigation() -> NotesNavigation {
         var evaluatingNavigation: NotesNavigation
-        switch fromNavigator.currentState {
+        switch navigatorState {
         case .idle(let currentNavigation):
             evaluatingNavigation = currentNavigation
         case .navigating(_, let to, _, _):
@@ -86,10 +154,9 @@ class NotesNavigationEndpointsBuilder: NavigationEndpointsBuilder {
         }
 
         let evaluatingStack = evaluatingNavigation.navigationStack()
-        assert(evaluatingStack.count >= fromNavigator.navigationController.viewControllers.count)
+        assert(evaluatingStack.count >= navigationController.viewControllers.count)
         let validVCsOnNavC = evaluatingStack.compactMap { (navigation) -> UIViewController? in
-            getEndpointCorrectInstancedViewController(forNavigationEndpoint: navigation,
-                                                      navigator: fromNavigator)
+            getCorrectlyInstancedViewController(forNavigationEndpoint: navigation)
             }.count
         let numOfVCsAccordingToEvailuatingNavigation = evaluatingStack.count
         let invalidVCsNumberInEvaluatingNavigation = numOfVCsAccordingToEvailuatingNavigation - validVCsOnNavC
@@ -101,116 +168,7 @@ class NotesNavigationEndpointsBuilder: NavigationEndpointsBuilder {
         }
         return evaluatingNavigation
     }
-}
 
-
-class NavigatorImpl : NSObject, Navigator {
-
-    fileprivate var model : NotesModelContext
-    fileprivate var endpointsBuilder : NotesNavigationEndpointsBuilder
-
-    init(model:NotesModelContext, endpointsBuilder: NotesNavigationEndpointsBuilder) {
-        self.model = model
-        self.endpointsBuilder = endpointsBuilder
-        currentState = .idle(.folders)
-        super.init()
-    }
-
-    fileprivate lazy var navigationController : UINavigationController = {
-        let navC = UINavigationController(rootViewController: FoldersVC(navigator: self, model:model, navigationInput:()))
-        navC.navigationBar.tintColor = UIColor.black
-        navC.delegate = self
-        return navC
-    }()
-    var rootViewController: UIViewController {
-        return navigationController
-    }
-
-    var currentNavigation: NotesNavigation {
-        return currentState.currentNavigation
-    }
-    
-    fileprivate var currentState: NavigatorState<NotesNavigation> {
-        didSet {
-            if oldValue == currentState {
-                return
-            }
-            // Call completion closures correctly: from navigating to idle
-            switch oldValue {
-            case .navigating(from: _, let toNavigation, _, let completion):
-                switch currentState {
-                case .idle(let newNavigation):
-                    assert(toNavigation == newNavigation)
-                    if oldValue != currentState {
-                        completion(currentState != .idle(toNavigation))
-                    }
-                default: break
-                }
-            default: break
-            }
-
-            // Configure vCs accordingly to new state
-            switch currentState {
-            case .navigating(_, let to, let animated, _):
-               let navigationStack = to.navigationStack()
-               let VCs = navigationStack.map { (navigation) -> UIViewController in
-                endpointsBuilder.getInstancedOrBuildViewController(forNavigationEndpoint: navigation,
-                                                                   navigator: self)
-               }
-               navigationController.setPopOrPushViewControllers(VCs, animated: animated)
-            default: break
-            }
-
-            print("[NOTESNAVIGATOR] \(currentState)")
-        }
-    }
-
-    func navigate(to: NotesNavigation, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void) {
-        switch currentState {
-        case .idle(let navigation):
-            currentState = .navigating(from: navigation,
-                                       to: to,
-                                       animated: animated,
-                                       toCompletion: completion)
-        case .navigating(let navigatingFrom, let navigatingTo, let animated, let toCompletion):
-            if to == navigatingTo {
-                // Already navigating there... just recreate completion closure to call current and new completion closure
-                currentState = .navigating(from: navigatingFrom,
-                                           to: navigatingTo,
-                                           animated: animated,
-                                           toCompletion: { (cancelled) in
-                                            toCompletion(cancelled)
-                                            completion(cancelled)
-                })
-            } else {
-                toCompletion(true)
-                currentState = .navigatingToNonFinalNavigation(from: navigatingFrom,
-                                                               to: navigatingTo,
-                                                               finalNavigation: to,
-                                                               animated: animated,
-                                                               finalCompletion: completion)
-            }
-        case .navigatingToNonFinalNavigation(let from, let currentTo, let finalNavigation, _, let finalCompletion):
-            if to == finalNavigation {
-                // Already final-navigating there... just recreate completion closure to call current and new completion closure
-                currentState = .navigatingToNonFinalNavigation(from: from,
-                                                               to: currentTo,
-                                                               finalNavigation: finalNavigation,
-                                                               animated: animated,
-                                                               finalCompletion: { (cancelled) in
-                                                                finalCompletion(cancelled)
-                                                                completion(cancelled)
-                })
-            } else {
-                finalCompletion(true)
-                currentState = .navigatingToNonFinalNavigation(from: from,
-                                                               to: currentTo,
-                                                               finalNavigation: to,
-                                                               animated: animated,
-                                                               finalCompletion: completion)
-            }
-        }
-    }
 }
 
 
@@ -225,18 +183,18 @@ extension NavigatorImpl : UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController,
                               didShow viewController: UIViewController,
                               animated: Bool) {
-        let newNavigation = endpointsBuilder.getCurrentNavigation(fromNavigator: self)
-        switch currentState {
+        let newNavigation = getCurrentNavigation()
+        switch navigatorState {
         case .idle:
             // Swipe back gesture recognizer
-            currentState = .idle(newNavigation)
+            navigatorState = .idle(newNavigation)
         case .navigating(_, let to, _, _):
             // Router started animation just finished...
             assert(to == newNavigation)
-            currentState = .idle(newNavigation)
+            navigatorState = .idle(newNavigation)
         case .navigatingToNonFinalNavigation(_, let to, let finalNavigation, let animated, finalCompletion: let finalCompletion):
             // Navigate to final destination
-            currentState = .navigating(from: to, to: finalNavigation, animated: animated, toCompletion: finalCompletion)
+            navigatorState = .navigating(from: to, to: finalNavigation, animated: animated, toCompletion: finalCompletion)
         }
     }
 }
