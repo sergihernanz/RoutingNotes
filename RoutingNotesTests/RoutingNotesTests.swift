@@ -50,8 +50,9 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
-            let endpointsBuilder = NotesNavigationEndpointsBuilder()
-            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: endpointsBuilder)
+            let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
+            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
+            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: anyEndpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -85,8 +86,9 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
-            let endpointsBuilder = NotesNavigationEndpointsBuilder()
-            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: endpointsBuilder)
+            let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
+            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
+            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: anyEndpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -125,8 +127,9 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
-            let endpointsBuilder = NotesNavigationEndpointsBuilder()
-            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: endpointsBuilder)
+            let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
+            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
+            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: anyEndpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -170,8 +173,9 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block:{ _ in
             let model = populateMockModel()
-            let endpointsBuilder = NotesNavigationEndpointsBuilder()
-            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: endpointsBuilder)
+            let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
+            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
+            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: anyEndpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -216,8 +220,9 @@ class RoutingNotesTests: XCTestCase {
         """, block:{ _ in
             let model = populateMockModel()
             let endpointsBuilder = TestsEndpointsBuilder()
+            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
             navigator = NotesStatefulNavigator(model: model,
-                                      endpointsBuilder: endpointsBuilder)
+                                      endpointsBuilder: anyEndpointsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!

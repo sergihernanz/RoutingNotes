@@ -8,11 +8,17 @@
 
 import UIKit
 
-class NotesNavigationEndpointsBuilder: NavigationEndpointsBuilder {
+typealias NotesNavigationEndpointsBuilder = AnyNavigationEndpointsBuilder<NotesNavigation, NotesStatefulNavigator, NotesModelContext>
 
-    func buildEndpointRoutableViewController(forNavigationEndpoint:NotesNavigation,
-                                             navigator: NotesStatefulNavigator,
-                                             model: NotesModelContext) -> UIViewController {
+class NotesNavigationEndpointsBuilderImpl: NavigationEndpointsBuilder {
+
+    typealias NavigationType = NotesNavigation
+    typealias NavigatorType = NotesStatefulNavigator
+    typealias ModelType = NotesModelContext
+
+    func buildEndpoint(forNavigationEndpoint:NotesNavigation,
+                       navigator: NotesStatefulNavigator,
+                       model: NotesModelContext) -> UIViewController {
         switch forNavigationEndpoint {
         case .folders:
             return FoldersVC(navigator: navigator, model:model, navigationInput:())
@@ -23,7 +29,7 @@ class NotesNavigationEndpointsBuilder: NavigationEndpointsBuilder {
         }
     }
 
-    func correctlyConfigured(viewController: UIViewController, forNavigation: NotesNavigation) -> Bool {
+    func isCorrectlyConfigured(viewController: UIViewController, forNavigation: NotesNavigation) -> Bool {
         switch forNavigation {
         case .folders:
             return viewController is FoldersVC

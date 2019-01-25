@@ -11,11 +11,11 @@ import UIKit
 
 class TestsEndpointsBuilder: NavigationEndpointsBuilder {
 
-    //typealias NavigationType = NotesNavigation
-    //typealias NavigatorType = NavigatorImpl
-    //typealias ModelType = NotesModelContext
+    typealias NavigationType = NotesNavigation
+    typealias NavigatorType = NotesStatefulNavigator
+    typealias ModelType = NotesModelContext
 
-    func buildEndpointRoutableViewController(forNavigationEndpoint:NotesNavigation,
+    func buildEndpoint(forNavigationEndpoint:NotesNavigation,
                                              navigator: NotesStatefulNavigator,
                                              model: NotesModelContext) -> UIViewController {
         switch forNavigationEndpoint {
@@ -34,7 +34,7 @@ class TestsEndpointsBuilder: NavigationEndpointsBuilder {
         }
     }
 
-    func correctlyConfigured(viewController: UIViewController, forNavigation: NotesNavigation) -> Bool {
+    func isCorrectlyConfigured(viewController: UIViewController, forNavigation: NotesNavigation) -> Bool {
         guard let testVC = viewController as? NavigationTestVC else {
             fatalError()
         }

@@ -9,6 +9,7 @@
 import Foundation
 
 protocol Navigation : Equatable {
+    init()
     func pop() -> Self?
 }
 
@@ -23,7 +24,7 @@ extension Navigation {
     }
 }
 
-enum NavigatorState<NavigationType : Equatable> : Equatable {
+enum NavigatorState<NavigationType : Navigation> : Equatable {
 
     case idle(NavigationType)
     case navigating(from:NavigationType, to:NavigationType,

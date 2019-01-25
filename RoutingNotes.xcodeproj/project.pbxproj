@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2D06C2E021BCF9F4004962A2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D06C2DF21BCF9F4004962A2 /* Model.swift */; };
 		2D0F310521D59E3900F3126B /* UIWindowRootViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */; };
+		2D1F0DFA21FB92D40023E74D /* StatefulNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */; };
 		2D546DF621AE77EA00CFB5BA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D546DF521AE77EA00CFB5BA /* AppDelegate.swift */; };
 		2D546DFF21AE77EB00CFB5BA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D546DFE21AE77EB00CFB5BA /* Assets.xcassets */; };
 		2D546E0221AE77EB00CFB5BA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D546E0021AE77EB00CFB5BA /* LaunchScreen.storyboard */; };
@@ -46,6 +47,7 @@
 /* Begin PBXFileReference section */
 		2D06C2DF21BCF9F4004962A2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowRootViewControllerTester.swift; sourceTree = "<group>"; };
+		2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StatefulNavigator.swift; path = RoutingNotes/Routers/StatefulNavigator.swift; sourceTree = "<group>"; };
 		2D546DF221AE77EA00CFB5BA /* RoutingNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoutingNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D546DF521AE77EA00CFB5BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D546DFE21AE77EB00CFB5BA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 		2D546DE921AE77EA00CFB5BA = {
 			isa = PBXGroup;
 			children = (
+				2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */,
 				2D546DF421AE77EA00CFB5BA /* RoutingNotes */,
 				2D546E0B21AE77EB00CFB5BA /* RoutingNotesTests */,
 				2D546DF321AE77EA00CFB5BA /* Products */,
@@ -293,6 +296,7 @@
 				2DD274D621F27577003FB74A /* NoteVC+Routing.swift in Sources */,
 				2DCDC52321F9101C0094761A /* TestsEndpointsBuilder.swift in Sources */,
 				2DD274D321F273B3003FB74A /* ListVC+Routing.swift in Sources */,
+				2D1F0DFA21FB92D40023E74D /* StatefulNavigator.swift in Sources */,
 				2DD274D021F26D7E003FB74A /* FoldersVC+Routing.swift in Sources */,
 				2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */,
 				2D06C2E021BCF9F4004962A2 /* Model.swift in Sources */,

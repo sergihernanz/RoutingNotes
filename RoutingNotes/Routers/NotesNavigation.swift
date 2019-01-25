@@ -10,6 +10,10 @@ import Foundation
 
 enum NotesNavigation : Navigation {
 
+    init() {
+        self = .folders
+    }
+
     case folders
     case folders👉list(listId:ListId)
     case folders👉🏻list👉note(listId:ListId, noteId:NoteId)
