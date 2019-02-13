@@ -51,7 +51,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
                                       forKey: AppDelegate.savedNavigationUserDefaultsKey)
         } catch {
         }
+        registerShortcuts()
     }
-    
+
+    func registerShortcuts() {
+        do {
+            var items = [UIApplicationShortcutItem]()
+            let favIcon = UIApplicationShortcutIcon(type: .favorite)
+            let jsonNavigationToList1 = try JSONEncoder().encode(NotesNavigation.folders👉list(listId: "1"))
+            if let jsonStringNavigationToList1 = String(data: jsonNavigationToList1, encoding: .utf8) {
+                items.append(UIApplicationShortcutItem(type: jsonStringNavigationToList1,
+                                                       localizedTitle: "List 1",
+                                                       localizedSubtitle: nil,
+                                                       icon: favIcon,
+                                                       userInfo: nil))
+            }
+            let jsonNavigationToNoteA = try JSONEncoder().encode(NotesNavigation.folders👉🏻list👉note(listId: "1", noteId: "A"))
+            if let jsonStringNavigationToNoteA = String(data: jsonNavigationToNoteA, encoding: .utf8) {
+                items.append(UIApplicationShortcutItem(type: jsonStringNavigationToNoteA,
+                                                       localizedTitle: "Note A",
+                                                       localizedSubtitle: nil,
+                                                       icon: favIcon,
+                                                       userInfo: nil))
+            }
+            UIApplication.shared.shortcutItems = items
+        } catch {
+            UIApplication.shared.shortcutItems = nil
+        }
+    }
+
+    func application(_ application: UIApplication,
+                     performActionFor shortcutItem: UIApplicationShortcutItem,
+                     completionHandler: @escaping (Bool) -> Void) {
+        do {
+            guard let data = shortcutItem.type.data(using: .utf8) else {
+                completionHandler(false)
+                return
+            }
+            let navigation = try JSONDecoder().decode(NotesNavigation.self, from: data)
+            navigator.navigate(to: navigation, animated:false, completion: { _ in
+                completionHandler(true)
+            })
+        } catch {
+            completionHandler(false)
+        }
+    }
 }
 
