@@ -30,9 +30,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         window.rootViewController = navigator.rootViewController
         window.makeKeyAndVisible()
         self.window = window
+        self.navigator = navigator
+
+        if let savedJSONNavigation = UserDefaults.standard.object(forKey: AppDelegate.savedNavigationUserDefaultsKey) as? Data {
+            do {
+                let savedNavigation = try JSONDecoder().decode(NotesNavigation.self, from: savedJSONNavigation)
+                navigator.navigate(to: savedNavigation, animated: false, completion: {_ in })
+            } catch {
+            }
+        }
 
         return true
     }
 
+    static let savedNavigationUserDefaultsKey = "savedNavigationUSerDefaultsKey"
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        do {
+            let jsonNavigation = try JSONEncoder().encode(navigator.currentNavigation)
+            UserDefaults.standard.set(jsonNavigation,
+                                      forKey: AppDelegate.savedNavigationUserDefaultsKey)
+        } catch {
+        }
+    }
+    
 }
 
