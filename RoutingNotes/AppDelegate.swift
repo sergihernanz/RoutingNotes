@@ -22,8 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
 
         let model = populateMockModel()
         let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
-        let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
         //let endpointsBuilder = TestsEndpointsBuilder()
+        let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
         let navigator = NotesStatefulNavigator(model:model,
                                       endpointsBuilder: anyEndpointsBuilder)
         let window = UIWindow(frame: UIScreen.main.bounds)
@@ -32,27 +32,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         self.window = window
         self.navigator = navigator
 
-        if let savedJSONNavigation = UserDefaults.standard.object(forKey: AppDelegate.savedNavigationUserDefaultsKey) as? Data {
-            do {
-                let savedNavigation = try JSONDecoder().decode(NotesNavigation.self, from: savedJSONNavigation)
-                navigator.navigate(to: savedNavigation, animated: false, completion: {_ in })
-            } catch {
-            }
-        }
+
+        loadLastAppLaunchNavigation()
+
+        UNUserNotificationCenter.current().delegate = self
+        //scheduleLocalNotification()
+        //registerShortcuts()
 
         return true
     }
+}
+
+extension AppDelegate {
 
     static let savedNavigationUserDefaultsKey = "savedNavigationUSerDefaultsKey"
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        do {
-            let jsonNavigation = try JSONEncoder().encode(navigator.currentNavigation)
-            UserDefaults.standard.set(jsonNavigation,
-                                      forKey: AppDelegate.savedNavigationUserDefaultsKey)
-        } catch {
+
+    func loadLastAppLaunchNavigation() {
+        // Load previous last navigation endpoint
+        if let savedJSONNavigation = UserDefaults.standard.string(forKey: AppDelegate.savedNavigationUserDefaultsKey),
+            let savedNavigation = NotesNavigation(jsonString: savedJSONNavigation) {
+            navigator.navigate(to: savedNavigation, animated: false, completion: {_ in })
         }
-        registerShortcuts()
     }
+
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        UserDefaults.standard.set(navigator.currentNavigation.toJSONString(),
+                                  forKey: AppDelegate.savedNavigationUserDefaultsKey)
+    }
+}
+
+extension AppDelegate {
 
     func registerShortcuts() {
         do {
@@ -83,22 +92,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     func application(_ application: UIApplication,
                      performActionFor shortcutItem: UIApplicationShortcutItem,
                      completionHandler: @escaping (Bool) -> Void) {
-        do {
-            guard let data = shortcutItem.type.data(using: .utf8) else {
-                completionHandler(false)
-                return
-            }
-            let navigation = try JSONDecoder().decode(NotesNavigation.self, from: data)
+        if let navigation = NotesNavigation(jsonString: shortcutItem.type) {
             navigator.navigate(to: navigation, animated:false, completion: { _ in
                 completionHandler(true)
             })
-        } catch {
-            completionHandler(false)
         }
     }
 }
 
-// Handle opening URLs
+// Handle opening links
 extension AppDelegate {
 
     func application(_ app: UIApplication,
@@ -131,36 +133,83 @@ extension AppDelegate {
 }
 
 
-class NotesLinkParser {
+import UserNotifications
 
-    static func navigation(url: URL) throws -> NotesNavigation? {
-        let foldersRegex = try NSRegularExpression(pattern: "^routingnotes://folders$", options: .caseInsensitive)
-        let listRegex = try NSRegularExpression(pattern: "^routingnotes://list/(\\w)$", options: .caseInsensitive)
-        let noteRegex = try NSRegularExpression(pattern: "^routingnotes://list/(\\w)/note/(\\w)$", options: .caseInsensitive)
-        let urlString = url.absoluteString
-        let urlStringRange = NSRange(location: 0, length: urlString.count)
-        let foldersMatches = foldersRegex.numberOfMatches(in: urlString, options: .anchored, range: urlStringRange)
-        if foldersMatches > 0 {
-            return .folders
+// Handle opening notifications
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func application(_ application: UIApplication,
+                     didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+                     fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        if let link = userInfo["link"] as? String,
+           let navigation = NotesNavigation(jsonString: link) {
+            navigator.navigate(to: navigation, animated:false, completion: { _ in
+                completionHandler(.noData)
+            })
+        } else {
+            completionHandler(.noData)
         }
-        let listMatches = listRegex.matches(in: urlString, options: .anchored, range: urlStringRange)
-        if listMatches.count == 1,
-           let match = listMatches.first,
-           match.numberOfRanges == 2 {
-            let listIdRange = match.range(at: 1)
-            let listId = String(urlString[String.Index(encodedOffset: listIdRange.lowerBound)..<String.Index(encodedOffset: listIdRange.upperBound)])
-            return .folders👉list(listId: listId)
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                willPresent notification: UNNotification,
+                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        if let link = notification.request.content.userInfo["link"] as? String,
+           let navigation = NotesNavigation(jsonString: link) {
+            navigator.navigate(to: navigation, animated:false, completion: { _ in
+                completionHandler(.sound)
+                self.begForgiveness()
+            })
+        } else {
+            completionHandler(.alert)
         }
-        let noteMatches = noteRegex.matches(in: urlString, options: .anchored, range: urlStringRange)
-        if noteMatches.count == 1,
-           let match = noteMatches.first,
-           match.numberOfRanges == 3,
-           let listIdRange = noteMatches.first?.range(at: 1),
-           let noteIdRange = noteMatches.first?.range(at: 2) {
-            let listId = String(urlString[String.Index(encodedOffset: listIdRange.lowerBound)..<String.Index(encodedOffset: listIdRange.upperBound)])
-            let noteId = String(urlString[String.Index(encodedOffset: noteIdRange.lowerBound)..<String.Index(encodedOffset: noteIdRange.upperBound)])
-            return .folders👉🏻list👉note(listId: listId, noteId: noteId)
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                didReceive response: UNNotificationResponse,
+                                withCompletionHandler completionHandler: @escaping () -> Void) {
+        if let link = response.notification.request.content.userInfo["link"] as? String,
+           let navigation = NotesNavigation(jsonString: link) {
+            navigator.navigate(to: navigation, animated:false, completion: { _ in
+                completionHandler()
+            })
+        } else {
+            completionHandler()
         }
-        return nil
+    }
+
+    func scheduleLocalNotification() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
+            if ( granted ) {
+                let jsonNavigationToNoteA = NotesNavigation.folders👉🏻list👉note(listId: "1", noteId: "A").toJSONString()
+                let content = UNMutableNotificationContent()
+                content.title = "Note A has changed"
+                content.body = "See the latest changes in List 1: Note A"
+                content.userInfo = ["link": jsonNavigationToNoteA as Any]
+
+                // Create the trigger as a repeating event.
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+                // Create the request
+                let uuidString = UUID().uuidString
+                let request = UNNotificationRequest(identifier: uuidString,
+                                                    content: content,
+                                                    trigger: trigger)
+
+                // Schedule the request with the system.
+                let notificationCenter = UNUserNotificationCenter.current()
+                notificationCenter.add(request) { (error) in
+                    if error != nil {
+                        assertionFailure()
+                    }
+                }
+            }
+        }
+    }
+
+    func begForgiveness() {
+        let alertController = UIAlertController(title: "Ups",
+                                                message: "Mmm.. we've navigated to a local notification destination without asking",
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "WTF! Ok", style: .destructive, handler: nil))
+        navigator.rootViewController.present(alertController, animated: true, completion: nil)
     }
 }

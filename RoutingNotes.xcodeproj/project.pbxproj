@@ -22,6 +22,7 @@
 		2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7993CF21D7BC3700279B87 /* MockUDOrdersModelContext.swift */; };
 		2D8C8E7C21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */; };
 		2D8C8E7E21F485F50045FC13 /* NavigationEndpointsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */; };
+		2DB3746E22203BAD00B877A1 /* NotesNavigation+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB3746D22203BAD00B877A1 /* NotesNavigation+Codable.swift */; };
 		2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E08721EF680C008104C4 /* Navigatable.swift */; };
 		2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */; };
 		2DCDC52321F9101C0094761A /* TestsEndpointsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD7509C21F5BAC1007BD6A1 /* TestsEndpointsBuilder.swift */; };
@@ -33,6 +34,7 @@
 		2DD274D321F273B3003FB74A /* ListVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D221F273B3003FB74A /* ListVC+Routing.swift */; };
 		2DD274D621F27577003FB74A /* NoteVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D521F27577003FB74A /* NoteVC+Routing.swift */; };
 		2DD274D921F27A69003FB74A /* NavigatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D821F27A69003FB74A /* NavigatorState.swift */; };
+		2DEB41642217268400F9A65F /* NotesLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEB41632217268400F9A65F /* NotesLinkParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,7 +69,9 @@
 		2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+pushPopOrSetViewControllers.swift"; sourceTree = "<group>"; };
 		2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationEndpointsBuilder.swift; sourceTree = "<group>"; };
 		2D8C8E7F21F59F4E0045FC13 /* NavigationTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTestVC.swift; sourceTree = "<group>"; };
+		2DB3746D22203BAD00B877A1 /* NotesNavigation+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotesNavigation+Codable.swift"; sourceTree = "<group>"; };
 		2DB6E08721EF680C008104C4 /* Navigatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigatable.swift; sourceTree = "<group>"; };
+		2DB7382F221EE5EC0081A533 /* RoutingNotes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RoutingNotes.entitlements; sourceTree = "<group>"; };
 		2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+DeselectRow.swift"; sourceTree = "<group>"; };
 		2DCDC52721F91DA20094761A /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
 		2DCDC52921F91E330094761A /* NotesNavigationEndpointsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesNavigationEndpointsBuilder.swift; sourceTree = "<group>"; };
@@ -77,6 +81,7 @@
 		2DD274D521F27577003FB74A /* NoteVC+Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteVC+Routing.swift"; sourceTree = "<group>"; };
 		2DD274D821F27A69003FB74A /* NavigatorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorState.swift; sourceTree = "<group>"; };
 		2DD7509C21F5BAC1007BD6A1 /* TestsEndpointsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsEndpointsBuilder.swift; sourceTree = "<group>"; };
+		2DEB41632217268400F9A65F /* NotesLinkParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesLinkParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,9 +124,11 @@
 		2D546DF421AE77EA00CFB5BA /* RoutingNotes */ = {
 			isa = PBXGroup;
 			children = (
+				2DB7382F221EE5EC0081A533 /* RoutingNotes.entitlements */,
 				2D5A8DC221B2737C00DAFC8D /* Model */,
 				2D5A8DBB21B1CD5100DAFC8D /* VCs */,
 				2D546E1921AE789E00CFB5BA /* Routers */,
+				2DEB41632217268400F9A65F /* NotesLinkParser.swift */,
 				2D546DF521AE77EA00CFB5BA /* AppDelegate.swift */,
 				2D546DFE21AE77EB00CFB5BA /* Assets.xcassets */,
 				2D546E0021AE77EB00CFB5BA /* LaunchScreen.storyboard */,
@@ -153,6 +160,7 @@
 				2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */,
 				2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */,
 				2D546E1A21AE789E00CFB5BA /* NotesNavigation.swift */,
+				2DB3746D22203BAD00B877A1 /* NotesNavigation+Codable.swift */,
 				2DCDC52921F91E330094761A /* NotesNavigationEndpointsBuilder.swift */,
 				2DCE24AC21B198ED00150FB0 /* NotesStatefulNavigator.swift */,
 			);
@@ -240,6 +248,11 @@
 				TargetAttributes = {
 					2D546DF121AE77EA00CFB5BA = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.SafariKeychain = {
+								enabled = 1;
+							};
+						};
 					};
 					2D546E0721AE77EB00CFB5BA = {
 						CreatedOnToolsVersion = 10.1;
@@ -292,7 +305,9 @@
 			files = (
 				2D5A8DBF21B1CD6E00DAFC8D /* ListVC.swift in Sources */,
 				2D546E1B21AE789E00CFB5BA /* NotesNavigation.swift in Sources */,
+				2DEB41642217268400F9A65F /* NotesLinkParser.swift in Sources */,
 				2DCDC52821F91DA20094761A /* Navigator.swift in Sources */,
+				2DB3746E22203BAD00B877A1 /* NotesNavigation+Codable.swift in Sources */,
 				2D8C8E7C21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift in Sources */,
 				2DCDC52A21F91E330094761A /* NotesNavigationEndpointsBuilder.swift in Sources */,
 				2DCE24AD21B198ED00150FB0 /* NotesStatefulNavigator.swift in Sources */,
@@ -466,6 +481,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RoutingNotes/RoutingNotes.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8X3V795LG6;
 				INFOPLIST_FILE = RoutingNotes/Info.plist;
@@ -473,8 +490,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = iqb.RoutingNotes;
+				PRODUCT_BUNDLE_IDENTIFIER = com.inqbarna.routingnotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -484,6 +502,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = RoutingNotes/RoutingNotes.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 8X3V795LG6;
 				INFOPLIST_FILE = RoutingNotes/Info.plist;
@@ -491,8 +511,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = iqb.RoutingNotes;
+				PRODUCT_BUNDLE_IDENTIFIER = com.inqbarna.routingnotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
