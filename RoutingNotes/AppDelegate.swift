@@ -38,6 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         UNUserNotificationCenter.current().delegate = self
         //scheduleLocalNotification()
         //registerShortcuts()
+        //registerCoreSpotlightEntries()
 
         return true
     }
@@ -100,6 +101,17 @@ extension AppDelegate {
     }
 }
 
+extension AppDelegate {
+
+    func application(_ application: UIApplication,
+                     continue userActivity: NSUserActivity,
+                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        let war = self.application(application, continueWebUserActivity: userActivity, restorationHandler: restorationHandler)
+        let csr = self.application(application, continueCoreSpotlightUserActivity: userActivity, restorationHandler: restorationHandler)
+        return war || csr
+    }
+}
+
 // Handle opening links
 extension AppDelegate {
 
@@ -109,7 +121,7 @@ extension AppDelegate {
         return open(link: url)
     }
     func application(_ application: UIApplication,
-                     continue userActivity: NSUserActivity,
+                     continueWebUserActivity userActivity: NSUserActivity,
                      restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
             if let url = userActivity.webpageURL {
@@ -211,5 +223,49 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                                 preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "WTF! Ok", style: .destructive, handler: nil))
         navigator.rootViewController.present(alertController, animated: true, completion: nil)
+    }
+}
+
+import CoreSpotlight
+import CoreServices
+extension AppDelegate {
+
+    func registerCoreSpotlightEntries() {
+        do {
+            var spotlightItems = [CSSearchableItem]()
+            for note in try navigator.model.fetch(request: NotesModelFetchRequest.emptyPredicate) as [Note] {
+                let list = try note.fetchList(ctxt: navigator.model)
+                let navigation = NotesNavigation.folders👉🏻list👉note(listId: list.listId, noteId: note.noteId)
+                let searchableItemAttributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
+                var keywords = [String]()
+                keywords.append(note.title)
+                searchableItemAttributeSet.title = note.title
+                searchableItemAttributeSet.contentDescription = note.content
+                searchableItemAttributeSet.keywords = keywords
+                let searchableItem = CSSearchableItem(uniqueIdentifier: navigation.toJSONString(),
+                                                      domainIdentifier: note.noteId,
+                                                      attributeSet: searchableItemAttributeSet)
+                spotlightItems.append(searchableItem)
+            }
+            CSSearchableIndex.default().indexSearchableItems(spotlightItems) { (error) -> Void in
+                if let err = error {
+                    print(err.localizedDescription)
+                }
+            }
+        } catch {
+        }
+    }
+
+    func application(_ application: UIApplication, continueCoreSpotlightUserActivity userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+        if userActivity.activityType == CSSearchableItemActionType {
+            if let userInfo = userActivity.userInfo {
+                if let jsonNavigation = userInfo[CSSearchableItemActivityIdentifier] as? String,
+                   let navigation = NotesNavigation(jsonString: jsonNavigation) {
+                    navigator.navigate(to: navigation, animated: false, completion: {_ in })
+                    return true
+                }
+            }
+        }
+        return false
     }
 }
