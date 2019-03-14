@@ -50,7 +50,7 @@
 /* Begin PBXFileReference section */
 		2D06C2DF21BCF9F4004962A2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowRootViewControllerTester.swift; sourceTree = "<group>"; };
-		2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = StatefulNavigator.swift; path = RoutingNotes/Routers/StatefulNavigator.swift; sourceTree = "<group>"; };
+		2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulNavigator.swift; sourceTree = "<group>"; };
 		2D4C25762214720300A2F0B5 /* NavigationCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCodableTests.swift; sourceTree = "<group>"; };
 		2D546DF221AE77EA00CFB5BA /* RoutingNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoutingNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D546DF521AE77EA00CFB5BA /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -105,7 +105,6 @@
 		2D546DE921AE77EA00CFB5BA = {
 			isa = PBXGroup;
 			children = (
-				2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */,
 				2D546DF421AE77EA00CFB5BA /* RoutingNotes */,
 				2D546E0B21AE77EB00CFB5BA /* RoutingNotesTests */,
 				2D546DF321AE77EA00CFB5BA /* Products */,
@@ -156,6 +155,7 @@
 			children = (
 				2DD274CE21F26D7E003FB74A /* VCsRouting */,
 				2DD274D821F27A69003FB74A /* NavigatorState.swift */,
+				2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */,
 				2DCDC52721F91DA20094761A /* Navigator.swift */,
 				2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */,
 				2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */,
