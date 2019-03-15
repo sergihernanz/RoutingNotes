@@ -9,27 +9,25 @@
 import Foundation
 import UIKit
 
-class ListVC : UIViewController {
+class ListVC: UIViewController {
 
-
-    @available(*,unavailable)
+    @available(*, unavailable)
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) { fatalError() }
-    @available(*,unavailable)
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
-    private(set) var listInput : ListId
+    private(set) var listInput: ListId
 
     private(set) var navigator: NotesStatefulNavigator
     private(set) var model: NotesModelContext
-    required init(navigator: NotesStatefulNavigator, model:NotesModelContext, navigationInput:ListId) {
+    required init(navigator: NotesStatefulNavigator, model: NotesModelContext, navigationInput: ListId) {
         self.navigator = navigator
         self.model = model
         self.listInput = navigationInput
 
         do {
-            let list = try model.fetch(id: .list(listInput)) as List?
-            if let l = list {
-                try notes = l.fetchNotes(ctxt: model)
+            if let list = try model.fetch(id: .list(listInput)) as List? {
+                try notes = list.fetchNotes(ctxt: model)
             } else {
                 notes = []
             }
@@ -46,12 +44,12 @@ class ListVC : UIViewController {
         view = table
     }
 
-    var notes : [Note] {
+    var notes: [Note] {
         didSet {
             tableView.reloadData()
         }
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         deselectRow(tableView: tableView, animated: animated)
@@ -67,11 +65,11 @@ class ListVC : UIViewController {
     }
 }
 
-extension ListVC : UITableViewDataSource {
+extension ListVC: UITableViewDataSource {
 
     static let cellReuseIdentifier = "listCell"
 
-    var tableView : UITableView {
+    var tableView: UITableView {
         return view as! UITableView
     }
 
@@ -86,7 +84,7 @@ extension ListVC : UITableViewDataSource {
 
 }
 
-extension ListVC : UITableViewDelegate {
+extension ListVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let note = notes[indexPath.row]
         guard let titleLabel = cell.textLabel,

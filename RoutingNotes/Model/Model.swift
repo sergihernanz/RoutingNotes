@@ -14,12 +14,12 @@ protocol ModelContext {
     associatedtype I
     associatedtype R
 
-    func fetch<T>(id:I) throws -> T?
-    func fetch<T>(request:R) throws -> [T]
+    func fetch<T>(id: I) throws -> T?
+    func fetch<T>(request: R) throws -> [T]
 
 }
 
-fileprivate class _AnyModelContextBase<I,R>: ModelContext {
+private class _AnyModelContextBase<I, R>: ModelContext {
     init() {
         guard type(of: self) != _AnyModelContextBase.self else {
             fatalError("_AnyModelContextBase<I,R> instances can not be created, create a subclass instance instead")
@@ -32,7 +32,7 @@ fileprivate class _AnyModelContextBase<I,R>: ModelContext {
         fatalError("Method must be overriden")
     }
 }
-fileprivate final class _AnyModelContextBox<Concrete: ModelContext>: _AnyModelContextBase<Concrete.I,Concrete.R> {
+fileprivate final class _AnyModelContextBox<Concrete: ModelContext>: _AnyModelContextBase<Concrete.I, Concrete.R> {
     // variable used since we're calling mutating functions
     var concrete: Concrete
     init(_ concrete: Concrete) {
@@ -46,8 +46,8 @@ fileprivate final class _AnyModelContextBox<Concrete: ModelContext>: _AnyModelCo
     }
 }
 
-final class AnyModelContext<I,R>: ModelContext {
-    private let box: _AnyModelContextBase<I,R>
+final class AnyModelContext<I, R>: ModelContext {
+    private let box: _AnyModelContextBase<I, R>
     // Initializer takes our concrete implementer of ModelContext i.e. ListModelContext
     init<Concrete: ModelContext>(_ concrete: Concrete) where Concrete.I == I, Concrete.R == R {
         box = _AnyModelContextBox(concrete)
@@ -62,51 +62,50 @@ final class AnyModelContext<I,R>: ModelContext {
 
 struct NotesModelFetchRequest {
     var filter: ((Any) -> Bool)?
-    let sortDescriptors:[NSSortDescriptor]
-    let range:ClosedRange<Int>
+    let sortDescriptors: [NSSortDescriptor]
+    let range: ClosedRange<Int>
 
-    static var emptyPredicate : NotesModelFetchRequest {
+    static var emptyPredicate: NotesModelFetchRequest {
         return NotesModelFetchRequest(filter: nil,
                                       sortDescriptors: [],
                                       range: 0...0)
     }
 }
-typealias NotesModelContext = AnyModelContext<NotesModelId,NotesModelFetchRequest>
-
+typealias NotesModelContext = AnyModelContext<NotesModelId, NotesModelFetchRequest>
 
 // Notes model
-enum NotesModelId : Equatable {
+enum NotesModelId: Equatable {
     // These below are just trying to emulate other systems different than core data, or entity+id search based queries
     case list(ListId)
     case note(NoteId)
 }
 protocol NotesModelBase {
-    var notesModelId : NotesModelId { get }
+    var notesModelId: NotesModelId { get }
 }
-func ==(lhs: NotesModelBase, rhs: NotesModelBase) -> Bool {
+func == (lhs: NotesModelBase, rhs: NotesModelBase) -> Bool {
     return lhs.notesModelId == rhs.notesModelId
 }
 
 typealias ListId = String
-protocol List : NotesModelBase {
-    var listId : ListId { get }
-    var name : String {get set}
-    func fetchNotes(ctxt:AnyModelContext<NotesModelId,NotesModelFetchRequest>) throws -> [Note]
+protocol List: NotesModelBase {
+    var listId: ListId { get }
+    var name: String {get set}
+    func fetchNotes(ctxt: AnyModelContext<NotesModelId, NotesModelFetchRequest>) throws -> [Note]
 }
 
 typealias NoteId = String
-protocol Note : NotesModelBase {
-    var noteId : NoteId { get }
-    var title : String {get set}
-    var modifiedDate : Date {get set}
-    var content : String {get set}
-    var listId : ListId {get set}
-    func fetchList(ctxt:AnyModelContext<NotesModelId,NotesModelFetchRequest>) throws -> List
+protocol Note: NotesModelBase {
+    var noteId: NoteId { get }
+    var title: String {get set}
+    var modifiedDate: Date {get set}
+    var content: String {get set}
+    var listId: ListId {get set}
+    func fetchList(ctxt: AnyModelContext<NotesModelId, NotesModelFetchRequest>) throws -> List
 }
 
 // Implementations
-struct ListUserDefaults : List, Codable {
-    var notesModelId : NotesModelId { return .list(listId) }
+struct ListUserDefaults: List, Codable {
+    var notesModelId: NotesModelId { return .list(listId) }
     var listId: ListId
     var name: String
 
@@ -117,28 +116,28 @@ struct ListUserDefaults : List, Codable {
         return try ctxt.fetch(request: req)
     }
 }
-struct NoteUserDefaults : Note, Codable {
-    var notesModelId : NotesModelId { return .note(noteId) }
+struct NoteUserDefaults: Note, Codable {
+    var notesModelId: NotesModelId { return .note(noteId) }
     var noteId: NoteId
     var title: String
     var modifiedDate: Date
     var content: String
-    var listId : ListId
+    var listId: ListId
     func fetchList(ctxt: AnyModelContext<NotesModelId, NotesModelFetchRequest>) throws -> List {
-        return try ctxt.fetch(id:.list(listId))!
+        return try ctxt.fetch(id: .list(listId))!
     }
 }
-class UserDefaultsOrdersModelContext : ModelContext {
+class UserDefaultsOrdersModelContext: ModelContext {
 
     typealias I = NotesModelId
     typealias R = NotesModelFetchRequest
 
-    let persistenceName : String
-    init(persistenceName:String) {
+    let persistenceName: String
+    init(persistenceName: String) {
         self.persistenceName = persistenceName
     }
 
-    internal func persistenceKey(type:String) -> String {
+    internal func persistenceKey(type: String) -> String {
         return "\(persistenceName)_\(type)"
     }
 
@@ -161,10 +160,10 @@ class UserDefaultsOrdersModelContext : ModelContext {
 
     func fetch<T>(request: NotesModelFetchRequest) throws -> [T] {
         switch String(describing: T.self) {
-        case String(describing:Note.self):
+        case String(describing: Note.self):
             let udNotes = try fetch(request: request) as [NoteUserDefaults]
             return udNotes as! [T]
-        case String(describing:List.self):
+        case String(describing: List.self):
             let udLists = try fetch(request: request) as [ListUserDefaults]
             return udLists as! [T]
         default:
@@ -173,9 +172,9 @@ class UserDefaultsOrdersModelContext : ModelContext {
     }
 
     func fetch<T>(request: NotesModelFetchRequest) throws -> [T] where T: Codable & NotesModelBase {
-        let key = persistenceKey(type:String(describing: T.self))
-        guard let data = UserDefaults.standard.value(forKey:key) as? Data else {
-            return [];
+        let key = persistenceKey(type: String(describing: T.self))
+        guard let data = UserDefaults.standard.value(forKey: key) as? Data else {
+            return []
         }
         let ret = try JSONDecoder().decode(Array<T>.self, from: data)
         guard let filter = request.filter else {

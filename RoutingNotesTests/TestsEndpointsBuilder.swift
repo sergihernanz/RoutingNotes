@@ -15,9 +15,9 @@ class TestsEndpointsBuilder: NavigationEndpointsBuilder {
     typealias NavigatorType = NotesStatefulNavigator
     typealias ModelType = NotesModelContext
 
-    func buildEndpoint(forNavigationEndpoint:NotesNavigation,
-                                             navigator: NotesStatefulNavigator,
-                                             model: NotesModelContext) -> UIViewController {
+    func buildEndpoint(forNavigationEndpoint: NotesNavigation,
+                       navigator: NotesStatefulNavigator,
+                       model: NotesModelContext) -> UIViewController {
         switch forNavigationEndpoint {
         case .folders:
             let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: ())
@@ -27,7 +27,7 @@ class TestsEndpointsBuilder: NavigationEndpointsBuilder {
             let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: listId)
             vc.title = "List \(listId)"
             return vc
-        case .folders👉🏻list👉note(_, let noteId):
+        case .folders👉list👉note(_, let noteId):
             let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: noteId)
             vc.title = "Note \(noteId)"
             return vc
@@ -43,7 +43,7 @@ class TestsEndpointsBuilder: NavigationEndpointsBuilder {
             return testVC.title == "Folders"
         case .folders👉list(let listId):
             return testVC.title == "List \(listId)"
-        case .folders👉🏻list👉note(_, let noteId):
+        case .folders👉list👉note(_, let noteId):
             return testVC.title == "Note \(noteId)"
         }
     }

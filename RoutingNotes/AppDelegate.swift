@@ -24,14 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
         //let endpointsBuilder = TestsEndpointsBuilder()
         let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
-        let navigator = NotesStatefulNavigator(model:model,
+        let navigator = NotesStatefulNavigator(model: model,
                                       endpointsBuilder: anyEndpointsBuilder)
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = navigator.rootViewController
         window.makeKeyAndVisible()
         self.window = window
         self.navigator = navigator
-
 
         loadLastAppLaunchNavigation()
 
@@ -76,7 +75,7 @@ extension AppDelegate {
                                                        icon: favIcon,
                                                        userInfo: nil))
             }
-            let jsonNavigationToNoteA = try JSONEncoder().encode(NotesNavigation.folders👉🏻list👉note(listId: "1", noteId: "A"))
+            let jsonNavigationToNoteA = try JSONEncoder().encode(NotesNavigation.folders👉list👉note(listId: "1", noteId: "A"))
             if let jsonStringNavigationToNoteA = String(data: jsonNavigationToNoteA, encoding: .utf8) {
                 items.append(UIApplicationShortcutItem(type: jsonStringNavigationToNoteA,
                                                        localizedTitle: "Note A",
@@ -94,7 +93,7 @@ extension AppDelegate {
                      performActionFor shortcutItem: UIApplicationShortcutItem,
                      completionHandler: @escaping (Bool) -> Void) {
         if let navigation = NotesNavigation(jsonString: shortcutItem.type) {
-            navigator.navigate(to: navigation, animated:false, completion: { _ in
+            navigator.navigate(to: navigation, animated: false, completion: { _ in
                 completionHandler(true)
             })
         }
@@ -117,7 +116,7 @@ extension AppDelegate {
 
     func application(_ app: UIApplication,
                      open url: URL,
-                     options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+                     options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
         return open(link: url)
     }
     func application(_ application: UIApplication,
@@ -144,17 +143,16 @@ extension AppDelegate {
     }
 }
 
-
 import UserNotifications
 
 // Handle opening notifications
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func application(_ application: UIApplication,
-                     didReceiveRemoteNotification userInfo: [AnyHashable : Any],
+                     didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if let link = userInfo["link"] as? String,
            let navigation = NotesNavigation(jsonString: link) {
-            navigator.navigate(to: navigation, animated:false, completion: { _ in
+            navigator.navigate(to: navigation, animated: false, completion: { _ in
                 completionHandler(.noData)
             })
         } else {
@@ -167,7 +165,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         if let link = notification.request.content.userInfo["link"] as? String,
            let navigation = NotesNavigation(jsonString: link) {
-            navigator.navigate(to: navigation, animated:false, completion: { _ in
+            navigator.navigate(to: navigation, animated: false, completion: { _ in
                 completionHandler(.sound)
                 self.begForgiveness()
             })
@@ -181,7 +179,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         if let link = response.notification.request.content.userInfo["link"] as? String,
            let navigation = NotesNavigation(jsonString: link) {
-            navigator.navigate(to: navigation, animated:false, completion: { _ in
+            navigator.navigate(to: navigation, animated: false, completion: { _ in
                 completionHandler()
             })
         } else {
@@ -191,8 +189,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
     func scheduleLocalNotification() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
-            if ( granted ) {
-                let jsonNavigationToNoteA = NotesNavigation.folders👉🏻list👉note(listId: "1", noteId: "A").toJSONString()
+            if granted {
+                let jsonNavigationToNoteA = NotesNavigation.folders👉list👉note(listId: "1", noteId: "A").toJSONString()
                 let content = UNMutableNotificationContent()
                 content.title = "Note A has changed"
                 content.body = "See the latest changes in List 1: Note A"
@@ -235,7 +233,7 @@ extension AppDelegate {
             var spotlightItems = [CSSearchableItem]()
             for note in try navigator.model.fetch(request: NotesModelFetchRequest.emptyPredicate) as [Note] {
                 let list = try note.fetchList(ctxt: navigator.model)
-                let navigation = NotesNavigation.folders👉🏻list👉note(listId: list.listId, noteId: note.noteId)
+                let navigation = NotesNavigation.folders👉list👉note(listId: list.listId, noteId: note.noteId)
                 let searchableItemAttributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
                 var keywords = [String]()
                 keywords.append(note.title)
@@ -256,7 +254,9 @@ extension AppDelegate {
         }
     }
 
-    func application(_ application: UIApplication, continueCoreSpotlightUserActivity userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
+    func application(_ application: UIApplication,
+                     continueCoreSpotlightUserActivity userActivity: NSUserActivity,
+                     restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if userActivity.activityType == CSSearchableItemActionType {
             if let userInfo = userActivity.userInfo {
                 if let jsonNavigation = userInfo[CSSearchableItemActivityIdentifier] as? String,

@@ -15,11 +15,11 @@ extension UIViewController {
             if let coordinator = transitionCoordinator {
                 coordinator.animate(alongsideTransition: { context in
                     tableView.deselectRow(at: selectedIndexPath, animated: true)
-                }) { context in
+                }, completion: { context in
                     if context.isCancelled {
                         tableView.selectRow(at: selectedIndexPath, animated: false, scrollPosition: .none)
                     }
-                }
+                })
             } else {
                 tableView.deselectRow(at: selectedIndexPath, animated: animated)
             }

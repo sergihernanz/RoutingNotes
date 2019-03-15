@@ -9,11 +9,11 @@
 import Foundation
 import UIKit
 
-class FoldersVC : UIViewController {
+class FoldersVC: UIViewController {
 
-    @available(*,unavailable)
+    @available(*, unavailable)
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) { fatalError() }
-    @available(*,unavailable)
+    @available(*, unavailable)
     required init?(coder aDecoder: NSCoder) { fatalError() }
 
     private(set) var navigator: NotesStatefulNavigator
@@ -37,7 +37,7 @@ class FoldersVC : UIViewController {
         view = table
     }
 
-    private(set) var folders : [List] {
+    private(set) var folders: [List] {
         didSet {
             tableView.reloadData()
         }
@@ -50,11 +50,11 @@ class FoldersVC : UIViewController {
     }
 }
 
-extension FoldersVC : UITableViewDataSource {
+extension FoldersVC: UITableViewDataSource {
 
     static let cellReuseIdentifier = "listCell"
 
-    var tableView : UITableView {
+    var tableView: UITableView {
         return view as! UITableView
     }
 
@@ -69,7 +69,7 @@ extension FoldersVC : UITableViewDataSource {
 
 }
 
-extension FoldersVC : UITableViewDelegate {
+extension FoldersVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let list = folders[indexPath.row]
         guard let titleLabel = cell.textLabel,

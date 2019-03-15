@@ -20,5 +20,5 @@ protocol Navigatable {
     var navigator: NavigatorType { get }
     var model: ModelType { get }
 
-    init(navigator:NavigatorType, model:ModelType, navigationInput: InputType);
+    init(navigator: NavigatorType, model: ModelType, navigationInput: InputType)
 }

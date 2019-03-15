@@ -16,16 +16,16 @@ class NotesNavigationEndpointsBuilderImpl: NavigationEndpointsBuilder {
     typealias NavigatorType = NotesStatefulNavigator
     typealias ModelType = NotesModelContext
 
-    func buildEndpoint(forNavigationEndpoint:NotesNavigation,
+    func buildEndpoint(forNavigationEndpoint: NotesNavigation,
                        navigator: NotesStatefulNavigator,
                        model: NotesModelContext) -> UIViewController {
         switch forNavigationEndpoint {
         case .folders:
-            return FoldersVC(navigator: navigator, model:model, navigationInput:())
+            return FoldersVC(navigator: navigator, model: model, navigationInput: ())
         case .folders👉list(let listId):
-            return ListVC(navigator: navigator, model:model, navigationInput: listId)
-        case .folders👉🏻list👉note(_, let noteId):
-            return NoteVC(navigator: navigator, model:model, navigationInput: noteId)
+            return ListVC(navigator: navigator, model: model, navigationInput: listId)
+        case .folders👉list👉note(_, let noteId):
+            return NoteVC(navigator: navigator, model: model, navigationInput: noteId)
         }
     }
 
@@ -38,7 +38,7 @@ class NotesNavigationEndpointsBuilderImpl: NavigationEndpointsBuilder {
                 listVC.navigationInput == listId {
                 return true
             }
-        case .folders👉🏻list👉note(_, let noteId):
+        case .folders👉list👉note(_, let noteId):
             if let noteVC = viewController as? NoteVC, noteVC.navigationInput == noteId {
                 return true
             }

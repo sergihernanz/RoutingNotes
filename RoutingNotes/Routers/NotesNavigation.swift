@@ -11,12 +11,12 @@ import Foundation
 enum NotesNavigation {
 
     case folders
-    case folders👉list(listId:ListId)
-    case folders👉🏻list👉note(listId:ListId, noteId:NoteId)
+    case folders👉list(listId: ListId)
+    case folders👉list👉note(listId: ListId, noteId: NoteId)
 
 }
 
-extension NotesNavigation : Navigation {
+extension NotesNavigation: Navigation {
 
     init() {
         self = .folders
@@ -24,7 +24,7 @@ extension NotesNavigation : Navigation {
 
     func pop() -> NotesNavigation? {
         switch self {
-        case .folders👉🏻list👉note(listId: let listId, noteId:_):
+        case .folders👉list👉note(listId: let listId, noteId:_):
             return .folders👉list(listId: listId)
         case .folders👉list(listId: _):
             return .folders

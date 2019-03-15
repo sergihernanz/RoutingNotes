@@ -60,8 +60,8 @@ extension UIView {
         return mutableViews
     }
 
-    func allLabels(text:String) -> [UILabel] {
-        return self.flatSelfAndAllSubviews().filter { (view:UIView) -> Bool in
+    func allLabels(text: String) -> [UILabel] {
+        return self.flatSelfAndAllSubviews().filter { (view: UIView) -> Bool in
             guard let label = view as? UILabel else {
                 return false
             }
@@ -72,8 +72,8 @@ extension UIView {
             } as! [UILabel]
     }
 
-    func allButtons(text:String) -> [UIButton] {
-        return self.flatSelfAndAllSubviews().filter { (view:UIView) -> Bool in
+    func allButtons(text: String) -> [UIButton] {
+        return self.flatSelfAndAllSubviews().filter { (view: UIView) -> Bool in
             guard let button = view as? UIButton else {
                 return false
             }

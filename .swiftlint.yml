@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+line_length: 160
+
+# DISABLED RULES #
+disabled_rules:
+- force_cast
+- todo
+- nesting
+
+identifier_name:
+  allowed_symbols: 
+    - 👉
+    - _
+  min_length: 3
+  max_length:
+    error: 50
+  excluded:
+    - id
+    - to
+    - vc
+
+type_name:
+  excluded:
+    - T
+    - I
+    - R
+    

@@ -11,12 +11,16 @@ import Foundation
 class NotesLinkParser {
 
     static func navigation(url: URL) throws -> NotesNavigation? {
-        let foldersRegexs = [try NSRegularExpression(pattern: "(?:^https://|^)inqbarna\\.firebaseapp\\.com($|/$|/routingnotes/*$)", options: .caseInsensitive),
-                            try NSRegularExpression(pattern: "^routingnotes://folders/*$", options: .caseInsensitive)]
-        let listRegexs = [try NSRegularExpression(pattern: "(?:^https://|^)inqbarna\\.firebaseapp\\.com/routingnotes/(\\w)/*$", options: .caseInsensitive),
-                          try NSRegularExpression(pattern: "^routingnotes://list/(\\w)$", options: .caseInsensitive)]
-        let noteRegexs = [try NSRegularExpression(pattern: "(?:^https://|^)inqbarna\\.firebaseapp\\.com/routingnotes/(\\w)/(\\w)/*$", options: .caseInsensitive),
-                          try NSRegularExpression(pattern: "^routingnotes://list/(\\w)/note/(\\w)$", options: .caseInsensitive)]
+        let foldersRegexs =
+            [try NSRegularExpression(pattern: "(?:^https://|^)inqbarna\\.firebaseapp\\.com($|/$|/routingnotes/*$)", options: .caseInsensitive),
+             try NSRegularExpression(pattern: "^routingnotes://folders/*$", options: .caseInsensitive)]
+        let listRegexs =
+            [try NSRegularExpression(pattern: "(?:^https://|^)inqbarna\\.firebaseapp\\.com/routingnotes/(\\w)/*$", options: .caseInsensitive),
+             try NSRegularExpression(pattern: "^routingnotes://list/(\\w)$", options: .caseInsensitive)]
+        let noteRegexs =
+            [try NSRegularExpression(pattern: "(?:^https://|^)inqbarna\\.firebaseapp\\.com/routingnotes/(\\w)/(\\w)/*$", options: .caseInsensitive),
+             try NSRegularExpression(pattern: "^routingnotes://list/(\\w)/note/(\\w)$", options: .caseInsensitive)]
+
         let urlString = url.absoluteString
         let urlStringRange = NSRange(location: 0, length: urlString.count)
         for foldersRegex in foldersRegexs {
@@ -44,7 +48,7 @@ class NotesLinkParser {
                 let noteIdRange = noteMatches.first?.range(at: 2) {
                 let listId = String(urlString[String.Index(encodedOffset: listIdRange.lowerBound)..<String.Index(encodedOffset: listIdRange.upperBound)])
                 let noteId = String(urlString[String.Index(encodedOffset: noteIdRange.lowerBound)..<String.Index(encodedOffset: noteIdRange.upperBound)])
-                return .folders👉🏻list👉note(listId: listId, noteId: noteId)
+                return .folders👉list👉note(listId: listId, noteId: noteId)
             }
         }
         return nil

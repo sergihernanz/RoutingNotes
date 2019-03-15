@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Navigation : Equatable {
+protocol Navigation: Equatable {
     init()
     func pop() -> Self?
 }
@@ -24,7 +24,7 @@ extension Navigation {
     }
 }
 
-enum NavigatorState<NavigationType : Navigation> : Equatable {
+enum NavigatorState<NavigationType: Navigation> : Equatable {
 
     case idle(NavigationType)
     case navigating(from:NavigationType, to:NavigationType,
@@ -45,14 +45,14 @@ enum NavigatorState<NavigationType : Navigation> : Equatable {
         case .navigating(let lhfrom, let lhto, _, _):
             switch rhs {
             case .navigating(let rhfrom, let rhto, _, _):
-                return lhfrom == rhfrom && rhto == lhto;
+                return lhfrom == rhfrom && rhto == lhto
             default:
                 return false
             }
         case .navigatingToNonFinalNavigation(let lhfrom, let lhto, let lhfinal, _, _):
             switch rhs {
             case .navigatingToNonFinalNavigation(let rhfrom, let rhto, let rhfinal, _, _):
-                return lhfrom == rhfrom && rhto == lhto && rhfinal == lhfinal;
+                return lhfrom == rhfrom && rhto == lhto && rhfinal == lhfinal
             default:
                 return false
             }

@@ -20,7 +20,7 @@ class NavigationTestVC: UIViewController, Navigatable {
     private(set) var model: NotesModelContext
     private(set) var navigationInput: Any
     private(set) var navigationOutput: Any?
-    required init(navigator: NotesStatefulNavigator, model:NotesModelContext, navigationInput:Any) {
+    required init(navigator: NotesStatefulNavigator, model: NotesModelContext, navigationInput: Any) {
         self.navigator = navigator
         self.model = model
         self.navigationInput = navigationInput
@@ -30,33 +30,40 @@ class NavigationTestVC: UIViewController, Navigatable {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func loadView() {
-        var buttons = [UIButton]()
+    lazy var foldersButton: UIButton = {
         let rect = CGRect(x: 0, y: 0, width: 375, height: 40)
-        
         let foldersButton = UIButton(frame: rect)
         foldersButton.addTarget(self, action: #selector(buttonTapped(button:)), for: .touchUpInside)
         foldersButton.tag = 0
         foldersButton.setTitle("Go to folders", for: .normal)
         foldersButton.setTitleColor(UIColor.black, for: .normal)
         foldersButton.showsTouchWhenHighlighted = true
-        buttons.append(foldersButton)
+        return foldersButton
+    }()
 
+    lazy var listButton: UIButton = {
+        let rect = CGRect(x: 0, y: 0, width: 375, height: 40)
         let listButton = UIButton(frame: rect)
         listButton.addTarget(self, action: #selector(buttonTapped(button:)), for: .touchUpInside)
         listButton.tag = 1
         listButton.setTitle("Go to list 1", for: .normal)
         listButton.setTitleColor(UIColor.black, for: .normal)
         listButton.showsTouchWhenHighlighted = true
-        buttons.append(listButton)
+        return listButton
+    }()
 
+    lazy var noteButton: UIButton = {
+        let rect = CGRect(x: 0, y: 0, width: 375, height: 40)
         let noteButton = UIButton(frame: rect)
         noteButton.addTarget(self, action: #selector(buttonTapped(button:)), for: .touchUpInside)
         noteButton.tag = 2
         noteButton.setTitle("Go to note A", for: .normal)
         noteButton.setTitleColor(UIColor.black, for: .normal)
         noteButton.showsTouchWhenHighlighted = true
-        buttons.append(noteButton)
+        return noteButton
+    }()
+
+    override func loadView() {
 
         let view = UIView()
         view.backgroundColor = UIColor.white
@@ -85,7 +92,7 @@ class NavigationTestVC: UIViewController, Navigatable {
         case 1:
             navigator.navigate(to: .folders👉list(listId:"1"), animated: true) {_ in }
         case 2:
-            navigator.navigate(to: .folders👉🏻list👉note(listId: "1", noteId: "A"), animated: true) {_ in }
+            navigator.navigate(to: .folders👉list👉note(listId: "1", noteId: "A"), animated: true) {_ in }
         default:
             navigator.navigate(to: .folders, animated: true) {_ in }
         }

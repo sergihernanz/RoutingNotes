@@ -16,7 +16,7 @@ extension UIViewController {
     }
 }
 
-enum NavigationError : Error {
+enum NavigationError: Error {
     case invalidDestinationForCurrentNavigation(currentNavigation:NotesNavigation, destinationDescription:String)
 
     var localizedDescription: String {
@@ -27,18 +27,16 @@ enum NavigationError : Error {
     }
 }
 
-
-
-final class NotesStatefulNavigator : NSObject, StatefulNavigator {
+final class NotesStatefulNavigator: NSObject, StatefulNavigator {
 
     typealias NavigationType = NotesNavigation
     typealias ModelType = NotesModelContext
     typealias BuilderType = NotesNavigationEndpointsBuilder
 
-    internal var model : NotesModelContext
-    internal var endpointsBuilder : NotesNavigationEndpointsBuilder
+    internal var model: NotesModelContext
+    internal var endpointsBuilder: NotesNavigationEndpointsBuilder
 
-    init(model:NotesModelContext,
+    init(model: NotesModelContext,
          endpointsBuilder: NotesNavigationEndpointsBuilder) {
         self.model = model
         self.endpointsBuilder = endpointsBuilder
@@ -46,8 +44,8 @@ final class NotesStatefulNavigator : NSObject, StatefulNavigator {
         super.init()
     }
 
-    //MARK: return the main UIViewController (UINavigationController)
-    fileprivate lazy var navigationController : UINavigationController = {
+    // MARK: return the main UIViewController (UINavigationController)
+    fileprivate lazy var navigationController: UINavigationController = {
         let rootVC = endpointsBuilder.buildEndpoint(forNavigationEndpoint: .folders,
                                                                           navigator: self,
                                                                           model: model)
@@ -60,7 +58,7 @@ final class NotesStatefulNavigator : NSObject, StatefulNavigator {
         return navigationController
     }
 
-    //MARK: Build and read the stack of UIViewControllers
+    // MARK: Build and read the stack of UIViewControllers
     var viewControllersStack: [UIViewController] {
         return navigationController.viewControllers
     }
@@ -78,8 +76,7 @@ final class NotesStatefulNavigator : NSObject, StatefulNavigator {
 
 }
 
-
-extension NotesStatefulNavigator : UINavigationControllerDelegate {
+extension NotesStatefulNavigator: UINavigationControllerDelegate {
 
     func navigationController(_ navigationController: UINavigationController,
                               willShow viewController: UIViewController,

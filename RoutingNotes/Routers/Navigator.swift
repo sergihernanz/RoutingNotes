@@ -16,9 +16,8 @@ protocol Navigator: class {
     // Root viewcontroller to be presented on a VC hierarchy
     var rootViewController: UIViewController { get }
 
-
     // Information
-    var currentNavigation : NavigationType { get }
+    var currentNavigation: NavigationType { get }
 
     // Deep link
     func navigate(to: NavigationType, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void)
@@ -27,4 +26,3 @@ protocol Navigator: class {
 
     // TODO: Dependency based navigation
 }
-

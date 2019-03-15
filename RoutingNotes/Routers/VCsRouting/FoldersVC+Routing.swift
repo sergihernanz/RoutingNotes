@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-extension FoldersVC : Navigatable {
+extension FoldersVC: Navigatable {
 
     typealias InputType = Void
     typealias OutputType = ListId
@@ -25,7 +25,7 @@ extension FoldersVC : Navigatable {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let list = folders[indexPath.row]
         do {
-            try navigator.navigateToList(listId: list.listId, animated: true) { (cancelled: Bool) in }
+            try navigator.navigateToList(listId: list.listId, animated: true) { (_: Bool) in }
         } catch let navigateToListError {
             fatalError(navigateToListError.localizedDescription)
         }

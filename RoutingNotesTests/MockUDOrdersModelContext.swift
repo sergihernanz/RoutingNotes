@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MockUDOrdersModelContext : UserDefaultsOrdersModelContext {
+class MockUDOrdersModelContext: UserDefaultsOrdersModelContext {
 
     override init(persistenceName: String) {
         super.init(persistenceName: persistenceName)
@@ -19,8 +19,8 @@ class MockUDOrdersModelContext : UserDefaultsOrdersModelContext {
         let lists = [
             ListUserDefaults(listId: "1", name: "List 1"),
             ListUserDefaults(listId: "2", name: "List 2"),
-            ListUserDefaults(listId: "3", name: "List 3"),
-            ];
+            ListUserDefaults(listId: "3", name: "List 3")
+            ]
         let notes = [
             NoteUserDefaults(noteId: "A",
                              title: "Note A",
@@ -41,15 +41,15 @@ class MockUDOrdersModelContext : UserDefaultsOrdersModelContext {
                              title: "Note D",
                              modifiedDate: Date(),
                              content: "Note D content",
-                             listId: "2"),
-            ];
+                             listId: "2")
+            ]
         let encoder = JSONEncoder()
         do {
-            let listsKey = persistenceKey(type:String(describing: ListUserDefaults.self))
+            let listsKey = persistenceKey(type: String(describing: ListUserDefaults.self))
             try UserDefaults.standard.setValue(encoder.encode(lists), forKeyPath: listsKey)
-            let notesKey = persistenceKey(type:String(describing: NoteUserDefaults.self))
+            let notesKey = persistenceKey(type: String(describing: NoteUserDefaults.self))
             try UserDefaults.standard.setValue(encoder.encode(notes), forKeyPath: notesKey)
-        } catch ( _ ) {
+        } catch {
             fatalError()
         }
     }

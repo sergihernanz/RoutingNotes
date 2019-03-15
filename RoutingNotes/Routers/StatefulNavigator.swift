@@ -18,9 +18,10 @@ protocol StatefulNavigator: Navigator {
     var model: ModelType { get }
     var navigatorState: NavigatorState<NavigationType> { get set }
 
-    associatedtype BuilderType: NavigationEndpointsBuilder where ModelType == BuilderType.ModelType, NavigationType == BuilderType.NavigationType, BuilderType.NavigatorType == Self
+    associatedtype BuilderType: NavigationEndpointsBuilder where ModelType == BuilderType.ModelType,
+                                                                 NavigationType == BuilderType.NavigationType,
+                                                                 BuilderType.NavigatorType == Self
     var endpointsBuilder: BuilderType { get }
-
 
     var viewControllersStack: [UIViewController] { get }
     func present(newViewControllerStack: [UIViewController], forNavigation: NavigationType, animated: Bool)
@@ -119,7 +120,7 @@ extension StatefulNavigator {
         }
     }
 
-    fileprivate func getCorrectlyInstancedViewController(forNavigationEndpoint:NavigationType) -> UIViewController? {
+    fileprivate func getCorrectlyInstancedViewController(forNavigationEndpoint: NavigationType) -> UIViewController? {
         let stackCount = forNavigationEndpoint.navigationStack().count
         if let vc = viewControllersStack[safe: stackCount-1],
             endpointsBuilder.isCorrectlyConfigured(viewController: vc, forNavigation: forNavigationEndpoint) {

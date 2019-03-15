@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 extension NotesNavigation: Codable {
 
     fileprivate enum CodingKeys: CodingKey {
@@ -38,7 +37,7 @@ extension NotesNavigation: Codable {
                                                                              forKey: .foldersListNote)
             let listId = try foldersListNoteContainer.decode(String.self, forKey: .listId)
             let noteId = try foldersListNoteContainer.decode(String.self, forKey: .noteId)
-            self = .folders👉🏻list👉note(listId: listId, noteId: noteId)
+            self = .folders👉list👉note(listId: listId, noteId: noteId)
         } else {
             assertionFailure("Incorrectly decoded instance")
             self = .folders
@@ -54,7 +53,7 @@ extension NotesNavigation: Codable {
             var associatedValuesContainer = container.nestedContainer(keyedBy: CodingKeys.FoldersListCodingKeys.self,
                                                                       forKey: .foldersList)
             try associatedValuesContainer.encode(listId, forKey: .listId)
-        case .folders👉🏻list👉note(listId: let listId, noteId: let noteId):
+        case .folders👉list👉note(listId: let listId, noteId: let noteId):
             var associatedValuesContainer = container.nestedContainer(keyedBy: CodingKeys.FoldersListNoteCodingKeys.self,
                                                                       forKey: .foldersListNote)
             try associatedValuesContainer.encode(listId, forKey: .listId)
@@ -70,8 +69,8 @@ extension NotesNavigation {
         do {
             let data = try JSONEncoder().encode(self)
             return String(data: data, encoding: .utf8)
-        } catch let e {
-            fatalError(e.localizedDescription)
+        } catch let error {
+            fatalError(error.localizedDescription)
         }
     }
 
