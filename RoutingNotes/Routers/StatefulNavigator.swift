@@ -18,7 +18,7 @@ protocol StatefulNavigator: Navigator {
     var model: ModelType { get }
     var navigatorState: NavigatorState<NavigationType> { get set }
 
-    associatedtype BuilderType: NavigationEndpointsBuilder where ModelType == BuilderType.ModelType,
+    associatedtype BuilderType: TopNavigationItemBuilder where ModelType == BuilderType.ModelType,
                                                                  NavigationType == BuilderType.NavigationType,
                                                                  BuilderType.NavigatorType == Self
     var endpointsBuilder: BuilderType { get }
@@ -113,7 +113,7 @@ extension StatefulNavigator {
             let navigationStack = to.navigationStack()
             let VCs = navigationStack.map { (navigation) -> UIViewController in
                 getCorrectlyInstancedViewController(forNavigationEndpoint: navigation) ??
-                    endpointsBuilder.buildEndpoint(forNavigationEndpoint: navigation, navigator: self, model: model)
+                    endpointsBuilder.buildTopItem(forNavigationEndpoint: navigation, navigator: self, model: model)
             }
             present(newViewControllerStack: VCs, forNavigation: to, animated: animated)
         default: break

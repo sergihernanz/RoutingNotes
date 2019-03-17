@@ -21,7 +21,7 @@
 		2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */; };
 		2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7993CF21D7BC3700279B87 /* MockUDOrdersModelContext.swift */; };
 		2D8C8E7C21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */; };
-		2D8C8E7E21F485F50045FC13 /* NavigationEndpointsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */; };
+		2D8C8E7E21F485F50045FC13 /* TopNavigationItemBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7D21F485F50045FC13 /* TopNavigationItemBuilder.swift */; };
 		2DB3746E22203BAD00B877A1 /* NotesNavigation+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB3746D22203BAD00B877A1 /* NotesNavigation+Codable.swift */; };
 		2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E08721EF680C008104C4 /* Navigatable.swift */; };
 		2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */; };
@@ -35,6 +35,8 @@
 		2DD274D621F27577003FB74A /* NoteVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D521F27577003FB74A /* NoteVC+Routing.swift */; };
 		2DD274D921F27A69003FB74A /* NavigatorState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D821F27A69003FB74A /* NavigatorState.swift */; };
 		2DEB41642217268400F9A65F /* NotesLinkParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEB41632217268400F9A65F /* NotesLinkParser.swift */; };
+		3818C01F734C6C735986A67E /* Pods_RoutingNotes.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 97921395F359DFB8C257736F /* Pods_RoutingNotes.framework */; };
+		AE142C2D38EA31462B6B039F /* Pods_RoutingNotesTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C2ED1F6C38A89EB12EED5067 /* Pods_RoutingNotesTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		16F904553BBF04C2F17B4D05 /* Pods-RoutingNotes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoutingNotes.release.xcconfig"; path = "Pods/Target Support Files/Pods-RoutingNotes/Pods-RoutingNotes.release.xcconfig"; sourceTree = "<group>"; };
 		2D06C2DF21BCF9F4004962A2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowRootViewControllerTester.swift; sourceTree = "<group>"; };
 		2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulNavigator.swift; sourceTree = "<group>"; };
@@ -64,10 +67,9 @@
 		2D5A8DBC21B1CD5100DAFC8D /* FoldersVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FoldersVC.swift; sourceTree = "<group>"; };
 		2D5A8DBE21B1CD6E00DAFC8D /* ListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListVC.swift; sourceTree = "<group>"; };
 		2D5A8DC021B1D10E00DAFC8D /* NoteVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteVC.swift; sourceTree = "<group>"; };
-		2D5A8DC321B2738600DAFC8D /* __unused__Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = __unused__Repository.swift; sourceTree = "<group>"; };
 		2D7993CF21D7BC3700279B87 /* MockUDOrdersModelContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockUDOrdersModelContext.swift; sourceTree = "<group>"; };
 		2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+pushPopOrSetViewControllers.swift"; sourceTree = "<group>"; };
-		2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationEndpointsBuilder.swift; sourceTree = "<group>"; };
+		2D8C8E7D21F485F50045FC13 /* TopNavigationItemBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopNavigationItemBuilder.swift; sourceTree = "<group>"; };
 		2D8C8E7F21F59F4E0045FC13 /* NavigationTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTestVC.swift; sourceTree = "<group>"; };
 		2DB3746D22203BAD00B877A1 /* NotesNavigation+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotesNavigation+Codable.swift"; sourceTree = "<group>"; };
 		2DB6E08721EF680C008104C4 /* Navigatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigatable.swift; sourceTree = "<group>"; };
@@ -82,6 +84,11 @@
 		2DD274D821F27A69003FB74A /* NavigatorState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigatorState.swift; sourceTree = "<group>"; };
 		2DD7509C21F5BAC1007BD6A1 /* TestsEndpointsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestsEndpointsBuilder.swift; sourceTree = "<group>"; };
 		2DEB41632217268400F9A65F /* NotesLinkParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesLinkParser.swift; sourceTree = "<group>"; };
+		416CE10C92AAC5BEA9371CAD /* Pods-RoutingNotesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoutingNotesTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RoutingNotesTests/Pods-RoutingNotesTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6C1C4647856EE3A14B29955C /* Pods-RoutingNotes.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoutingNotes.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RoutingNotes/Pods-RoutingNotes.debug.xcconfig"; sourceTree = "<group>"; };
+		97921395F359DFB8C257736F /* Pods_RoutingNotes.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RoutingNotes.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C2ED1F6C38A89EB12EED5067 /* Pods_RoutingNotesTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RoutingNotesTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DF9F988955ACA17DDCBB5DA0 /* Pods-RoutingNotesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoutingNotesTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-RoutingNotesTests/Pods-RoutingNotesTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +96,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3818C01F734C6C735986A67E /* Pods_RoutingNotes.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +104,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE142C2D38EA31462B6B039F /* Pods_RoutingNotesTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +117,8 @@
 				2D546DF421AE77EA00CFB5BA /* RoutingNotes */,
 				2D546E0B21AE77EB00CFB5BA /* RoutingNotesTests */,
 				2D546DF321AE77EA00CFB5BA /* Products */,
+				C218BAFA0E43DDF06E46CED2 /* Pods */,
+				F088F80E08294235D99A4D53 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -157,7 +168,7 @@
 				2DD274D821F27A69003FB74A /* NavigatorState.swift */,
 				2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */,
 				2DCDC52721F91DA20094761A /* Navigator.swift */,
-				2D8C8E7D21F485F50045FC13 /* NavigationEndpointsBuilder.swift */,
+				2D8C8E7D21F485F50045FC13 /* TopNavigationItemBuilder.swift */,
 				2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */,
 				2D546E1A21AE789E00CFB5BA /* NotesNavigation.swift */,
 				2DB3746D22203BAD00B877A1 /* NotesNavigation+Codable.swift */,
@@ -182,7 +193,6 @@
 		2D5A8DC221B2737C00DAFC8D /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2D5A8DC321B2738600DAFC8D /* __unused__Repository.swift */,
 				2D06C2DF21BCF9F4004962A2 /* Model.swift */,
 			);
 			path = Model;
@@ -198,6 +208,26 @@
 			path = VCsRouting;
 			sourceTree = "<group>";
 		};
+		C218BAFA0E43DDF06E46CED2 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				6C1C4647856EE3A14B29955C /* Pods-RoutingNotes.debug.xcconfig */,
+				16F904553BBF04C2F17B4D05 /* Pods-RoutingNotes.release.xcconfig */,
+				416CE10C92AAC5BEA9371CAD /* Pods-RoutingNotesTests.debug.xcconfig */,
+				DF9F988955ACA17DDCBB5DA0 /* Pods-RoutingNotesTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		F088F80E08294235D99A4D53 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				97921395F359DFB8C257736F /* Pods_RoutingNotes.framework */,
+				C2ED1F6C38A89EB12EED5067 /* Pods_RoutingNotesTests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -205,9 +235,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D546E1121AE77EB00CFB5BA /* Build configuration list for PBXNativeTarget "RoutingNotes" */;
 			buildPhases = (
+				6FD56C16610A1BF18CB64C46 /* [CP] Check Pods Manifest.lock */,
 				2D546DEE21AE77EA00CFB5BA /* Sources */,
 				2D546DEF21AE77EA00CFB5BA /* Frameworks */,
 				2D546DF021AE77EA00CFB5BA /* Resources */,
+				2D8F28C2223BFBEA008360DF /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -222,6 +254,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D546E1421AE77EB00CFB5BA /* Build configuration list for PBXNativeTarget "RoutingNotesTests" */;
 			buildPhases = (
+				4518AB96D1926FA991E67B00 /* [CP] Check Pods Manifest.lock */,
 				2D546E0421AE77EB00CFB5BA /* Sources */,
 				2D546E0521AE77EB00CFB5BA /* Frameworks */,
 				2D546E0621AE77EB00CFB5BA /* Resources */,
@@ -298,6 +331,70 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2D8F28C2223BFBEA008360DF /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n${PODS_ROOT}/SwiftLint/swiftlint lint\n";
+		};
+		4518AB96D1926FA991E67B00 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RoutingNotesTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6FD56C16610A1BF18CB64C46 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RoutingNotes-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		2D546DEE21AE77EA00CFB5BA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -322,7 +419,7 @@
 				2D5A8DBD21B1CD5100DAFC8D /* FoldersVC.swift in Sources */,
 				2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */,
 				2D546DF621AE77EA00CFB5BA /* AppDelegate.swift in Sources */,
-				2D8C8E7E21F485F50045FC13 /* NavigationEndpointsBuilder.swift in Sources */,
+				2D8C8E7E21F485F50045FC13 /* TopNavigationItemBuilder.swift in Sources */,
 				2DD274D921F27A69003FB74A /* NavigatorState.swift in Sources */,
 				2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */,
 				2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */,
@@ -479,6 +576,7 @@
 		};
 		2D546E1221AE77EB00CFB5BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 6C1C4647856EE3A14B29955C /* Pods-RoutingNotes.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RoutingNotes/RoutingNotes.entitlements;
@@ -500,6 +598,7 @@
 		};
 		2D546E1321AE77EB00CFB5BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 16F904553BBF04C2F17B4D05 /* Pods-RoutingNotes.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RoutingNotes/RoutingNotes.entitlements;
@@ -521,6 +620,7 @@
 		};
 		2D546E1521AE77EB00CFB5BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 416CE10C92AAC5BEA9371CAD /* Pods-RoutingNotesTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -542,6 +642,7 @@
 		};
 		2D546E1621AE77EB00CFB5BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DF9F988955ACA17DDCBB5DA0 /* Pods-RoutingNotesTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

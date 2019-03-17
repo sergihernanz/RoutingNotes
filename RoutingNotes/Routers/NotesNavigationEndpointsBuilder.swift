@@ -10,15 +10,15 @@ import UIKit
 
 typealias NotesNavigationEndpointsBuilder = AnyNavigationEndpointsBuilder<NotesNavigation, NotesStatefulNavigator, NotesModelContext>
 
-class NotesNavigationEndpointsBuilderImpl: NavigationEndpointsBuilder {
+class NotesNavigationEndpointsBuilderImpl: TopNavigationItemBuilder {
 
     typealias NavigationType = NotesNavigation
     typealias NavigatorType = NotesStatefulNavigator
     typealias ModelType = NotesModelContext
 
-    func buildEndpoint(forNavigationEndpoint: NotesNavigation,
-                       navigator: NotesStatefulNavigator,
-                       model: NotesModelContext) -> UIViewController {
+    func buildTopItem(forNavigationEndpoint: NotesNavigation,
+                      navigator: NotesStatefulNavigator,
+                      model: NotesModelContext) -> UIViewController {
         switch forNavigationEndpoint {
         case .folders:
             return FoldersVC(navigator: navigator, model: model, navigationInput: ())

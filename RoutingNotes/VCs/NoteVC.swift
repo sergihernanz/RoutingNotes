@@ -45,7 +45,7 @@ class NoteVC: UIViewController {
 
     override func loadView() {
         let mainView = UIView(frame: UIScreen.main.bounds)
-        mainView.backgroundColor = UIColor.white
+        mainView.backgroundColor = .white
         mainView.addSubview(titleTextField)
         mainView.addSubview(bodyTextField)
         let guide = mainView.safeAreaLayoutGuide

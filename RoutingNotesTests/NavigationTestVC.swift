@@ -35,8 +35,9 @@ class NavigationTestVC: UIViewController, Navigatable {
         let foldersButton = UIButton(frame: rect)
         foldersButton.addTarget(self, action: #selector(buttonTapped(button:)), for: .touchUpInside)
         foldersButton.tag = 0
-        foldersButton.setTitle("Go to folders", for: .normal)
-        foldersButton.setTitleColor(UIColor.black, for: .normal)
+        foldersButton.setTitle("Deep link to folders", for: .normal)
+        foldersButton.setTitleColor(.blue, for: .normal)
+        foldersButton.setTitleColor(.black, for: .highlighted)
         foldersButton.showsTouchWhenHighlighted = true
         return foldersButton
     }()
@@ -46,8 +47,9 @@ class NavigationTestVC: UIViewController, Navigatable {
         let listButton = UIButton(frame: rect)
         listButton.addTarget(self, action: #selector(buttonTapped(button:)), for: .touchUpInside)
         listButton.tag = 1
-        listButton.setTitle("Go to list 1", for: .normal)
-        listButton.setTitleColor(UIColor.black, for: .normal)
+        listButton.setTitle("Deep link to list 1", for: .normal)
+        listButton.setTitleColor(.red, for: .normal)
+        listButton.setTitleColor(.black, for: .highlighted)
         listButton.showsTouchWhenHighlighted = true
         return listButton
     }()
@@ -57,8 +59,9 @@ class NavigationTestVC: UIViewController, Navigatable {
         let noteButton = UIButton(frame: rect)
         noteButton.addTarget(self, action: #selector(buttonTapped(button:)), for: .touchUpInside)
         noteButton.tag = 2
-        noteButton.setTitle("Go to note A", for: .normal)
-        noteButton.setTitleColor(UIColor.black, for: .normal)
+        noteButton.setTitle("Deep link to note A", for: .normal)
+        noteButton.setTitleColor(.green, for: .normal)
+        noteButton.setTitleColor(.black, for: .highlighted)
         noteButton.showsTouchWhenHighlighted = true
         return noteButton
     }()
@@ -66,7 +69,7 @@ class NavigationTestVC: UIViewController, Navigatable {
     override func loadView() {
 
         let view = UIView()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = .white
         let stack = UIStackView(arrangedSubviews: [foldersButton, listButton, noteButton])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
@@ -97,4 +100,32 @@ class NavigationTestVC: UIViewController, Navigatable {
             navigator.navigate(to: .folders, animated: true) {_ in }
         }
     }
+
+    //COLORED navigation item
+    private func color(forTitle title: String) -> UIColor {
+        switch title {
+        case "Folders":
+            return .blue
+        case "List 1":
+            return .red
+        default:
+            return .green
+        }
+    }
+
+    private lazy var coloredNavigationItem: UINavigationItem = {
+        let title = self.title ?? ""
+        let navItem = UINavigationItem(title: title)
+        let label = UILabel()
+        label.attributedText = NSAttributedString(string: title,
+                                                  attributes: [NSAttributedString.Key.foregroundColor: color(forTitle: title)])
+        navItem.titleView = label
+        navItem.backBarButtonItem = UIBarButtonItem(title: title, style: .plain, target: nil, action: nil)
+        navItem.backBarButtonItem?.tintColor = color(forTitle: title)
+        return navItem
+    }()
+    override var navigationItem: UINavigationItem {
+        return coloredNavigationItem
+    }
+
 }

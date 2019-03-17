@@ -9,15 +9,15 @@
 import UIKit
 //@testable import RoutingNotes
 
-class TestsEndpointsBuilder: NavigationEndpointsBuilder {
+class TestsEndpointsBuilder: TopNavigationItemBuilder {
 
     typealias NavigationType = NotesNavigation
     typealias NavigatorType = NotesStatefulNavigator
     typealias ModelType = NotesModelContext
 
-    func buildEndpoint(forNavigationEndpoint: NotesNavigation,
-                       navigator: NotesStatefulNavigator,
-                       model: NotesModelContext) -> UIViewController {
+    func buildTopItem(forNavigationEndpoint: NotesNavigation,
+                      navigator: NotesStatefulNavigator,
+                      model: NotesModelContext) -> UIViewController {
         switch forNavigationEndpoint {
         case .folders:
             let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: ())

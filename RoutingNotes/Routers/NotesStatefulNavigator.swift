@@ -46,11 +46,11 @@ final class NotesStatefulNavigator: NSObject, StatefulNavigator {
 
     // MARK: return the main UIViewController (UINavigationController)
     fileprivate lazy var navigationController: UINavigationController = {
-        let rootVC = endpointsBuilder.buildEndpoint(forNavigationEndpoint: .folders,
+        let rootVC = endpointsBuilder.buildTopItem(forNavigationEndpoint: .folders,
                                                                           navigator: self,
                                                                           model: model)
         let navC = UINavigationController(rootViewController: rootVC)
-        navC.navigationBar.tintColor = UIColor.black
+        navC.navigationBar.tintColor = .black
         navC.delegate = self
         return navC
     }()

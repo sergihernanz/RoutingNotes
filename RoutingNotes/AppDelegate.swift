@@ -20,10 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     private var navigator: NotesStatefulNavigator!
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
+        let useTestsEndpointsBuilder = ProcessInfo.processInfo.environment.keys.contains("TEST_ENDPOINTS_BUILDER")
         let model = populateMockModel()
-        let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
-        //let endpointsBuilder = TestsEndpointsBuilder()
-        let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
+        let anyEndpointsBuilder = !useTestsEndpointsBuilder ? AnyNavigationEndpointsBuilder(NotesNavigationEndpointsBuilderImpl()) :
+                                                              AnyNavigationEndpointsBuilder(TestsEndpointsBuilder())
         let navigator = NotesStatefulNavigator(model: model,
                                       endpointsBuilder: anyEndpointsBuilder)
         let window = UIWindow(frame: UIScreen.main.bounds)
