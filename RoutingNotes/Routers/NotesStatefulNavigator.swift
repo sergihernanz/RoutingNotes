@@ -29,7 +29,7 @@ enum NavigationError: Error {
 
 final class NotesStatefulNavigator: NSObject, StatefulNavigator {
 
-    typealias NavigationType = NotesNavigation
+    typealias NavigationType = MainNotesNavigation
     typealias ModelType = NotesModelContext
     typealias BuilderType = NotesNavigationEndpointsBuilder
 
@@ -40,13 +40,13 @@ final class NotesStatefulNavigator: NSObject, StatefulNavigator {
          endpointsBuilder: NotesNavigationEndpointsBuilder) {
         self.model = model
         self.endpointsBuilder = endpointsBuilder
-        navigatorState = .idle(.folders)
+        navigatorState = .idle(.main(.folders))
         super.init()
     }
 
     // MARK: return the main UIViewController (UINavigationController)
     fileprivate lazy var navigationController: UINavigationController = {
-        let rootVC = endpointsBuilder.buildTopItem(forNavigationEndpoint: .folders,
+        let rootVC = endpointsBuilder.buildTopItem(forNavigationEndpoint: .main(.folders),
                                                                           navigator: self,
                                                                           model: model)
         let navC = UINavigationController(rootViewController: rootVC)
@@ -62,12 +62,17 @@ final class NotesStatefulNavigator: NSObject, StatefulNavigator {
     var viewControllersStack: [UIViewController] {
         return navigationController.viewControllers
     }
-    func present(newViewControllerStack: [UIViewController], forNavigation: NotesNavigation, animated: Bool) {
-        navigationController.setPopOrPushViewControllers(newViewControllerStack, animated: animated)
+    func present(newViewControllerStack: [UIViewController], forNavigation: MainNotesNavigation, animated: Bool) {
+        switch forNavigation {
+        case .main:
+            navigationController.setPopOrPushViewControllers(newViewControllerStack, animated: animated)
+        case .modal:
+            navigationController.setPopOrPushViewControllers(newViewControllerStack, animated: animated)
+        }
     }
 
     // Call didSet on navigatorState didSet method... manual step other than protocol conformance
-    internal var navigatorState: NavigatorState<NotesNavigation> {
+    internal var navigatorState: NavigatorState<MainNotesNavigation> {
         didSet {
             didSet(newState: navigatorState, oldState: oldValue)
             print("[NOTESNAVIGATOR] \(navigatorState)")

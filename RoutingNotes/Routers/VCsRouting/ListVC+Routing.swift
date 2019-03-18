@@ -36,7 +36,7 @@ extension ListVC: Navigatable {
 }
 
 fileprivate extension NotesNavigation {
-    func navigationToDetail(noteId: ListId) throws -> NotesNavigation {
+    func navigationToDetail(noteId: NoteId) throws -> NotesNavigation {
         switch self {
         case .folders👉list(listId: let listId):
             return .folders👉list👉note(listId: listId, noteId: noteId)
@@ -47,7 +47,16 @@ fileprivate extension NotesNavigation {
     }
 }
 
-fileprivate extension Navigator where NavigationType == NotesNavigation {
+fileprivate extension MainNotesNavigation {
+    func navigationToDetail(noteId: NoteId) throws -> MainNotesNavigation {
+        switch self {
+        case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
+            return .main(try notesNavigation.navigationToDetail(noteId: noteId))
+        }
+    }
+}
+
+fileprivate extension Navigator where NavigationType == MainNotesNavigation {
     func navigateToDetail(noteId: NoteId, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void) throws {
         let newNavigation = try currentNavigation.navigationToDetail(noteId: noteId)
         navigate(to: newNavigation, animated: animated, completion: completion)

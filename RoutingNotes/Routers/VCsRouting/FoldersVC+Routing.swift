@@ -44,7 +44,16 @@ fileprivate extension NotesNavigation {
     }
 }
 
-fileprivate extension Navigator where NavigationType == NotesNavigation {
+fileprivate extension MainNotesNavigation {
+    func navigationToList(listId: ListId) throws -> MainNotesNavigation {
+        switch self {
+        case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
+            return .main(try notesNavigation.navigationToList(listId: listId))
+        }
+    }
+}
+
+fileprivate extension Navigator where NavigationType == MainNotesNavigation {
     func navigateToList(listId: ListId, animated: Bool, completion: @escaping (_ cancelled: Bool) -> Void) throws {
         let newNavigation = try currentNavigation.navigationToList(listId: listId)
         navigate(to: newNavigation, animated: animated, completion: completion)

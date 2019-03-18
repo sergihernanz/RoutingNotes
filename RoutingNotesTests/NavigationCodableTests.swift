@@ -9,7 +9,7 @@
 import XCTest
 @testable import RoutingNotes
 
-class NavigationCodableTests: XCTestCase {
+class NotesNavigationCodableTests: XCTestCase {
 
     func testFoldersEncode() {
         let navigation: NotesNavigation = .folders
@@ -97,22 +97,25 @@ class NavigationCodableTests: XCTestCase {
 
 }
 
-class NavigationLinkParserTests: XCTestCase {
+class ModalNotesNavigationCodableTests: XCTestCase {
 
-    func testFoldersLink() {
-        var navigation: NotesNavigation?
-        var url: URL!
+    func testReceivedNotificationOnForeground() {
+        let navigation: NotesModalNavigation = .receivedNotificationOnForeground
+        var navigationDecoded: NotesModalNavigation = .receivedNotificationOnForeground
         XCTContext.runActivity(named: """
-            GIVEN we have a .folders url
+            GIVEN we have a .receivedNotificationOnForeground navigation
         """, block: { _ in
-            url = URL(string: "routingnotes://folders")
-            XCTAssertNotNil(url)
+            XCTAssertEqual(navigation, .receivedNotificationOnForeground)
         })
         XCTContext.runActivity(named: """
-            WHEN we parse the link url
+            WHEN we encode the item
         """, block: { _ in
             do {
-                try navigation = NotesLinkParser.navigation(url: url)
+                let encoded = try JSONEncoder().encode(navigation)
+                print(String(data: encoded, encoding: .utf8) ?? "")
+                XCTAssertNotNil(encoded)
+                navigationDecoded = try JSONDecoder().decode(NotesModalNavigation.self, from: encoded)
+                XCTAssertNotNil(navigationDecoded)
             } catch let error {
                 XCTFail(error.localizedDescription)
             }
@@ -120,24 +123,30 @@ class NavigationLinkParserTests: XCTestCase {
         XCTContext.runActivity(named: """
             THEN it is correctly decoded
         """, block: { _ in
-            XCTAssertEqual(navigation, .folders)
+            XCTAssertEqual(navigationDecoded, .receivedNotificationOnForeground)
         })
     }
+}
 
-    func testFoldersListLink() {
-        var navigation: NotesNavigation?
-        var url: URL!
+class NotesMainNavigationCodableTests: XCTestCase {
+
+    func testMainFoldersEncode() {
+        let navigation: MainNotesNavigation = .main(.folders)
+        var navigationDecoded: MainNotesNavigation = .main(.folders)
         XCTContext.runActivity(named: """
-            GIVEN we have a .foldersList url
+            GIVEN we have a .main(.folders) navigation
         """, block: { _ in
-            url = URL(string: "routingnotes://list/1")
-            XCTAssertNotNil(url)
+            XCTAssertEqual(navigation, .main(.folders))
         })
         XCTContext.runActivity(named: """
-            WHEN we parse the link url
+            WHEN we encode the item
         """, block: { _ in
             do {
-                try navigation = NotesLinkParser.navigation(url: url)
+                let encoded = try JSONEncoder().encode(navigation)
+                print(String(data: encoded, encoding: .utf8) ?? "")
+                XCTAssertNotNil(encoded)
+                navigationDecoded = try JSONDecoder().decode(MainNotesNavigation.self, from: encoded)
+                XCTAssertNotNil(navigationDecoded)
             } catch let error {
                 XCTFail(error.localizedDescription)
             }
@@ -145,24 +154,27 @@ class NavigationLinkParserTests: XCTestCase {
         XCTContext.runActivity(named: """
             THEN it is correctly decoded
         """, block: { _ in
-            XCTAssertEqual(navigation, .folders👉list(listId: "1"))
+            XCTAssertEqual(navigationDecoded, .main(.folders))
         })
     }
 
-    func testFoldersListNoteLink() {
-        var navigation: NotesNavigation?
-        var url: URL!
+    func testModalOnTopOfListEncode() {
+        let navigation: MainNotesNavigation = .modal(.receivedNotificationOnForeground, onTopOf:.folders👉list(listId: "List A"))
+        var navigationDecoded: MainNotesNavigation = .modal(.receivedNotificationOnForeground, onTopOf:.folders)
         XCTContext.runActivity(named: """
-            GIVEN we have a .foldersListNote url
+            GIVEN we have a .main(.folders) navigation
         """, block: { _ in
-            url = URL(string: "routingnotes://list/1/note/A")
-            XCTAssertNotNil(url)
+            XCTAssertEqual(navigation, .modal(.receivedNotificationOnForeground, onTopOf:.folders👉list(listId: "List A")))
         })
         XCTContext.runActivity(named: """
-            WHEN we parse the link url
+            WHEN we encode the item
         """, block: { _ in
             do {
-                try navigation = NotesLinkParser.navigation(url: url)
+                let encoded = try JSONEncoder().encode(navigation)
+                print(String(data: encoded, encoding: .utf8) ?? "")
+                XCTAssertNotNil(encoded)
+                navigationDecoded = try JSONDecoder().decode(MainNotesNavigation.self, from: encoded)
+                XCTAssertNotNil(navigationDecoded)
             } catch let error {
                 XCTFail(error.localizedDescription)
             }
@@ -170,8 +182,7 @@ class NavigationLinkParserTests: XCTestCase {
         XCTContext.runActivity(named: """
             THEN it is correctly decoded
         """, block: { _ in
-            XCTAssertEqual(navigation, .folders👉list👉note(listId: "1", noteId:"A"))
+            XCTAssertEqual(navigationDecoded, .modal(.receivedNotificationOnForeground, onTopOf:.folders👉list(listId: "List A")))
         })
     }
-
 }

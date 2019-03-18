@@ -8,11 +8,49 @@
 
 import Foundation
 
-enum NotesNavigation {
+enum MainNotesNavigation {
+    case main(NotesNavigation)
+    case modal(NotesModalNavigation, onTopOf: NotesNavigation)
+}
 
+enum NotesModalNavigation: String {
+    case receivedNotificationOnForeground
+}
+
+enum NotesNavigation {
     case folders
     case folders👉list(listId: ListId)
     case folders👉list👉note(listId: ListId, noteId: NoteId)
+}
+
+extension MainNotesNavigation: Navigation {
+
+    init() {
+        self = .main(.folders)
+    }
+
+    func pop() -> MainNotesNavigation? {
+        switch self {
+        case .modal(_, onTopOf: let notesNavigation):
+            return .main(notesNavigation)
+        case .main(let notesNavigation):
+            guard let poppedNotesNavigation = notesNavigation.pop() else {
+                return nil
+            }
+            return .main(poppedNotesNavigation)
+        }
+    }
+}
+
+extension NotesModalNavigation: Navigation {
+
+    init() {
+        self = .receivedNotificationOnForeground
+    }
+
+    func  pop() -> NotesModalNavigation? {
+        return nil
+    }
 
 }
 

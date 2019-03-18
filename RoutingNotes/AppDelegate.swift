@@ -35,9 +35,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
         loadLastAppLaunchNavigation()
 
         UNUserNotificationCenter.current().delegate = self
-        //scheduleLocalNotification()
-        //registerShortcuts()
-        //registerCoreSpotlightEntries()
+        if ProcessInfo.processInfo.environment.keys.contains("SCHEDULE_LOCAL_NOTIFICATION") {
+            scheduleLocalNotification()
+        }
+        registerShortcuts()
+        registerCoreSpotlightEntries()
 
         return true
     }
@@ -50,7 +52,7 @@ extension AppDelegate {
     func loadLastAppLaunchNavigation() {
         // Load previous last navigation endpoint
         if let savedJSONNavigation = UserDefaults.standard.string(forKey: AppDelegate.savedNavigationUserDefaultsKey),
-            let savedNavigation = NotesNavigation(jsonString: savedJSONNavigation) {
+            let savedNavigation = MainNotesNavigation(jsonString: savedJSONNavigation) {
             navigator.navigate(to: savedNavigation, animated: false, completion: {_ in })
         }
     }
@@ -67,7 +69,7 @@ extension AppDelegate {
         do {
             var items = [UIApplicationShortcutItem]()
             let favIcon = UIApplicationShortcutIcon(type: .favorite)
-            let jsonNavigationToList1 = try JSONEncoder().encode(NotesNavigation.folders👉list(listId: "1"))
+            let jsonNavigationToList1 = try JSONEncoder().encode(MainNotesNavigation.main(.folders👉list(listId: "1")))
             if let jsonStringNavigationToList1 = String(data: jsonNavigationToList1, encoding: .utf8) {
                 items.append(UIApplicationShortcutItem(type: jsonStringNavigationToList1,
                                                        localizedTitle: "List 1",
@@ -75,7 +77,7 @@ extension AppDelegate {
                                                        icon: favIcon,
                                                        userInfo: nil))
             }
-            let jsonNavigationToNoteA = try JSONEncoder().encode(NotesNavigation.folders👉list👉note(listId: "1", noteId: "A"))
+            let jsonNavigationToNoteA = try JSONEncoder().encode(MainNotesNavigation.main(.folders👉list👉note(listId: "1", noteId: "A")))
             if let jsonStringNavigationToNoteA = String(data: jsonNavigationToNoteA, encoding: .utf8) {
                 items.append(UIApplicationShortcutItem(type: jsonStringNavigationToNoteA,
                                                        localizedTitle: "Note A",
@@ -92,7 +94,7 @@ extension AppDelegate {
     func application(_ application: UIApplication,
                      performActionFor shortcutItem: UIApplicationShortcutItem,
                      completionHandler: @escaping (Bool) -> Void) {
-        if let navigation = NotesNavigation(jsonString: shortcutItem.type) {
+        if let navigation = MainNotesNavigation(jsonString: shortcutItem.type) {
             navigator.navigate(to: navigation, animated: false, completion: { _ in
                 completionHandler(true)
             })
@@ -151,7 +153,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                      didReceiveRemoteNotification userInfo: [AnyHashable: Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         if let link = userInfo["link"] as? String,
-           let navigation = NotesNavigation(jsonString: link) {
+           let navigation = MainNotesNavigation(jsonString: link) {
             navigator.navigate(to: navigation, animated: false, completion: { _ in
                 completionHandler(.noData)
             })
@@ -164,7 +166,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         if let link = notification.request.content.userInfo["link"] as? String,
-           let navigation = NotesNavigation(jsonString: link) {
+           let navigation = MainNotesNavigation(jsonString: link) {
             navigator.navigate(to: navigation, animated: false, completion: { _ in
                 completionHandler(.sound)
                 self.begForgiveness()
@@ -178,7 +180,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         if let link = response.notification.request.content.userInfo["link"] as? String,
-           let navigation = NotesNavigation(jsonString: link) {
+           let navigation = MainNotesNavigation(jsonString: link) {
             navigator.navigate(to: navigation, animated: false, completion: { _ in
                 completionHandler()
             })
@@ -190,7 +192,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func scheduleLocalNotification() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { (granted, error) in
             if granted {
-                let jsonNavigationToNoteA = NotesNavigation.folders👉list👉note(listId: "1", noteId: "A").toJSONString()
+                let jsonNavigationToNoteA = MainNotesNavigation.main(.folders👉list👉note(listId: "1", noteId: "A")).toJSONString()
                 let content = UNMutableNotificationContent()
                 content.title = "Note A has changed"
                 content.body = "See the latest changes in List 1: Note A"
@@ -233,7 +235,7 @@ extension AppDelegate {
             var spotlightItems = [CSSearchableItem]()
             for note in try navigator.model.fetch(request: NotesModelFetchRequest.emptyPredicate) as [Note] {
                 let list = try note.fetchList(ctxt: navigator.model)
-                let navigation = NotesNavigation.folders👉list👉note(listId: list.listId, noteId: note.noteId)
+                let navigation = MainNotesNavigation.main(.folders👉list👉note(listId: list.listId, noteId: note.noteId))
                 let searchableItemAttributeSet = CSSearchableItemAttributeSet(itemContentType: kUTTypeText as String)
                 var keywords = [String]()
                 keywords.append(note.title)
@@ -260,7 +262,7 @@ extension AppDelegate {
         if userActivity.activityType == CSSearchableItemActionType {
             if let userInfo = userActivity.userInfo {
                 if let jsonNavigation = userInfo[CSSearchableItemActivityIdentifier] as? String,
-                   let navigation = NotesNavigation(jsonString: jsonNavigation) {
+                   let navigation = MainNotesNavigation(jsonString: jsonNavigation) {
                     navigator.navigate(to: navigation, animated: false, completion: {_ in })
                     return true
                 }

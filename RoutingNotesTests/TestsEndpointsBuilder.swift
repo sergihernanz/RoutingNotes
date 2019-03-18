@@ -11,40 +11,58 @@ import UIKit
 
 class TestsEndpointsBuilder: TopNavigationItemBuilder {
 
-    typealias NavigationType = NotesNavigation
+    typealias NavigationType = MainNotesNavigation
     typealias NavigatorType = NotesStatefulNavigator
     typealias ModelType = NotesModelContext
 
-    func buildTopItem(forNavigationEndpoint: NotesNavigation,
+    func buildTopItem(forNavigationEndpoint: MainNotesNavigation,
                       navigator: NotesStatefulNavigator,
                       model: NotesModelContext) -> UIViewController {
         switch forNavigationEndpoint {
-        case .folders:
-            let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: ())
-            vc.title = "Folders"
-            return vc
-        case .folders👉list(let listId):
-            let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: listId)
-            vc.title = "List \(listId)"
-            return vc
-        case .folders👉list👉note(_, let noteId):
-            let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: noteId)
-            vc.title = "Note \(noteId)"
-            return vc
+        case .main(let notesNavigation):
+            switch notesNavigation {
+            case .folders:
+                let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: ())
+                vc.title = "Folders"
+                return vc
+            case .folders👉list(let listId):
+                let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: listId)
+                vc.title = "List \(listId)"
+                return vc
+            case .folders👉list👉note(_, let noteId):
+                let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: noteId)
+                vc.title = "Note \(noteId)"
+                return vc
+            }
+        case .modal(let modalNavigation, onTopOf: _):
+            switch modalNavigation {
+            case .receivedNotificationOnForeground:
+                let vc = NavigationTestVC(navigator: navigator, model: model, navigationInput: ())
+                vc.title = "Alert"
+                return vc
+            }
         }
     }
 
-    func isCorrectlyConfigured(viewController: UIViewController, forNavigation: NotesNavigation) -> Bool {
+    func isCorrectlyConfigured(viewController: UIViewController, forNavigation: MainNotesNavigation) -> Bool {
         guard let testVC = viewController as? NavigationTestVC else {
             fatalError()
         }
         switch forNavigation {
-        case .folders:
-            return testVC.title == "Folders"
-        case .folders👉list(let listId):
-            return testVC.title == "List \(listId)"
-        case .folders👉list👉note(_, let noteId):
-            return testVC.title == "Note \(noteId)"
+        case .main(let notesNavigation):
+            switch notesNavigation {
+            case .folders:
+                return testVC.title == "Folders"
+            case .folders👉list(let listId):
+                return testVC.title == "List \(listId)"
+            case .folders👉list👉note(_, let noteId):
+                return testVC.title == "Note \(noteId)"
+            }
+        case .modal(let modalNavigation, onTopOf: _):
+            switch modalNavigation {
+            case .receivedNotificationOnForeground:
+                return testVC.title == "Alert"
+            }
         }
     }
 

@@ -93,11 +93,11 @@ class NavigationTestVC: UIViewController, Navigatable {
     @objc func buttonTapped(button: UIButton) {
         switch button.tag {
         case 1:
-            navigator.navigate(to: .folders👉list(listId:"1"), animated: true) {_ in }
+            navigator.navigate(to: .main(.folders👉list(listId:"1")), animated: true) {_ in }
         case 2:
-            navigator.navigate(to: .folders👉list👉note(listId: "1", noteId: "A"), animated: true) {_ in }
+            navigator.navigate(to: .main(.folders👉list👉note(listId: "1", noteId: "A")), animated: true) {_ in }
         default:
-            navigator.navigate(to: .folders, animated: true) {_ in }
+            navigator.navigate(to: .main(.folders), animated: true) {_ in }
         }
     }
 

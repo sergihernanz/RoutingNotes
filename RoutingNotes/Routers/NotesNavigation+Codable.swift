@@ -8,6 +8,66 @@
 
 import Foundation
 
+extension MainNotesNavigation: Codable {
+
+    fileprivate enum CodingKeys: CodingKey {
+        case main
+        case modal
+        enum MainCodingKeys: CodingKey {
+            case notesNavigation
+        }
+        enum ModalCodingKeys: CodingKey {
+            case notesNavigation
+            case modalNavigation
+        }
+    }
+
+    init(from decoder: Decoder) throws {
+        let rootContainer = try decoder.container(keyedBy: CodingKeys.self)
+        if rootContainer.contains(.modal) {
+            let notesNavigation = try rootContainer.decode(NotesNavigation.self, forKey: .main)
+            let modalNavigation = try rootContainer.decode(NotesModalNavigation.self, forKey: .modal)
+            self = .modal(modalNavigation, onTopOf: notesNavigation)
+        } else if rootContainer.contains(.main) {
+            let notesNavigation = try rootContainer.decode(NotesNavigation.self, forKey: .main)
+            self = .main(notesNavigation)
+        } else {
+            assertionFailure("Incorrectly decoded instance")
+            self = .init()
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .main(let notesNavigation):
+            try container.encode(notesNavigation, forKey: .main)
+        case .modal(let modalNavigation, onTopOf: let notesNavigation):
+            try container.encode(notesNavigation, forKey: .main)
+            try container.encode(modalNavigation, forKey: .modal)
+        }
+    }
+
+}
+
+extension NotesModalNavigation: Codable {
+
+    init(from decoder: Decoder) throws {
+        var unkeyedContainer = try decoder.unkeyedContainer()
+        guard let newSelf = try NotesModalNavigation(rawValue: unkeyedContainer.decode(String.self)) else {
+            throw DecodingError.dataCorruptedError(
+                in: unkeyedContainer,
+                debugDescription: "Cannot initialize NotesModalNavigation")
+        }
+        self = newSelf
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var unkeyedContainer = encoder.unkeyedContainer()
+        try unkeyedContainer.encode(self.rawValue)
+    }
+}
+
 extension NotesNavigation: Codable {
 
     fileprivate enum CodingKeys: CodingKey {
@@ -63,7 +123,7 @@ extension NotesNavigation: Codable {
 
 }
 
-extension NotesNavigation {
+extension MainNotesNavigation {
 
     func toJSONString() -> String? {
         do {
@@ -79,7 +139,7 @@ extension NotesNavigation {
             guard let data = jsonString.data(using: .utf8) else {
                 return nil
             }
-            self = try JSONDecoder().decode(NotesNavigation.self, from: data)
+            self = try JSONDecoder().decode(MainNotesNavigation.self, from: data)
         } catch {
             return nil
         }
