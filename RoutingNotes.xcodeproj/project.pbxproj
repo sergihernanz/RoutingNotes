@@ -30,7 +30,7 @@
 		2DCDC52321F9101C0094761A /* TestsEndpointsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD7509C21F5BAC1007BD6A1 /* TestsEndpointsBuilder.swift */; };
 		2DCDC52621F9158E0094761A /* NavigationTestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7F21F59F4E0045FC13 /* NavigationTestVC.swift */; };
 		2DCDC52821F91DA20094761A /* Navigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDC52721F91DA20094761A /* Navigator.swift */; };
-		2DCDC52A21F91E330094761A /* NotesNavigationEndpointsBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDC52921F91E330094761A /* NotesNavigationEndpointsBuilder.swift */; };
+		2DCDC52A21F91E330094761A /* NotesTopNavigationItemBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCDC52921F91E330094761A /* NotesTopNavigationItemBuilder.swift */; };
 		2DCE24AD21B198ED00150FB0 /* NotesStatefulNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DCE24AC21B198ED00150FB0 /* NotesStatefulNavigator.swift */; };
 		2DD274D021F26D7E003FB74A /* FoldersVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274CF21F26D7E003FB74A /* FoldersVC+Routing.swift */; };
 		2DD274D321F273B3003FB74A /* ListVC+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DD274D221F273B3003FB74A /* ListVC+Routing.swift */; };
@@ -80,7 +80,7 @@
 		2DB7382F221EE5EC0081A533 /* RoutingNotes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RoutingNotes.entitlements; sourceTree = "<group>"; };
 		2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+DeselectRow.swift"; sourceTree = "<group>"; };
 		2DCDC52721F91DA20094761A /* Navigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigator.swift; sourceTree = "<group>"; };
-		2DCDC52921F91E330094761A /* NotesNavigationEndpointsBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesNavigationEndpointsBuilder.swift; sourceTree = "<group>"; };
+		2DCDC52921F91E330094761A /* NotesTopNavigationItemBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesTopNavigationItemBuilder.swift; sourceTree = "<group>"; };
 		2DCE24AC21B198ED00150FB0 /* NotesStatefulNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesStatefulNavigator.swift; sourceTree = "<group>"; };
 		2DD274CF21F26D7E003FB74A /* FoldersVC+Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "FoldersVC+Routing.swift"; sourceTree = "<group>"; };
 		2DD274D221F273B3003FB74A /* ListVC+Routing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ListVC+Routing.swift"; sourceTree = "<group>"; };
@@ -177,7 +177,7 @@
 				2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */,
 				2D546E1A21AE789E00CFB5BA /* NotesNavigation.swift */,
 				2DB3746D22203BAD00B877A1 /* NotesNavigation+Codable.swift */,
-				2DCDC52921F91E330094761A /* NotesNavigationEndpointsBuilder.swift */,
+				2DCDC52921F91E330094761A /* NotesTopNavigationItemBuilder.swift */,
 				2DCE24AC21B198ED00150FB0 /* NotesStatefulNavigator.swift */,
 			);
 			path = Routers;
@@ -412,7 +412,7 @@
 				2DCDC52821F91DA20094761A /* Navigator.swift in Sources */,
 				2DB3746E22203BAD00B877A1 /* NotesNavigation+Codable.swift in Sources */,
 				2D8C8E7C21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift in Sources */,
-				2DCDC52A21F91E330094761A /* NotesNavigationEndpointsBuilder.swift in Sources */,
+				2DCDC52A21F91E330094761A /* NotesTopNavigationItemBuilder.swift in Sources */,
 				2DCE24AD21B198ED00150FB0 /* NotesStatefulNavigator.swift in Sources */,
 				2DD274D621F27577003FB74A /* NoteVC+Routing.swift in Sources */,
 				2DCDC52321F9101C0094761A /* TestsEndpointsBuilder.swift in Sources */,

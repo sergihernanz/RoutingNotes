@@ -1,5 +1,5 @@
 //
-//  NavigationEndpointsBuilder.swift
+//  TopNavigationItemBuilder.swift
 //  RoutingNotes
 //
 //  Created by Sergi Hernanz on 20/01/2019.
@@ -20,11 +20,11 @@ protocol TopNavigationItemBuilder {
                       model: ModelType) -> UIViewController
 }
 
-private class _AnyNavigationEndpointsBuilderBase<NavigationType: Navigation, NavigatorType: Navigator, ModelType>: TopNavigationItemBuilder {
+private class _AnyTopNavigationItemBuilderBase<NavigationType: Navigation, NavigatorType: Navigator, ModelType>: TopNavigationItemBuilder {
 
     init() {
-        guard type(of: self) != _AnyNavigationEndpointsBuilderBase.self else {
-            fatalError("_AnyNavigationEndpointsBuilderBase<_,_,_> instances can not be created, create a subclass instance instead")
+        guard type(of: self) != _AnyTopNavigationItemBuilderBase.self else {
+            fatalError("_AnyTopNavigationItemBuilderBase<_,_,_> instances can not be created, create a subclass instance instead")
         }
     }
     func buildTopItem(forNavigationEndpoint: NavigationType,
@@ -36,8 +36,8 @@ private class _AnyNavigationEndpointsBuilderBase<NavigationType: Navigation, Nav
         fatalError("Method must be overriden")
     }
 }
-fileprivate final class _AnyNavigationEndpointsBuilderBox<Concrete: TopNavigationItemBuilder>:
-                            _AnyNavigationEndpointsBuilderBase<Concrete.NavigationType, Concrete.NavigatorType, Concrete.ModelType> {
+fileprivate final class _AnyTopNavigationItemBuilderBox<Concrete: TopNavigationItemBuilder>:
+                            _AnyTopNavigationItemBuilderBase<Concrete.NavigationType, Concrete.NavigatorType, Concrete.ModelType> {
     // variable used since we're calling mutating functions
     var concrete: Concrete
     init(_ concrete: Concrete) {
@@ -55,13 +55,13 @@ fileprivate final class _AnyNavigationEndpointsBuilderBox<Concrete: TopNavigatio
     }
 }
 
-final class AnyNavigationEndpointsBuilder<NavigationType: Navigation, NavigatorType: Navigator, ModelType>: TopNavigationItemBuilder {
+final class AnyTopNavigationItemBuilder<NavigationType: Navigation, NavigatorType: Navigator, ModelType>: TopNavigationItemBuilder {
 
-    private let box: _AnyNavigationEndpointsBuilderBase<NavigationType, NavigatorType, ModelType>
+    private let box: _AnyTopNavigationItemBuilderBase<NavigationType, NavigatorType, ModelType>
     init<Concrete: TopNavigationItemBuilder>(_ concrete: Concrete) where Concrete.NavigationType == NavigationType,
                                                                            Concrete.NavigatorType == NavigatorType,
                                                                            Concrete.ModelType == ModelType {
-        box = _AnyNavigationEndpointsBuilderBox(concrete)
+        box = _AnyTopNavigationItemBuilderBox(concrete)
     }
     func buildTopItem(forNavigationEndpoint: NavigationType,
                       navigator: NavigatorType,

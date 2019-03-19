@@ -40,9 +40,9 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block: { _ in
             let model = populateMockModel()
-            let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
-            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
-            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: anyEndpointsBuilder)
+            let topNavItemsBuilder = NotesTopNavigationItemBuilderImpl()
+            let anyTopNavigationItemsBuilder = AnyTopNavigationItemBuilder(topNavItemsBuilder)
+            navigator = NotesStatefulNavigator(model: model, topNavigationItemsBuilder: anyTopNavigationItemsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -76,9 +76,9 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block: { _ in
             let model = populateMockModel()
-            let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
-            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
-            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: anyEndpointsBuilder)
+            let topNavItemsBuilder = NotesTopNavigationItemBuilderImpl()
+            let anyTopNavigationItemsBuilder = AnyTopNavigationItemBuilder(topNavItemsBuilder)
+            navigator = NotesStatefulNavigator(model: model, topNavigationItemsBuilder: anyTopNavigationItemsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -117,9 +117,9 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block: { _ in
             let model = populateMockModel()
-            let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
-            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
-            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: anyEndpointsBuilder)
+            let topNavItemsBuilder = NotesTopNavigationItemBuilderImpl()
+            let anyTopNavigationItemsBuilder = AnyTopNavigationItemBuilder(topNavItemsBuilder)
+            navigator = NotesStatefulNavigator(model: model, topNavigationItemsBuilder: anyTopNavigationItemsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -163,9 +163,9 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block: { _ in
             let model = populateMockModel()
-            let endpointsBuilder = NotesNavigationEndpointsBuilderImpl()
-            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
-            navigator = NotesStatefulNavigator(model: model, endpointsBuilder: anyEndpointsBuilder)
+            let topNavItemsBuilder = NotesTopNavigationItemBuilderImpl()
+            let anyTopNavigationItemsBuilder = AnyTopNavigationItemBuilder(topNavItemsBuilder)
+            navigator = NotesStatefulNavigator(model: model, topNavigationItemsBuilder: anyTopNavigationItemsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!
@@ -209,10 +209,10 @@ class RoutingNotesTests: XCTestCase {
                   AND configured with a mock model
         """, block: { _ in
             let model = populateMockModel()
-            let endpointsBuilder = TestsEndpointsBuilder()
-            let anyEndpointsBuilder = AnyNavigationEndpointsBuilder(endpointsBuilder)
+            let topNavItemsBuilder = TestsTopNavigationItemsBuilder()
+            let anyTopNavigationItemsBuilder = AnyTopNavigationItemBuilder(topNavItemsBuilder)
             navigator = NotesStatefulNavigator(model: model,
-                                      endpointsBuilder: anyEndpointsBuilder)
+                                               topNavigationItemsBuilder: anyTopNavigationItemsBuilder)
             XCTAssertNotNil(navigator)
         })
         var rootVCTester: UIWindowRootViewControllerTester<UIViewController>!

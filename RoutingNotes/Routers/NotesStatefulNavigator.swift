@@ -31,24 +31,24 @@ final class NotesStatefulNavigator: NSObject, StatefulNavigator {
 
     typealias NavigationType = MainNotesNavigation
     typealias ModelType = NotesModelContext
-    typealias BuilderType = NotesNavigationEndpointsBuilder
+    typealias BuilderType = NotesTopNavigationItemBuilder
 
     internal var model: NotesModelContext
-    internal var endpointsBuilder: NotesNavigationEndpointsBuilder
+    internal var topNavigationItemBuilder: NotesTopNavigationItemBuilder
 
     init(model: NotesModelContext,
-         endpointsBuilder: NotesNavigationEndpointsBuilder) {
+         topNavigationItemsBuilder: NotesTopNavigationItemBuilder) {
         self.model = model
-        self.endpointsBuilder = endpointsBuilder
+        self.topNavigationItemBuilder = topNavigationItemsBuilder
         navigatorState = .idle(.main(.folders))
         super.init()
     }
 
     // MARK: return the main UIViewController (UINavigationController)
     fileprivate lazy var navigationController: UINavigationController = {
-        let rootVC = endpointsBuilder.buildTopItem(forNavigationEndpoint: .main(.folders),
-                                                                          navigator: self,
-                                                                          model: model)
+        let rootVC = topNavigationItemBuilder.buildTopItem(forNavigationEndpoint: .main(.folders),
+                                                           navigator: self,
+                                                           model: model)
         let navC = UINavigationController(rootViewController: rootVC)
         navC.navigationBar.tintColor = .black
         navC.delegate = self

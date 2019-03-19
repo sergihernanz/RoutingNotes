@@ -19,9 +19,9 @@ protocol StatefulNavigator: Navigator {
     var navigatorState: NavigatorState<NavigationType> { get set }
 
     associatedtype BuilderType: TopNavigationItemBuilder where ModelType == BuilderType.ModelType,
-                                                                 NavigationType == BuilderType.NavigationType,
-                                                                 BuilderType.NavigatorType == Self
-    var endpointsBuilder: BuilderType { get }
+                                                               NavigationType == BuilderType.NavigationType,
+                                                               BuilderType.NavigatorType == Self
+    var topNavigationItemBuilder: BuilderType { get }
 
     var viewControllersStack: [UIViewController] { get }
     func present(newViewControllerStack: [UIViewController], forNavigation: NavigationType, animated: Bool)
@@ -113,7 +113,7 @@ extension StatefulNavigator {
             let navigationStack = to.navigationStack()
             let VCs = navigationStack.map { (navigation) -> UIViewController in
                 getCorrectlyInstancedViewController(forNavigationEndpoint: navigation) ??
-                    endpointsBuilder.buildTopItem(forNavigationEndpoint: navigation, navigator: self, model: model)
+                    topNavigationItemBuilder.buildTopItem(forNavigationEndpoint: navigation, navigator: self, model: model)
             }
             present(newViewControllerStack: VCs, forNavigation: to, animated: animated)
         default: break
@@ -123,7 +123,7 @@ extension StatefulNavigator {
     fileprivate func getCorrectlyInstancedViewController(forNavigationEndpoint: NavigationType) -> UIViewController? {
         let stackCount = forNavigationEndpoint.navigationStack().count
         if let vc = viewControllersStack[safe: stackCount-1],
-            endpointsBuilder.isCorrectlyConfigured(viewController: vc, forNavigation: forNavigationEndpoint) {
+            topNavigationItemBuilder.isCorrectlyConfigured(viewController: vc, forNavigation: forNavigationEndpoint) {
             return vc
         }
         return nil

@@ -1,5 +1,5 @@
 //
-//  NotesNavigationEndpointsBuilder.swift
+//  NotesTopNavigationItemBuilder.swift
 //  RoutingNotes
 //
 //  Created by Sergi Hernanz on 23/01/2019.
@@ -8,9 +8,9 @@
 
 import UIKit
 
-typealias NotesNavigationEndpointsBuilder = AnyNavigationEndpointsBuilder<MainNotesNavigation, NotesStatefulNavigator, NotesModelContext>
+typealias NotesTopNavigationItemBuilder = AnyTopNavigationItemBuilder<MainNotesNavigation, NotesStatefulNavigator, NotesModelContext>
 
-class NotesNavigationEndpointsBuilderImpl: TopNavigationItemBuilder {
+class NotesTopNavigationItemBuilderImpl: TopNavigationItemBuilder {
 
     typealias NavigationType = MainNotesNavigation
     typealias NavigatorType = NotesStatefulNavigator

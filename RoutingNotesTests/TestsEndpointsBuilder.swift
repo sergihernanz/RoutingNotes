@@ -1,5 +1,5 @@
 //
-//  TestsEndpointsBuilder.swift
+//  TestsTopNavigationItemsBuilder.swift
 //  RoutingNotesTests
 //
 //  Created by Sergi Hernanz on 21/01/2019.
@@ -9,7 +9,7 @@
 import UIKit
 //@testable import RoutingNotes
 
-class TestsEndpointsBuilder: TopNavigationItemBuilder {
+class TestsTopNavigationItemsBuilder: TopNavigationItemBuilder {
 
     typealias NavigationType = MainNotesNavigation
     typealias NavigatorType = NotesStatefulNavigator
