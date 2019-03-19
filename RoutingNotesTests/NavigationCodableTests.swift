@@ -100,12 +100,12 @@ class NotesNavigationCodableTests: XCTestCase {
 class ModalNotesNavigationCodableTests: XCTestCase {
 
     func testReceivedNotificationOnForeground() {
-        let navigation: NotesModalNavigation = .receivedNotificationOnForeground
-        var navigationDecoded: NotesModalNavigation = .receivedNotificationOnForeground
+        let navigation: NotesModalNavigation = .receivedNotificationOnForeground(.folders)
+        var navigationDecoded: NotesModalNavigation = .receivedNotificationOnForeground(.folders)
         XCTContext.runActivity(named: """
             GIVEN we have a .receivedNotificationOnForeground navigation
         """, block: { _ in
-            XCTAssertEqual(navigation, .receivedNotificationOnForeground)
+            XCTAssertEqual(navigation, .receivedNotificationOnForeground(.folders))
         })
         XCTContext.runActivity(named: """
             WHEN we encode the item
@@ -123,7 +123,7 @@ class ModalNotesNavigationCodableTests: XCTestCase {
         XCTContext.runActivity(named: """
             THEN it is correctly decoded
         """, block: { _ in
-            XCTAssertEqual(navigationDecoded, .receivedNotificationOnForeground)
+            XCTAssertEqual(navigationDecoded, .receivedNotificationOnForeground(.folders))
         })
     }
 }
@@ -159,12 +159,12 @@ class NotesMainNavigationCodableTests: XCTestCase {
     }
 
     func testModalOnTopOfListEncode() {
-        let navigation: MainNotesNavigation = .modal(.receivedNotificationOnForeground, onTopOf:.folders👉list(listId: "List A"))
-        var navigationDecoded: MainNotesNavigation = .modal(.receivedNotificationOnForeground, onTopOf:.folders)
+        let navigation: MainNotesNavigation = .modal(.receivedNotificationOnForeground(.folders), onTopOf:.folders👉list(listId: "List A"))
+        var navigationDecoded: MainNotesNavigation = .modal(.receivedNotificationOnForeground(.folders), onTopOf:.folders)
         XCTContext.runActivity(named: """
             GIVEN we have a .main(.folders) navigation
         """, block: { _ in
-            XCTAssertEqual(navigation, .modal(.receivedNotificationOnForeground, onTopOf:.folders👉list(listId: "List A")))
+            XCTAssertEqual(navigation, .modal(.receivedNotificationOnForeground(.folders), onTopOf:.folders👉list(listId: "List A")))
         })
         XCTContext.runActivity(named: """
             WHEN we encode the item
@@ -182,7 +182,7 @@ class NotesMainNavigationCodableTests: XCTestCase {
         XCTContext.runActivity(named: """
             THEN it is correctly decoded
         """, block: { _ in
-            XCTAssertEqual(navigationDecoded, .modal(.receivedNotificationOnForeground, onTopOf:.folders👉list(listId: "List A")))
+            XCTAssertEqual(navigationDecoded, .modal(.receivedNotificationOnForeground(.folders), onTopOf:.folders👉list(listId: "List A")))
         })
     }
 }

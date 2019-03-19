@@ -166,13 +166,18 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         #if true
-        switch navigator.currentNavigation {
-        case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
-            let newNavigation = MainNotesNavigation.modal(.receivedNotificationOnForeground,
-                                                          onTopOf: notesNavigation)
-            navigator.navigate(to: newNavigation, animated: false, completion: { _ in
-                completionHandler(.sound)
-            })
+        if let link = notification.request.content.userInfo["link"] as? String,
+            let deepLinkNavigation = MainNotesNavigation(jsonString: link)?.notesNavigation {
+            switch navigator.currentNavigation {
+            case .main(let currentNavigation), .modal(_, onTopOf: let currentNavigation):
+                let newNavigation = MainNotesNavigation.modal(.receivedNotificationOnForeground(deepLinkNavigation),
+                                                              onTopOf: currentNavigation)
+                navigator.navigate(to: newNavigation, animated: false, completion: { _ in
+                    completionHandler(.sound)
+                })
+            }
+        } else {
+            completionHandler(.alert)
         }
         #else
         if let link = notification.request.content.userInfo["link"] as? String,

@@ -23,6 +23,7 @@
 		2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D7993CF21D7BC3700279B87 /* MockUDOrdersModelContext.swift */; };
 		2D8C8E7C21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */; };
 		2D8C8E7E21F485F50045FC13 /* TopNavigationItemBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D8C8E7D21F485F50045FC13 /* TopNavigationItemBuilder.swift */; };
+		2DA62C8B2240CC820056D6B4 /* ForegroundLinkAlert+Routing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DA62C8A2240CC820056D6B4 /* ForegroundLinkAlert+Routing.swift */; };
 		2DB3746E22203BAD00B877A1 /* NotesNavigation+Codable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB3746D22203BAD00B877A1 /* NotesNavigation+Codable.swift */; };
 		2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DB6E08721EF680C008104C4 /* Navigatable.swift */; };
 		2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC9B6BF21CC4D540025CDC4 /* ViewController+DeselectRow.swift */; };
@@ -73,6 +74,7 @@
 		2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+pushPopOrSetViewControllers.swift"; sourceTree = "<group>"; };
 		2D8C8E7D21F485F50045FC13 /* TopNavigationItemBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopNavigationItemBuilder.swift; sourceTree = "<group>"; };
 		2D8C8E7F21F59F4E0045FC13 /* NavigationTestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTestVC.swift; sourceTree = "<group>"; };
+		2DA62C8A2240CC820056D6B4 /* ForegroundLinkAlert+Routing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForegroundLinkAlert+Routing.swift"; sourceTree = "<group>"; };
 		2DB3746D22203BAD00B877A1 /* NotesNavigation+Codable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotesNavigation+Codable.swift"; sourceTree = "<group>"; };
 		2DB6E08721EF680C008104C4 /* Navigatable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigatable.swift; sourceTree = "<group>"; };
 		2DB7382F221EE5EC0081A533 /* RoutingNotes.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RoutingNotes.entitlements; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				2DD274CF21F26D7E003FB74A /* FoldersVC+Routing.swift */,
 				2DD274D221F273B3003FB74A /* ListVC+Routing.swift */,
 				2DD274D521F27577003FB74A /* NoteVC+Routing.swift */,
+				2DA62C8A2240CC820056D6B4 /* ForegroundLinkAlert+Routing.swift */,
 			);
 			path = VCsRouting;
 			sourceTree = "<group>";
@@ -419,6 +422,7 @@
 				2DC9B6C021CC4D540025CDC4 /* ViewController+DeselectRow.swift in Sources */,
 				2D06C2E021BCF9F4004962A2 /* Model.swift in Sources */,
 				2DCDC52621F9158E0094761A /* NavigationTestVC.swift in Sources */,
+				2DA62C8B2240CC820056D6B4 /* ForegroundLinkAlert+Routing.swift in Sources */,
 				2D5A8DBD21B1CD5100DAFC8D /* FoldersVC.swift in Sources */,
 				2D5A8DC121B1D10E00DAFC8D /* NoteVC.swift in Sources */,
 				2D546DF621AE77EA00CFB5BA /* AppDelegate.swift in Sources */,

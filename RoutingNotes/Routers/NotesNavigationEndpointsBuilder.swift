@@ -31,8 +31,8 @@ class NotesNavigationEndpointsBuilderImpl: TopNavigationItemBuilder {
             }
         case .modal(let modalNavigation, onTopOf: _):
             switch modalNavigation {
-            case .receivedNotificationOnForeground:
-                let routable = ForegroundAlert(navigator: navigator, model: model, navigationInput: .folders)
+            case .receivedNotificationOnForeground(let nav):
+                let routable = ForegroundAlert(navigator: navigator, model: model, navigationInput: nav)
                 return routable.viewController
             }
         }

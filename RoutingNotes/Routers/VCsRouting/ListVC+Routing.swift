@@ -53,10 +53,7 @@ fileprivate extension NotesNavigation {
 
 fileprivate extension MainNotesNavigation {
     func navigationToDetail(noteId: NoteId) throws -> MainNotesNavigation {
-        switch self {
-        case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
-            return .main(try notesNavigation.navigationToDetail(noteId: noteId))
-        }
+        return .main(try notesNavigation.navigationToDetail(noteId: noteId))
     }
 }
 

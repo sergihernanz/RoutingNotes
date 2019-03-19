@@ -50,10 +50,7 @@ fileprivate extension NotesNavigation {
 
 fileprivate extension MainNotesNavigation {
     func navigationToList(listId: ListId) throws -> MainNotesNavigation {
-        switch self {
-        case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
-            return .main(try notesNavigation.navigationToList(listId: listId))
-        }
+        return .main(try notesNavigation.navigationToList(listId: listId))
     }
 }
 

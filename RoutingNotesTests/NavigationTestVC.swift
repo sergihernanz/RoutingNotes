@@ -115,11 +115,9 @@ class NavigationTestVC: UIViewController, Navigatable {
         case 2:
             navigator.navigate(to: .main(.folders👉list👉note(listId: "1", noteId: "A")), animated: true) {_ in }
         case 3:
-            switch navigator.currentNavigation {
-            case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
-                navigator.navigate(to: .modal(.receivedNotificationOnForeground,
-                                              onTopOf: notesNavigation), animated: true) {_ in }
-            }
+            navigator.navigate(to: .modal(.receivedNotificationOnForeground(.folders),
+                                          onTopOf: navigator.currentNavigation.notesNavigation),
+                               animated: true) {_ in }
         default:
             navigator.navigate(to: .main(.folders), animated: true) {_ in }
         }

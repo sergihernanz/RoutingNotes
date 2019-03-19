@@ -52,19 +52,28 @@ extension MainNotesNavigation: Codable {
 
 extension NotesModalNavigation: Codable {
 
+    fileprivate enum CodingKeys: CodingKey {
+        case notificationOnForeground
+    }
+
     init(from decoder: Decoder) throws {
-        var unkeyedContainer = try decoder.unkeyedContainer()
-        guard let newSelf = try NotesModalNavigation(rawValue: unkeyedContainer.decode(String.self)) else {
-            throw DecodingError.dataCorruptedError(
-                in: unkeyedContainer,
-                debugDescription: "Cannot initialize NotesModalNavigation")
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        if container.contains(.notificationOnForeground) {
+            let destination = try container.decode(NotesNavigation.self, forKey: .notificationOnForeground)
+            self = .receivedNotificationOnForeground(destination)
+            return
         }
-        self = newSelf
+        throw DecodingError.dataCorruptedError(forKey: .notificationOnForeground,
+            in: container,
+            debugDescription: "Cannot initialize NotesModalNavigation")
     }
 
     func encode(to encoder: Encoder) throws {
-        var unkeyedContainer = encoder.unkeyedContainer()
-        try unkeyedContainer.encode(self.rawValue)
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .receivedNotificationOnForeground(let notesNavigation):
+            try container.encode(notesNavigation, forKey: .notificationOnForeground)
+        }
     }
 }
 

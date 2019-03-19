@@ -37,10 +37,8 @@ class ForegroundAlert: Navigatable {
                 return
             }*/
             self.navigationOutput = true
-            switch self.navigator.currentNavigation {
-            case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
-                self.navigator.navigate(to: .main(notesNavigation), animated: true, completion: { _ in })
-            }
+            let notesNavigation = self.navigator.currentNavigation.notesNavigation
+            self.navigator.navigate(to: .main(notesNavigation), animated: true, completion: { _ in })
         }))
         return alertVC
     }()

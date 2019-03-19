@@ -13,8 +13,8 @@ enum MainNotesNavigation {
     case modal(NotesModalNavigation, onTopOf: NotesNavigation)
 }
 
-enum NotesModalNavigation: String {
-    case receivedNotificationOnForeground
+enum NotesModalNavigation {
+    case receivedNotificationOnForeground(NotesNavigation)
 }
 
 enum NotesNavigation {
@@ -40,12 +40,19 @@ extension MainNotesNavigation: Navigation {
             return .main(poppedNotesNavigation)
         }
     }
+
+    var notesNavigation: NotesNavigation {
+    switch self {
+    case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
+        return notesNavigation
+    }
+    }
 }
 
 extension NotesModalNavigation: Navigation {
 
     init() {
-        self = .receivedNotificationOnForeground
+        self = .receivedNotificationOnForeground(.folders)
     }
 
     func  pop() -> NotesModalNavigation? {
