@@ -10,7 +10,7 @@ import Foundation
 
 class NotesLinkParser {
 
-    static func navigation(url: URL) throws -> MainNotesNavigation? {
+    static func navigation(url: URL) throws -> NotesNavigation? {
         let foldersRegexs =
             [try NSRegularExpression(pattern: "(?:^https://|^)inqbarna\\.firebaseapp\\.com($|/$|/routingnotes/*$)", options: .caseInsensitive),
              try NSRegularExpression(pattern: "^routingnotes://folders/*$", options: .caseInsensitive)]
@@ -26,7 +26,7 @@ class NotesLinkParser {
         for foldersRegex in foldersRegexs {
             let foldersMatches = foldersRegex.numberOfMatches(in: urlString, options: .anchored, range: urlStringRange)
             if foldersMatches > 0 {
-                return .main(.folders)
+                return .folders
             }
         }
         for listRegex in listRegexs {
@@ -36,7 +36,7 @@ class NotesLinkParser {
                 match.numberOfRanges == 2 {
                 let listIdRange = match.range(at: 1)
                 let listId = String(urlString[String.Index(encodedOffset: listIdRange.lowerBound)..<String.Index(encodedOffset: listIdRange.upperBound)])
-                return .main(.folders👉list(listId: listId))
+                return .folders👉list(listId: listId)
             }
         }
         for noteRegex in noteRegexs {
@@ -48,7 +48,7 @@ class NotesLinkParser {
                 let noteIdRange = noteMatches.first?.range(at: 2) {
                 let listId = String(urlString[String.Index(encodedOffset: listIdRange.lowerBound)..<String.Index(encodedOffset: listIdRange.upperBound)])
                 let noteId = String(urlString[String.Index(encodedOffset: noteIdRange.lowerBound)..<String.Index(encodedOffset: noteIdRange.upperBound)])
-                return .main(.folders👉list👉note(listId: listId, noteId: noteId))
+                return .folders👉list👉note(listId: listId, noteId: noteId)
             }
         }
         return nil

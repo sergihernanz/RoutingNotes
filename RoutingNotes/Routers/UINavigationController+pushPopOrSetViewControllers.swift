@@ -12,13 +12,16 @@ extension UINavigationController {
 
     // Completion is only called if a simple modal dismissal is done,
     //  otherwise you need to register as navigation controller delegate
-    func setPopOrPushViewControllers(_ newViewControllers: [UIViewController],
-                                     animated: Bool,
-                                     completion: (() -> Void)? = nil) {
+    fileprivate func setPopOrPushViewControllers(_ newViewControllers: [UIViewController],
+                                                 dismissAnyModal: Bool,
+                                                 animated: Bool,
+                                                 completion: (() -> Void)? = nil) {
         if viewControllers.elementsEqual(newViewControllers) {
             // Nothing to do
-            if nil != self.presentedViewController {
+            if dismissAnyModal && nil != self.presentedViewController {
                 self.dismiss(animated: animated, completion: completion)
+            } else {
+                completion?()
             }
             return
         }
@@ -50,7 +53,7 @@ extension UINavigationController {
             // New array matches currentArray.popLast... pop
             self.setViewControllers(newViewControllers, animated: animated)
         }
-        if nil != self.presentedViewController {
+        if dismissAnyModal && nil != self.presentedViewController {
             self.dismiss(animated: false, completion: privateSetPopOrPush)
         } else {
             privateSetPopOrPush()
@@ -58,10 +61,16 @@ extension UINavigationController {
     }
 
     func setPopOrPushViewControllers(_ newViewControllers: [UIViewController],
+                                     animated: Bool,
+                                     completion: (() -> Void)? = nil) {
+        self.setPopOrPushViewControllers(newViewControllers, dismissAnyModal: true, animated: animated, completion: completion)
+    }
+
+    func setPopOrPushViewControllers(_ newViewControllers: [UIViewController],
                                      modalTopMost: UIViewController,
                                      animated: Bool,
                                      completion: (() -> Void)? = nil) {
-        self.setPopOrPushViewControllers(newViewControllers, animated: animated)
+        self.setPopOrPushViewControllers(newViewControllers, dismissAnyModal: false, animated: animated)
         self.present(modalTopMost, animated: animated, completion: completion)
     }
 }

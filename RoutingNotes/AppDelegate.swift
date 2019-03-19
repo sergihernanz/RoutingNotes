@@ -135,7 +135,7 @@ extension AppDelegate {
     fileprivate func open(link: URL) -> Bool {
         do {
             if let navigation = try NotesLinkParser.navigation(url: link) {
-                navigator.navigate(to: navigation, animated: false, completion: {_ in })
+                navigator.navigate(to: .main(navigation), animated: false, completion: {_ in })
                 return true
             }
         } catch {
@@ -165,6 +165,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification,
                                 withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        #if true
+        switch navigator.currentNavigation {
+        case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
+            let newNavigation = MainNotesNavigation.modal(.receivedNotificationOnForeground,
+                                                          onTopOf: notesNavigation)
+            navigator.navigate(to: newNavigation, animated: false, completion: { _ in
+                completionHandler(.sound)
+            })
+        }
+        #else
         if let link = notification.request.content.userInfo["link"] as? String,
            let navigation = MainNotesNavigation(jsonString: link) {
             navigator.navigate(to: navigation, animated: false, completion: { _ in
@@ -174,6 +184,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         } else {
             completionHandler(.alert)
         }
+        #endif
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -199,7 +210,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 content.userInfo = ["link": jsonNavigationToNoteA as Any]
 
                 // Create the trigger as a repeating event.
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
                 // Create the request
                 let uuidString = UUID().uuidString
                 let request = UNNotificationRequest(identifier: uuidString,

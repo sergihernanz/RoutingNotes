@@ -30,6 +30,10 @@ class NavigationTestVC: UIViewController, Navigatable {
         fatalError("init(coder:) has not been implemented")
     }
 
+    var viewController: UIViewController {
+        return self
+    }
+
     lazy var foldersButton: UIButton = {
         let rect = CGRect(x: 0, y: 0, width: 375, height: 40)
         let foldersButton = UIButton(frame: rect)

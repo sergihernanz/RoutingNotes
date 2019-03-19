@@ -32,14 +32,8 @@ class NotesNavigationEndpointsBuilderImpl: TopNavigationItemBuilder {
         case .modal(let modalNavigation, onTopOf: _):
             switch modalNavigation {
             case .receivedNotificationOnForeground:
-                let alertVC = UIAlertController(title: "",
-                                                message: "Check out XXX",
-                                                preferredStyle: .alert)
-                alertVC.addAction(UIAlertAction(title: "Go there", style: .default, handler: { _ in
-                    navigator.navigate(to: .main(.folders), animated: true) {_ in }
-                }))
-                alertVC.addAction(UIAlertAction(title: "Not now", style: .destructive, handler: nil))
-                return alertVC
+                let routable = ForegroundAlert(navigator: navigator, model: model, navigationInput: .folders)
+                return routable.viewController
             }
         }
     }
@@ -64,7 +58,7 @@ class NotesNavigationEndpointsBuilderImpl: TopNavigationItemBuilder {
             switch modalNavigation {
             case .receivedNotificationOnForeground:
                 if let foregroundNotificationAlert = viewController as? UIAlertController,
-                   foregroundNotificationAlert.title == "Check out XXX" {
+                   foregroundNotificationAlert.message == "Check out XXX" {
                     return true
                 }
                 return false

@@ -22,6 +22,10 @@ extension FoldersVC: Navigatable {
         return folders[selectedIP.row].listId
     }
 
+    var viewController: UIViewController {
+        return self
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let list = folders[indexPath.row]
         do {

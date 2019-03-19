@@ -6,7 +6,7 @@
 //  Copyright © 2019 Sergi Hernanz. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 protocol Navigatable {
 
@@ -21,4 +21,7 @@ protocol Navigatable {
     var model: ModelType { get }
 
     init(navigator: NavigatorType, model: ModelType, navigationInput: InputType)
+
+    // Root viewcontroller to be presented on a VC hierarchy
+    var viewController: UIViewController { get }
 }

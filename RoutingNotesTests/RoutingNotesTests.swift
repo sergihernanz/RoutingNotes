@@ -92,12 +92,12 @@ class RoutingNotesTests: XCTestCase {
             XCTAssertNotNil(rootVCTester.rootWindow)
 
             let exp = expectation(description: "deepLinkToList")
-            navigator.navigate(to: .folders👉list(listId: "1"), animated: true, completion: { (_: Bool) in
+            navigator.navigate(to: .main(.folders👉list(listId: "1")), animated: true, completion: { (_: Bool) in
                 exp.fulfill()
             })
             RunLoop.current.run(until: Date())
             wait(for: [exp], timeout: 6)
-            XCTAssertEqual(navigator.currentNavigation, .folders👉list(listId: "1"))
+            XCTAssertEqual(navigator.currentNavigation, .main(.folders👉list(listId: "1")))
         })
         XCTContext.runActivity(named: """
             THEN it displays the list with the right array of notes saved on the mock model
@@ -133,18 +133,18 @@ class RoutingNotesTests: XCTestCase {
             XCTAssertNotNil(rootVCTester.rootWindow)
 
             let listExp = expectation(description: "deepLinkToList")
-            navigator.navigate(to: .folders👉list(listId: "1"), animated: true, completion: { (cancelled: Bool) in
+            navigator.navigate(to: .main(.folders👉list(listId: "1")), animated: true, completion: { (cancelled: Bool) in
                 XCTAssertTrue(cancelled)
                 listExp.fulfill()
             })
             let noteExp = expectation(description: "deepLinkToNote")
-            navigator.navigate(to: .folders👉list👉note(listId: "1", noteId: "A"), animated: true, completion: { (cancelled: Bool) in
+            navigator.navigate(to: .main(.folders👉list👉note(listId: "1", noteId: "A")), animated: true, completion: { (cancelled: Bool) in
                 XCTAssertFalse(cancelled)
                 noteExp.fulfill()
             })
             RunLoop.current.run(until: Date())
             wait(for: [listExp, noteExp], timeout: 6)
-            XCTAssertEqual(navigator.currentNavigation, .folders👉list👉note(listId: "1", noteId: "A"))
+            XCTAssertEqual(navigator.currentNavigation, .main(.folders👉list👉note(listId: "1", noteId: "A")))
         })
         XCTContext.runActivity(named: """
             THEN it displays the note detail
@@ -179,18 +179,18 @@ class RoutingNotesTests: XCTestCase {
             XCTAssertNotNil(rootVCTester.rootWindow)
 
             let noteExp1 = expectation(description: "deepLinkToNote1")
-            navigator.navigate(to: .folders👉list👉note(listId: "1", noteId: "A"), animated: true, completion: { (cancelled: Bool) in
+            navigator.navigate(to: .main(.folders👉list👉note(listId: "1", noteId: "A")), animated: true, completion: { (cancelled: Bool) in
                 XCTAssertFalse(cancelled)
                 noteExp1.fulfill()
             })
             let noteExp2 = expectation(description: "deepLinkToNote2")
-            navigator.navigate(to: .folders👉list👉note(listId: "1", noteId: "A"), animated: true, completion: { (cancelled: Bool) in
+            navigator.navigate(to: .main(.folders👉list👉note(listId: "1", noteId: "A")), animated: true, completion: { (cancelled: Bool) in
                 XCTAssertFalse(cancelled)
                 noteExp2.fulfill()
             })
             RunLoop.current.run(until: Date())
             wait(for: [noteExp1, noteExp2], timeout: 6)
-            XCTAssertEqual(navigator.currentNavigation, .folders👉list👉note(listId: "1", noteId: "A"))
+            XCTAssertEqual(navigator.currentNavigation, .main(.folders👉list👉note(listId: "1", noteId: "A")))
         })
         XCTContext.runActivity(named: """
             THEN it displays the note detail
@@ -226,18 +226,18 @@ class RoutingNotesTests: XCTestCase {
             XCTAssertNotNil(rootVCTester.rootWindow)
 
             let detailExp = expectation(description: "deepLinkToDetail")
-            navigator.navigate(to: .folders👉list👉note(listId: "1", noteId: "A"), animated: true, completion: { (_: Bool) in
+            navigator.navigate(to: .main(.folders👉list👉note(listId: "1", noteId: "A")), animated: true, completion: { (_: Bool) in
                 detailExp.fulfill()
             })
             RunLoop.current.run(until: Date())
             wait(for: [detailExp], timeout: 6)
             let listExp = expectation(description: "deepLinkToList")
-            navigator.navigate(to: .folders👉list(listId: "1"), animated: true, completion: { (_: Bool) in
+            navigator.navigate(to: .main(.folders👉list(listId: "1")), animated: true, completion: { (_: Bool) in
                 listExp.fulfill()
             })
             RunLoop.current.run(until: Date())
             wait(for: [listExp], timeout: 6)
-            XCTAssertEqual(navigator.currentNavigation, .folders👉list(listId: "1"))
+            XCTAssertEqual(navigator.currentNavigation, .main(.folders👉list(listId: "1")))
         })
         XCTContext.runActivity(named: """
             THEN it displays the list with the right array of notes saved on the mock model

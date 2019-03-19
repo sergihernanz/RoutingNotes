@@ -6,7 +6,7 @@
 //  Copyright © 2019 Sergi Hernanz. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 extension NoteVC: Navigatable {
 
@@ -18,6 +18,9 @@ extension NoteVC: Navigatable {
     }
     var navigationOutput: Void? {
         return nil
+    }
+    var viewController: UIViewController {
+        return self
     }
 
 }

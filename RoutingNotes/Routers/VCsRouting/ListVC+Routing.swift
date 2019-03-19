@@ -25,6 +25,10 @@ extension ListVC: Navigatable {
         return notes[selectedIP.row].noteId
     }
 
+    var viewController: UIViewController {
+        return self
+    }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let note = notes[indexPath.row]
         do {
