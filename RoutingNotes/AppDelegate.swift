@@ -194,8 +194,8 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             if granted {
                 let jsonNavigationToNoteA = MainNotesNavigation.main(.folders👉list👉note(listId: "1", noteId: "A")).toJSONString()
                 let content = UNMutableNotificationContent()
-                content.title = "Note A has changed"
-                content.body = "See the latest changes in List 1: Note A"
+                content.title = "'Note A' has changed"
+                content.body = "See the latest changes in 'List 1': 'Note A'"
                 content.userInfo = ["link": jsonNavigationToNoteA as Any]
 
                 // Create the trigger as a repeating event.

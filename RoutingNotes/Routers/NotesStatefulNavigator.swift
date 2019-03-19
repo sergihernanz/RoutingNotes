@@ -60,14 +60,31 @@ final class NotesStatefulNavigator: NSObject, StatefulNavigator {
 
     // MARK: Build and read the stack of UIViewControllers
     var viewControllersStack: [UIViewController] {
-        return navigationController.viewControllers
+        var ncViewControllers = navigationController.viewControllers
+        guard let modal = navigationController.presentedViewController else {
+            return ncViewControllers
+        }
+        ncViewControllers.append(modal)
+        return ncViewControllers
     }
     func present(newViewControllerStack: [UIViewController], forNavigation: MainNotesNavigation, animated: Bool) {
         switch forNavigation {
         case .main:
-            navigationController.setPopOrPushViewControllers(newViewControllerStack, animated: animated)
+            navigationController.setPopOrPushViewControllers(newViewControllerStack,
+                                                             animated: animated) {
+                self.completeAnimation(self.getCurrentNavigation())
+            }
         case .modal:
-            navigationController.setPopOrPushViewControllers(newViewControllerStack, animated: animated)
+            var others = newViewControllerStack
+            others.removeLast()
+            if let modal = newViewControllerStack.last,
+               others.count > 0 {
+                navigationController.setPopOrPushViewControllers(others,
+                                                                 modalTopMost: modal,
+                                                                 animated: animated) {
+                    self.completeAnimation(self.getCurrentNavigation())
+                }
+            }
         }
     }
 
@@ -92,18 +109,6 @@ extension NotesStatefulNavigator: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController,
                               didShow viewController: UIViewController,
                               animated: Bool) {
-        let newNavigation = getCurrentNavigation()
-        switch navigatorState {
-        case .idle:
-            // Swipe back gesture recognizer
-            navigatorState = .idle(newNavigation)
-        case .navigating(_, let to, _, _):
-            // Router started animation just finished...
-            assert(to == newNavigation)
-            navigatorState = .idle(newNavigation)
-        case .navigatingToNonFinalNavigation(_, let to, let finalNavigation, let animated, finalCompletion: let finalCompletion):
-            // Navigate to final destination
-            navigatorState = .navigating(from: to, to: finalNavigation, animated: animated, toCompletion: finalCompletion)
-        }
+        completeAnimation(getCurrentNavigation())
     }
 }

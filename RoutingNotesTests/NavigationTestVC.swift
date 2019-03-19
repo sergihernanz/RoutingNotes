@@ -66,11 +66,23 @@ class NavigationTestVC: UIViewController, Navigatable {
         return noteButton
     }()
 
+    lazy var alertButton: UIButton = {
+        let rect = CGRect(x: 0, y: 0, width: 375, height: 40)
+        let noteButton = UIButton(frame: rect)
+        noteButton.addTarget(self, action: #selector(buttonTapped(button:)), for: .touchUpInside)
+        noteButton.tag = 3
+        noteButton.setTitle("Deep link to Alert", for: .normal)
+        noteButton.setTitleColor(.gray, for: .normal)
+        noteButton.setTitleColor(.black, for: .highlighted)
+        noteButton.showsTouchWhenHighlighted = true
+        return noteButton
+    }()
+
     override func loadView() {
 
         let view = UIView()
         view.backgroundColor = .white
-        let stack = UIStackView(arrangedSubviews: [foldersButton, listButton, noteButton])
+        let stack = UIStackView(arrangedSubviews: [foldersButton, listButton, noteButton, alertButton])
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.axis = .vertical
         stack.distribution = .equalSpacing
@@ -84,6 +96,8 @@ class NavigationTestVC: UIViewController, Navigatable {
             listButton.widthAnchor.constraint(equalTo: view.widthAnchor),
             noteButton.heightAnchor.constraint(equalToConstant: 44),
             noteButton.widthAnchor.constraint(equalTo: view.widthAnchor),
+            alertButton.heightAnchor.constraint(equalToConstant: 44),
+            alertButton.widthAnchor.constraint(equalTo: view.widthAnchor),
             stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stack.centerYAnchor.constraint(equalTo: view.centerYAnchor)
             ])
@@ -96,6 +110,12 @@ class NavigationTestVC: UIViewController, Navigatable {
             navigator.navigate(to: .main(.folders👉list(listId:"1")), animated: true) {_ in }
         case 2:
             navigator.navigate(to: .main(.folders👉list👉note(listId: "1", noteId: "A")), animated: true) {_ in }
+        case 3:
+            switch navigator.currentNavigation {
+            case .main(let notesNavigation), .modal(_, onTopOf: let notesNavigation):
+                navigator.navigate(to: .modal(.receivedNotificationOnForeground,
+                                              onTopOf: notesNavigation), animated: true) {_ in }
+            }
         default:
             navigator.navigate(to: .main(.folders), animated: true) {_ in }
         }

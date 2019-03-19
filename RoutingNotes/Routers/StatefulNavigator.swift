@@ -155,4 +155,19 @@ extension StatefulNavigator {
         }
         return evaluatingNavigation
     }
+
+    func completeAnimation(_ newNavigation: NavigationType) {
+        switch navigatorState {
+        case .idle:
+            // Swipe back gesture recognizer
+            navigatorState = .idle(newNavigation)
+        case .navigating(_, let to, _, _):
+            // Router started animation just finished...
+            assert(to == newNavigation)
+            navigatorState = .idle(newNavigation)
+        case .navigatingToNonFinalNavigation(_, let to, let finalNavigation, let animated, finalCompletion: let finalCompletion):
+            // Navigate to final destination
+            navigatorState = .navigating(from: to, to: finalNavigation, animated: animated, toCompletion: finalCompletion)
+        }
+    }
 }
