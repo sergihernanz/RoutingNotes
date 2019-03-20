@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UISplitViewControllerDele
     private var navigator: NotesStatefulNavigator!
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
-        let useTestsTopNavigationItemsBuilder = ProcessInfo.processInfo.environment.keys.contains("TEST_ENDPOINTS_BUILDER")
+        let useTestsTopNavigationItemsBuilder = ProcessInfo.processInfo.environment.keys.contains("TEST_VCS_BUILDER")
         let model = populateMockModel()
         let anyTopNavigationItemBuilder = !useTestsTopNavigationItemsBuilder ?
                                             AnyTopNavigationItemBuilder(NotesTopNavigationItemBuilderImpl()) :
@@ -216,7 +216,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                 content.userInfo = ["link": jsonNavigationToNoteA as Any]
 
                 // Create the trigger as a repeating event.
-                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 3, repeats: false)
+                let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false)
                 // Create the request
                 let uuidString = UUID().uuidString
                 let request = UNNotificationRequest(identifier: uuidString,

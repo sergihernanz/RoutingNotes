@@ -143,7 +143,7 @@ class RoutingNotesTests: XCTestCase {
                 noteExp.fulfill()
             })
             RunLoop.current.run(until: Date())
-            wait(for: [listExp, noteExp], timeout: 6)
+            wait(for: [listExp, noteExp], timeout: 14)
             XCTAssertEqual(navigator.currentNavigation, .main(.folders👉list👉note(listId: "1", noteId: "A")))
         })
         XCTContext.runActivity(named: """
