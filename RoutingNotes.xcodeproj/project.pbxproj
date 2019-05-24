@@ -11,6 +11,7 @@
 		2D0F310521D59E3900F3126B /* UIWindowRootViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */; };
 		2D10BBF522983796002DEAAA /* AutoEquatable.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D10BBF222983796002DEAAA /* AutoEquatable.generated.swift */; };
 		2D10BBF822983C67002DEAAA /* AutoCodable.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D10BBF722983C67002DEAAA /* AutoCodable.generated.swift */; };
+		2D10BBFA229841A4002DEAAA /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D10BBF9229841A4002DEAAA /* Navigation.swift */; };
 		2D1DCAAF223FA289009C417F /* NavigationLinkParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1DCAAE223FA289009C417F /* NavigationLinkParserTests.swift */; };
 		2D1F0DFA21FB92D40023E74D /* StatefulNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */; };
 		2D4C25772214720300A2F0B5 /* NavigationCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4C25762214720300A2F0B5 /* NavigationCodableTests.swift */; };
@@ -60,6 +61,7 @@
 		2D10BBF222983796002DEAAA /* AutoEquatable.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoEquatable.generated.swift; sourceTree = "<group>"; };
 		2D10BBF422983796002DEAAA /* AutoEquatable.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AutoEquatable.stencil; sourceTree = "<group>"; };
 		2D10BBF722983C67002DEAAA /* AutoCodable.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCodable.generated.swift; sourceTree = "<group>"; };
+		2D10BBF9229841A4002DEAAA /* Navigation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
 		2D1DCAAE223FA289009C417F /* NavigationLinkParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLinkParserTests.swift; sourceTree = "<group>"; };
 		2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulNavigator.swift; sourceTree = "<group>"; };
 		2D4C25762214720300A2F0B5 /* NavigationCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCodableTests.swift; sourceTree = "<group>"; };
@@ -202,9 +204,10 @@
 			isa = PBXGroup;
 			children = (
 				2DD274CE21F26D7E003FB74A /* VCsRouting */,
-				2DD274D821F27A69003FB74A /* NavigatorState.swift */,
-				2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */,
 				2DCDC52721F91DA20094761A /* Navigator.swift */,
+				2D10BBF9229841A4002DEAAA /* Navigation.swift */,
+				2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */,
+				2DD274D821F27A69003FB74A /* NavigatorState.swift */,
 				2D8C8E7D21F485F50045FC13 /* TopNavigationItemBuilder.swift */,
 				2D8C8E7B21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift */,
 				2D546E1A21AE789E00CFB5BA /* NotesNavigation.swift */,
@@ -480,6 +483,7 @@
 				2D546DF621AE77EA00CFB5BA /* AppDelegate.swift in Sources */,
 				2D8C8E7E21F485F50045FC13 /* TopNavigationItemBuilder.swift in Sources */,
 				2DD274D921F27A69003FB74A /* NavigatorState.swift in Sources */,
+				2D10BBFA229841A4002DEAAA /* Navigation.swift in Sources */,
 				2D7993D021D7BC3700279B87 /* MockUDOrdersModelContext.swift in Sources */,
 				2DB6E08821EF680C008104C4 /* Navigatable.swift in Sources */,
 			);

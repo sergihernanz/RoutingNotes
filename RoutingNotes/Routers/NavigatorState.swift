@@ -8,22 +8,6 @@
 
 import Foundation
 
-protocol Navigation: Equatable {
-    init()
-    func pop() -> Self?
-}
-
-extension Navigation {
-    func navigationStack() -> [Self] {
-        guard let backNavigation = self.pop() else {
-            return [self]
-        }
-        var stack = backNavigation.navigationStack()
-        stack.append(self)
-        return stack
-    }
-}
-
 enum NavigatorState<NavigationType: Navigation> {
 
     case idle(NavigationType)
