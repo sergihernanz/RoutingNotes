@@ -24,7 +24,7 @@ extension Navigation {
     }
 }
 
-enum NavigatorState<NavigationType: Navigation> : Equatable {
+enum NavigatorState<NavigationType: Navigation> {
 
     case idle(NavigationType)
     case navigating(from:NavigationType, to:NavigationType,
@@ -32,32 +32,6 @@ enum NavigatorState<NavigationType: Navigation> : Equatable {
     case navigatingToNonFinalNavigation(from:NavigationType, to:NavigationType,
                                         finalNavigation: NavigationType, animated: Bool,
                                         finalCompletion: ((_ cancelled: Bool) -> Void))
-
-    static func == (lhs: NavigatorState, rhs: NavigatorState) -> Bool {
-        switch lhs {
-        case .idle(let lhsn):
-            switch rhs {
-            case .idle(let rhsn):
-                return lhsn == rhsn
-            default:
-                return false
-            }
-        case .navigating(let lhfrom, let lhto, _, _):
-            switch rhs {
-            case .navigating(let rhfrom, let rhto, _, _):
-                return lhfrom == rhfrom && rhto == lhto
-            default:
-                return false
-            }
-        case .navigatingToNonFinalNavigation(let lhfrom, let lhto, let lhfinal, _, _):
-            switch rhs {
-            case .navigatingToNonFinalNavigation(let rhfrom, let rhto, let rhfinal, _, _):
-                return lhfrom == rhfrom && rhto == lhto && rhfinal == lhfinal
-            default:
-                return false
-            }
-        }
-    }
 
     var currentNavigation: NavigationType {
         switch self {
@@ -69,4 +43,21 @@ enum NavigatorState<NavigationType: Navigation> : Equatable {
             return finalNavigation
         }
     }
+}
+
+extension NavigatorState: Equatable {
+
+    static func == (lhs: NavigatorState, rhs: NavigatorState) -> Bool {
+        switch (lhs, rhs) {
+        case (.idle(let lhs), .idle(let rhs)):
+            return lhs == rhs
+        case (.navigating(let lhs), .navigating(let rhs)):
+            return lhs.from == rhs.from && lhs.to == rhs.to
+        case (.navigatingToNonFinalNavigation(let lhs), .navigatingToNonFinalNavigation(let rhs)):
+            return lhs.from == lhs.from && lhs.to == rhs.to && lhs.finalNavigation == rhs.finalNavigation
+        default:
+            return false
+        }
+    }
+
 }

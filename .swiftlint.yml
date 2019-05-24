@@ -26,3 +26,5 @@ type_name:
     - I
     - R
     
+excluded:
+  - Sourcery

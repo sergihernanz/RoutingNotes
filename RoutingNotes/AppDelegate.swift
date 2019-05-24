@@ -171,7 +171,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
             let deepLinkNavigation = MainNotesNavigation(jsonString: link)?.notesNavigation {
             switch navigator.currentNavigation {
             case .main(let currentNavigation), .modal(_, onTopOf: let currentNavigation):
-                let newNavigation = MainNotesNavigation.modal(.receivedNotificationOnForeground(deepLinkNavigation),
+                let newNavigation = MainNotesNavigation.modal(modal: .receivedNotificationOnForeground(deepLinkNavigation),
                                                               onTopOf: currentNavigation)
                 navigator.navigate(to: newNavigation, animated: false, completion: { _ in
                     completionHandler(.sound)

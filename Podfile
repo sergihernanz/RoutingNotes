@@ -7,6 +7,7 @@ target 'RoutingNotes' do
 
   # Pods for RoutingNotes
   pod "SwiftLint"
+  pod "Sourcery"
 
   target 'RoutingNotesTests' do
     inherit! :search_paths

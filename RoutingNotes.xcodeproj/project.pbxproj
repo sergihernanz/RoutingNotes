@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2D06C2E021BCF9F4004962A2 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D06C2DF21BCF9F4004962A2 /* Model.swift */; };
 		2D0F310521D59E3900F3126B /* UIWindowRootViewControllerTester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */; };
+		2D10BBF522983796002DEAAA /* AutoEquatable.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D10BBF222983796002DEAAA /* AutoEquatable.generated.swift */; };
+		2D10BBF822983C67002DEAAA /* AutoCodable.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D10BBF722983C67002DEAAA /* AutoCodable.generated.swift */; };
 		2D1DCAAF223FA289009C417F /* NavigationLinkParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1DCAAE223FA289009C417F /* NavigationLinkParserTests.swift */; };
 		2D1F0DFA21FB92D40023E74D /* StatefulNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */; };
 		2D4C25772214720300A2F0B5 /* NavigationCodableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D4C25762214720300A2F0B5 /* NavigationCodableTests.swift */; };
@@ -55,6 +57,9 @@
 		16F904553BBF04C2F17B4D05 /* Pods-RoutingNotes.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RoutingNotes.release.xcconfig"; path = "Pods/Target Support Files/Pods-RoutingNotes/Pods-RoutingNotes.release.xcconfig"; sourceTree = "<group>"; };
 		2D06C2DF21BCF9F4004962A2 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		2D0F310421D59E3900F3126B /* UIWindowRootViewControllerTester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIWindowRootViewControllerTester.swift; sourceTree = "<group>"; };
+		2D10BBF222983796002DEAAA /* AutoEquatable.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoEquatable.generated.swift; sourceTree = "<group>"; };
+		2D10BBF422983796002DEAAA /* AutoEquatable.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AutoEquatable.stencil; sourceTree = "<group>"; };
+		2D10BBF722983C67002DEAAA /* AutoCodable.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoCodable.generated.swift; sourceTree = "<group>"; };
 		2D1DCAAE223FA289009C417F /* NavigationLinkParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationLinkParserTests.swift; sourceTree = "<group>"; };
 		2D1F0DF921FB92D40023E74D /* StatefulNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatefulNavigator.swift; sourceTree = "<group>"; };
 		2D4C25762214720300A2F0B5 /* NavigationCodableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCodableTests.swift; sourceTree = "<group>"; };
@@ -115,9 +120,36 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D10BBF022983796002DEAAA /* Sourcery */ = {
+			isa = PBXGroup;
+			children = (
+				2D10BBF122983796002DEAAA /* Generated */,
+				2D10BBF322983796002DEAAA /* SourceryStencils */,
+			);
+			path = Sourcery;
+			sourceTree = "<group>";
+		};
+		2D10BBF122983796002DEAAA /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				2D10BBF722983C67002DEAAA /* AutoCodable.generated.swift */,
+				2D10BBF222983796002DEAAA /* AutoEquatable.generated.swift */,
+			);
+			path = Generated;
+			sourceTree = "<group>";
+		};
+		2D10BBF322983796002DEAAA /* SourceryStencils */ = {
+			isa = PBXGroup;
+			children = (
+				2D10BBF422983796002DEAAA /* AutoEquatable.stencil */,
+			);
+			path = SourceryStencils;
+			sourceTree = "<group>";
+		};
 		2D546DE921AE77EA00CFB5BA = {
 			isa = PBXGroup;
 			children = (
+				2D10BBF022983796002DEAAA /* Sourcery */,
 				2D546DF421AE77EA00CFB5BA /* RoutingNotes */,
 				2D546E0B21AE77EB00CFB5BA /* RoutingNotesTests */,
 				2D546DF321AE77EA00CFB5BA /* Products */,
@@ -241,6 +273,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D546E1121AE77EB00CFB5BA /* Build configuration list for PBXNativeTarget "RoutingNotes" */;
 			buildPhases = (
+				2D10BBEF22983611002DEAAA /* ShellScript */,
 				6FD56C16610A1BF18CB64C46 /* [CP] Check Pods Manifest.lock */,
 				2D546DEE21AE77EA00CFB5BA /* Sources */,
 				2D546DEF21AE77EA00CFB5BA /* Frameworks */,
@@ -338,6 +371,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2D10BBEF22983611002DEAAA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/Sourcery/bin/sourcery\" --sources RoutingNotes --templates Sourcery/SourceryStencils/ --output Sourcery/Generated/\n";
+		};
 		2D8F28C2223BFBEA008360DF /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -353,7 +403,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n${PODS_ROOT}/SwiftLint/swiftlint lint\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n${PODS_ROOT}/SwiftLint/swiftlint lint \n";
 		};
 		4518AB96D1926FA991E67B00 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -406,6 +456,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2D10BBF522983796002DEAAA /* AutoEquatable.generated.swift in Sources */,
 				2D5A8DBF21B1CD6E00DAFC8D /* ListVC.swift in Sources */,
 				2D546E1B21AE789E00CFB5BA /* NotesNavigation.swift in Sources */,
 				2DEB41642217268400F9A65F /* NotesLinkParser.swift in Sources */,
@@ -413,6 +464,7 @@
 				2DB3746E22203BAD00B877A1 /* NotesNavigation+Codable.swift in Sources */,
 				2D8C8E7C21F45D0C0045FC13 /* UINavigationController+pushPopOrSetViewControllers.swift in Sources */,
 				2DCDC52A21F91E330094761A /* NotesTopNavigationItemBuilder.swift in Sources */,
+				2D10BBF822983C67002DEAAA /* AutoCodable.generated.swift in Sources */,
 				2DCE24AD21B198ED00150FB0 /* NotesStatefulNavigator.swift in Sources */,
 				2DD274D621F27577003FB74A /* NoteVC+Routing.swift in Sources */,
 				2DCDC52321F9101C0094761A /* TestsEndpointsBuilder.swift in Sources */,

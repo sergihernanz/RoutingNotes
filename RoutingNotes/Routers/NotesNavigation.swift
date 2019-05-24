@@ -10,7 +10,7 @@ import Foundation
 
 enum MainNotesNavigation {
     case main(NotesNavigation)
-    case modal(NotesModalNavigation, onTopOf: NotesNavigation)
+    case modal(modal: NotesModalNavigation, onTopOf: NotesNavigation)
 }
 
 enum NotesModalNavigation {
@@ -77,4 +77,20 @@ extension NotesNavigation: Navigation {
             return nil
         }
     }
+
 }
+
+/*
+extension NotesNavigation: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .folders:
+            return "folders"
+        case .folders👉list(let listId):
+            return "folders-list(\(listId))"
+        case .folders👉list👉note(let listId, let noteId):
+            return "folders-list(\(listId))-note(\(noteId))"
+        }
+    }
+}
+*/
